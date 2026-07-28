@@ -102,7 +102,7 @@ Public constants も package verification の対象です。`public_constants` �
 
 - manifest と、その surface を守る compatibility spec、entrypoint smoke、package guard のいずれかを同期する
 - documented public API に含まれる surface なら `docs/en/public-api.md` と `docs/ja/public-api.md` をそろえる
-- 同じ surface を名前で案内している README、usage docs、feature docs、configuration option doc、JavaScript event doc、mockup inventory、release doc を確認する
+- 同じ surface を名前で案内している README、usage page、feature doc、configuration option doc、JavaScript event doc、mockup inventory、release doc を確認する
 - adopter が気づく必要のある変更は `CHANGELOG.md` に user-facing effect として残す。runtime behavior を変えない docs-only guidance だけなら Documentation として扱う
 - release notes、migration expectation、package verification、tag-time evidence に影響する場合は `docs/en/release.md` と `docs/ja/release.md` を見直す
 
@@ -220,3 +220,35 @@ Docs PR を開く前に、`docs/i18n-audit.md` を cross-language checklist と�
 - `test/browser/**` を変更する Pull Request では、browser smoke spec の保守だけが目的でも、通常の JavaScript setup と明示的な `npm run test:browser` coverage が走る前提で確認する
 - Pull Request で `docs/mockups/` の focused mockup を追加・rename・削除する場合は、mockup inventory の導線もそろえる。`docs/mockups/README.md` の Files table を更新し、`docs/mockups/review-gallery.html` のcardを追加または調整し、recommended review flow が変わるなら root README と言語別 README の入口を見直し、browser smoke の対象にする mockup なら代表 selector と minimum count を持つ focused smoke target definition も追加または更新する。
 - docs-only CI が JavaScript を skip するのは、`docs/mockups/**` が変わっていない場合だけです。focused mockup files が変わると、CI は README-derived focused smoke targets に対して `npm run test:browser` を実行します。ただし、この smoke は README Files table、review gallery、既存 mockup inventory、visual correctness がすべて同期していることまでは保証しません。既存の mockup files と docs index がすでに食い違っている場合は、gallery redesign や mockup HTML/CSS 変更を checklist-only PR に混ぜず、別の docs follow-up として扱う。
+
+## release前の確認
+
+この section は短い maintainer checklist として保ちます。`bundle exec rake release:check`、gem package verification、tag alignment、main-push full CI の詳細な release evidence は [Release checklist](release.md) を確認してください。
+
+- `bundle exec standardrb`
+- `bundle exec rspec`
+- `npm test`
+- `npm run test:entrypoints`
+- `npm run test:browser`
+- `bundle exec rake build`
+- `bundle exec rake release:check`
+- gem package contents（`gem build tree_view.gemspec` と `ruby script/check_gem_package_contents.rb tree_view-*.gem`）
+- release CI evidence: PR CI、その後 merge 後の main-push full CI（gem package verification を含む）
+- 変更ファイルが必要とする場合は docs-entrypoint / CI-policy / browser smoke evidence
+- `config/public_api_manifest.yml` が public API docs で扱う Ruby、helper、option、JavaScript export、event surface に追従していることを確認する
+- CHANGELOG
+- docs index / i18n audit
+
+## branch / PR方針
+
+- 小さな機能変更は小さなPRにする
+- docs-onlyで単純な分割や棚卸しは大きめのPRでもよい
+- Pull Request を作成する前に、同じ Issue を close する open Pull Request が既にないか確認する。`Closes #NNN`、linked Issue、changed files の重なりを見ます。
+- duplicate close-check で既存候補が見つかった場合は、新規 PR 作成を止め、既存 PR に review / follow-up / supersede の文脈を寄せるか、maintainer に採用方針の判断を依頼する。
+- Dependabot の Pull Request branch を人間または agent が編集した後は、`@dependabot rebase` が使えなくなる可能性がある前提で扱う。その branch に refresh commit を重ね続けるのではなく、`@dependabot recreate` または replacement Pull Request を選ぶ。
+- lint rewrite のような広い機械的 baseline cleanup が複数の dependency update に影響する場合は、dedicated baseline Pull Request に分ける。同じ cleanup を複数の Dependabot branch に重複投入して、それぞれを green にしようとしない。
+- merge前にPR CIを通す
+- docs-only PR では representative Rails / JavaScript job を short-circuit できるが、merge は同じ check 名が green のままで待つ
+- workflow 定義を変えるPRは、merge前に fresh な head SHA で Checks を観測する
+- PR が `main` から `diverged` している場合は、古い green CI だけに頼らず、refresh するかを決める前に mergeability、changed files、risk、behind count を確認する
+- release判定前に `main` でfull compatibility / package verificationを確認する
