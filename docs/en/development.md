@@ -220,3 +220,35 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 - When a pull request changes `test/browser/**`, expect normal JavaScript setup and explicit `npm run test:browser` coverage even if the intent is only to maintain browser smoke specs.
 - When a pull request adds, renames, or removes a focused mockup under `docs/mockups/`, keep the mockup inventory trail synchronized: update `docs/mockups/README.md` Files table, add or adjust the `docs/mockups/review-gallery.html` card, review README and language README entry points when the recommended review flow changes, and add or update the focused smoke target definition with a representative selector and minimum count when the mockup should be browser-smoked.
 - Docs-only CI skips JavaScript only when `docs/mockups/**` is unchanged. When focused mockup files change, CI runs `npm run test:browser` against the README-derived focused smoke targets, but that smoke does not prove the README Files table, review gallery, existing mockup inventory, and visual correctness are fully synchronized. If the existing mockup files and docs indexes already disagree, handle that as a separate docs follow-up instead of mixing gallery redesign or mockup HTML/CSS changes into a checklist-only PR.
+
+## Before release
+
+Keep this section as the short maintainer checklist. Use [Release checklist](release.md) for the detailed release evidence, including `bundle exec rake release:check`, gem package verification, tag alignment, and the main-push full CI gates.
+
+- `bundle exec standardrb`
+- `bundle exec rspec`
+- `npm test`
+- `npm run test:entrypoints`
+- `npm run test:browser`
+- `bundle exec rake build`
+- `bundle exec rake release:check`
+- gem package contents (`gem build tree_view.gemspec` and `ruby script/check_gem_package_contents.rb tree_view-*.gem`)
+- release CI evidence: PR CI, then main-push full CI after merge, including gem package verification
+- docs-entrypoint / CI-policy / browser smoke evidence when the changed files require those lanes
+- confirm `config/public_api_manifest.yml` still matches the documented Ruby, helper, option, JavaScript export, and event surfaces covered by public API docs
+- CHANGELOG
+- docs index / i18n audit
+
+## Branch and PR policy
+
+- Keep functional changes small.
+- Larger docs-only inventory or split PRs are acceptable.
+- Before opening a pull request, check whether an open pull request already closes the same issue. Look for the same `Closes #NNN` line, linked issue, and overlapping changed files.
+- If a duplicate close-check finds an existing candidate, stop the new PR path and either add review/follow-up/supersede context to the existing PR or ask a maintainer to choose the adoption path.
+- When a Dependabot pull request branch has been edited by a human or agent, assume `@dependabot rebase` may no longer work and use `@dependabot recreate` or a replacement pull request instead of piling more refresh commits onto that branch.
+- Keep broad mechanical baseline cleanup, such as lint rewrites, in a dedicated baseline pull request when it affects multiple dependency updates; do not duplicate the same cleanup across several Dependabot branches just to make each update green.
+- PR CI must pass before merge.
+- Docs-only PRs may short-circuit the representative Rails and JavaScript jobs, but merge still waits for the named checks to stay green.
+- PRs that change workflow definitions should be observed on a fresh head SHA before merge.
+- If a PR is `diverged` from `main`, do not rely on old green CI alone; review mergeability, changed files, risk, and behind count before deciding whether to refresh.
+- Full compatibility and package verification is confirmed on `main` before release decisions.
