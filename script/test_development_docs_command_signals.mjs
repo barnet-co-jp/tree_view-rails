@@ -26,6 +26,8 @@ const ciPolicySuiteDocs = [
 
 const requiredMaintenanceScripts = [
   "test:docs-entrypoints",
+  "test:host-app-extension-diagnostics-signals",
+  "test:quality-docs-smoke-signals",
   "test:development-docs-commands",
   "test:ci-policy",
   "test:node-version-sources",
@@ -105,7 +107,13 @@ const requiredDevelopmentDocsCommandSignals = [
     [
       "npm run test:development-docs-commands",
       "Development docs command-signal guard",
-      "`Development docs command signals` group"
+      "`Development docs command signals` group",
+      "npm run test:host-app-extension-diagnostics-signals",
+      "host app extension / diagnostics guidance",
+      "representative docs signal",
+      "npm run test:quality-docs-smoke-signals",
+      "docs quality / maintenance guidance",
+      "docs-only PR triage"
     ]
   ],
   [
@@ -113,7 +121,13 @@ const requiredDevelopmentDocsCommandSignals = [
     [
       "npm run test:development-docs-commands",
       "Development docs command signal",
-      "`Development docs command signals` group"
+      "`Development docs command signals` group",
+      "npm run test:host-app-extension-diagnostics-signals",
+      "host app extension / diagnostics guidance",
+      "representative docs signal",
+      "npm run test:quality-docs-smoke-signals",
+      "docs quality / maintenance guidance",
+      "docs-only PR triage"
     ]
   ]
 ]
