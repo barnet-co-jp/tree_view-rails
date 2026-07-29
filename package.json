@@ -19,6 +19,8 @@
     "test:toggle-icons-docs": "node script/check_toggle_icons_public_surface.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
     "test:docs-entrypoints": "node script/check_docs_link_integrity.mjs && node script/test_docs_entrypoint_suite.mjs",
+    "test:host-app-extension-diagnostics-signals": "node script/test_host_app_extension_diagnostics_signals.mjs",
+    "test:quality-docs-smoke-signals": "node script/test_quality_docs_smoke_signals.mjs",
     "test:release-docs": "npm run test:docs-entrypoints -- --only \"Release docs signals\"",
     "test:release-package-contents": "npm run test:docs-entrypoints -- --only \"Release package contents signals\"",
     "test:entrypoints-composition": "node script/test_entrypoints_package_script_composition.mjs",
