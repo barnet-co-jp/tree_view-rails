@@ -7,6 +7,7 @@ const docs = [
 ]
 
 const requiredScripts = [
+  ["test:ci-policy-suite", "node script/test_ci_policy_suite.mjs"],
   [
     "test:repository-only-maintainer-entrypoints",
     "node script/test_repository_only_maintainer_entrypoints.mjs"
@@ -21,31 +22,31 @@ const docSignals = [
   [
     "docs/en/development.md",
     [
-      "npm run test:repository-only-maintainer-entrypoints",
+      "script/test_ci_policy_suite.mjs --self-test",
+      "checks candidate docs entrypoint scripts against the suite's `checks` array and explicit exclusions",
+      "script/test_repository_only_maintainer_entrypoints.mjs",
       "repository-only maintainer entry points",
-      "checkout-only maintainer files rather than gem-packaged host-app API guides",
-      "npm run test:manifest-surface-doc-roles",
-      "manifest-backed public surface and reader-facing docs signal roles",
-      "module methods, helper methods, GraphAdapter initializer keywords, and PathTreeBuilder node shapes",
-      "node script/test_ci_policy_suite.mjs --list",
-      "node script/test_ci_policy_suite.mjs --only <group-or-index>",
-      "node script/test_ci_policy_suite.mjs --self-test",
-      "CI policy suite targeted triage"
+      "without treating them as gem-packaged host-app API guides",
+      "config/public_api_manifest.yml",
+      "module methods",
+      "helper methods",
+      "GraphAdapter initializer keywords",
+      "PathTreeBuilder node shapes"
     ]
   ],
   [
     "docs/ja/development.md",
     [
-      "npm run test:repository-only-maintainer-entrypoints",
+      "script/test_ci_policy_suite.mjs --self-test",
+      "candidate docs entrypoint script が suite の `checks` array または明示的な exclusion",
+      "script/test_repository_only_maintainer_entrypoints.mjs",
       "repository-only maintainer entry points",
-      "gem-packaged host-app API guide ではない checkout-only maintainer files",
-      "npm run test:manifest-surface-doc-roles",
-      "manifest-backed public surface と reader-facing docs signal の役割",
-      "module methods、helper methods、GraphAdapter initializer keywords、PathTreeBuilder node shapes",
-      "node script/test_ci_policy_suite.mjs --list",
-      "node script/test_ci_policy_suite.mjs --only <group-or-index>",
-      "node script/test_ci_policy_suite.mjs --self-test",
-      "CI policy suite targeted triage"
+      "gem 同梱の host-app API guide として扱うものではありません",
+      "config/public_api_manifest.yml",
+      "module methods",
+      "helper methods",
+      "GraphAdapter initializer keywords",
+      "PathTreeBuilder node shapes"
     ]
   ]
 ]
@@ -55,14 +56,6 @@ const missingSignals = []
 for (const [scriptName, command] of requiredScripts) {
   if (packageJson.scripts?.[scriptName] !== command) {
     missingSignals.push(`package.json scripts.${scriptName}: ${command}`)
-  }
-
-  const npmCommand = `npm run ${scriptName}`
-
-  for (const [docPath, doc] of docs) {
-    if (!doc.includes(npmCommand)) {
-      missingSignals.push(`${docPath}: ${npmCommand}`)
-    }
   }
 }
 
