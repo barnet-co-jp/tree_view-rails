@@ -146,6 +146,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added narrow maintenance guard command release evidence for `test:entrypoints-composition`, `test:ci-policy-license-prelude`, and `test:immutable-package-root-export-signals` so Development docs command signals stay aligned with package-script aliases.
 - Added package script composition guard release evidence for `test:entrypoints`, `test:js:core`, and `test:js` so maintainers can verify JavaScript command hierarchy drift during release preparation.
 - Added RenderState callback builder docs signal coverage so manifest-backed callback builder keys stay aligned with Public API docs and host-app responsibility boundaries.
 - Added diagnostics manifest drift guard evidence for accepted checks, `TreeView::Diagnostics.run` public options, and `TreeView::Diagnostics::Result` attributes / helper methods so runtime and manifest surfaces stay synchronized.
