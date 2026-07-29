@@ -22,7 +22,7 @@ const docSignals = [
   [
     "docs/en/development.md",
     [
-      "node script/test_ci_policy_suite.mjs --self-test",
+      "npm run test:ci-policy",
       "checks candidate docs entrypoint scripts against the suite's `checks` array and explicit exclusions",
       "script/test_repository_only_maintainer_entrypoints.mjs",
       "repository-only maintainer entry points",
@@ -37,7 +37,7 @@ const docSignals = [
   [
     "docs/ja/development.md",
     [
-      "node script/test_ci_policy_suite.mjs --self-test",
+      "npm run test:ci-policy",
       "candidate docs entrypoint script が suite の `checks` array または明示的な exclusion",
       "script/test_repository_only_maintainer_entrypoints.mjs",
       "repository-only maintainer entry points",
