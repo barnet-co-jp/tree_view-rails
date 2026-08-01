@@ -56,6 +56,10 @@ Release preparation notes:
 
 - Cleaned up generated selection hidden inputs when selection controllers disconnect, scoped to each controller source id.
 
+### Security
+
+- Updated `rails-html-sanitizer` to 1.7.1 and its `loofah` dependency to 2.25.2 to incorporate upstream SVG reference and URI sanitization security fixes.
+
 ### Documentation
 
 - Added localized names docs in Japanese and English.
