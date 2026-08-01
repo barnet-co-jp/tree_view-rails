@@ -14,7 +14,7 @@
     "test:ci-policy-license-prelude": "node script/test_license_package_sensitive_signal.mjs",
     "test:node-version-sources": "node script/test_node_version_sources.mjs",
     "test:ruby-version-sources": "node script/test_ruby_version_sources.mjs",
-    "test:development-docs-commands": "node script/test_development_docs_command_signals.mjs && node script/test_narrow_guard_commands.mjs && node script/check_ci_policy_standalone_prelude_development_doc_signal.mjs && node script/test_manifest_surface_doc_roles.mjs && node script/test_entrypoints_package_script_composition.mjs && node script/check_render_state_callback_builder_development_signal.mjs && node script/test_maintainer_guard_command_signals.mjs && node script/test_public_docs_guard_command_signals.mjs",
+    "test:development-docs-commands": "node script/test_development_docs_command_signals.mjs && node script/test_narrow_guard_commands.mjs && node script/check_ci_policy_standalone_prelude_development_doc_signal.mjs && node script/test_manifest_surface_doc_roles.mjs && node script/test_entrypoints_package_script_composition.mjs && node script/check_render_state_callback_builder_development_signal.mjs && node script/test_maintainer_guard_command_signals.mjs && node script/check_public_guard_command_signals.mjs",
     "test:public-api-manifest-structure": "node script/test_public_api_manifest_structure.mjs",
     "test:css-custom-property-manifest": "node script/test_css_custom_property_manifest_stylesheet_signals.mjs",
     "test:toggle-icons-docs": "node script/check_toggle_icons_public_surface.mjs",
