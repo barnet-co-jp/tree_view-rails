@@ -37,6 +37,11 @@ npm test
 npm run test:vitest-ui
 npm run test:entrypoints
 npm run test:docs-entrypoints
+npm run test:public-api-entrypoint-signals
+npm run test:public-api-transfer-integration-signals
+npm run test:host-lifecycle-no-detail-signals
+npm run test:event-names-docs-signals
+npm run test:controller-registration-docs-signals
 npm run test:host-app-extension-diagnostics-signals
 npm run test:quality-docs-smoke-signals
 npm run test:development-docs-commands
@@ -131,6 +136,18 @@ npm run test:docs-entrypoints
 ```
 
 この command は、docs entrypoint smoke、repository-only maintainer entrypoint smoke、docs entrypoint signal smoke、README Quick Start signal、Public API docs signal、i18n parity checks を実行し、より広い entrypoint / CI policy checks は含めません。`npm run test:docs-entrypoints -- --list` で番号付きの group を確認し、`npm run test:docs-entrypoints -- --only <group-or-index>` で 1-based 番号、完全一致の名前、大文字小文字を問わない名前、または一意に絞れる部分一致の名前から 1 group だけを実行できます。repository-only maintainer entrypoint smoke は、`Product Profile.md`、`AGENTS.md`、`CHANGELOG.md`、`docs/i18n-audit.md` など checkout 専用のファイルが `docs/README.md` と言語別 README から辿れることを守りますが、それらを gem 同梱の host-app API guide として扱うものではありません。docs-only change が失敗したときは、`npm run test:entrypoints` や `npm run test:browser` に進む前の切り分けに使ってください。
+
+### Public docs guard の focused command
+
+manifest-backed な reader-facing documentation guard だけを再実行するときは、次の command を使います。
+
+- `npm run test:public-api-entrypoint-signals`: package-root guidance、TypeScript declaration boundary、manifest source of truth、ResourceTable bridge docs。
+- `npm run test:public-api-transfer-integration-signals`: transfer drop positions、integration hooks、Public API / Drag and Drop docs の境界。
+- `npm run test:host-lifecycle-no-detail-signals`: intentional no-detail host lifecycle events と remote-state event names / values の責務差。
+- `npm run test:event-names-docs-signals`: event names、state-change reasons、transfer drop positions、documented detail-key boundary。
+- `npm run test:controller-registration-docs-signals`: controller identifiers / exports、default registration helper、host-app-owned custom boot guidance。
+
+これらは documentation signal と maintainer triage entrypoint を守る command です。runtime export の存在確認は `script/test_entrypoints.mjs`、declaration literal shape は `script/test_declaration_literal_shapes.mjs`、controller registration や event dispatch の挙動は runtime tests が担当します。public exports、manifest schema、payload、registration order、host-app policy は変更しません。
 
 Browser-level smoke testsはPlaywrightで実行します。
 
