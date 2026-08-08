@@ -54,6 +54,12 @@ npm run test:public-api-transfer-integration-signals
 npm run test:host-lifecycle-no-detail-signals
 npm run test:event-names-docs-signals
 npm run test:controller-registration-docs-signals
+npm run test:tree-view-rows-docs-signals
+npm run test:grouped-option-docs-signals
+npm run test:public-api-exported-controller-class-docs-signals
+npm run test:readme-quick-start-signal
+npm run test:docs-policy-signal-guards
+npm run test:public-setup-surface-docs-signals
 npm run test:host-app-extension-diagnostics-signals
 npm run test:quality-docs-smoke-signals
 npm run test:development-docs-commands
@@ -160,6 +166,19 @@ Use these commands to rerun one manifest-backed, reader-facing documentation gua
 - `npm run test:controller-registration-docs-signals`: controller identifiers, exports, the default registration helper, and host-app-owned custom boot guidance.
 
 These commands guard documentation signals and maintainer triage entrypoints. Runtime export existence remains owned by `script/test_entrypoints.mjs`, declaration literal shapes by `script/test_declaration_literal_shapes.mjs`, and controller registration or event dispatch behavior by the runtime tests. They do not change public exports, manifest schema, payloads, registration order, or host-app policy.
+
+### Focused docs guard commands
+
+Use these focused triage commands to rerun one already-registered docs entrypoint guard directly:
+
+- `npm run test:tree-view-rows-docs-signals` runs the `tree_view_rows helper docs signals` group guard for `helper_option_keys.tree_view_rows`, the `tree_view_rows` / `tree_view_window` reader-facing surface, and host-app-owned pagination and virtual scrolling boundaries.
+- `npm run test:grouped-option-docs-signals` runs the `RenderState grouped option docs signals` group guard for the grouped option manifest surface and representative Public API, selection, and row-status guidance.
+- `npm run test:public-api-exported-controller-class-docs-signals` runs the `Public API exported controller class docs signals` group guard for the exported class list and `registerTreeViewControllers(application)` guidance. Runtime export existence remains owned by `script/test_entrypoints.mjs`; registration helper / manifest alignment remains owned by `script/test_controller_entries_contract.mjs`.
+- `npm run test:readme-quick-start-signal` runs the `README quick start signal` group guard for representative Installation and Controller / View / Row partial setup paths in the root README.
+- `npm run test:docs-policy-signal-guards` runs the `Docs policy signal guards` group guard for representative docs policy, repository-maintainer docs, and technical asset responsibility signals.
+- `npm run test:public-setup-surface-docs-signals` runs the `Public setup surface docs signals` group guard for setup generator, persisted state, and installation-facing docs guidance.
+
+These are focused triage commands, not replacements for `npm run test:docs-entrypoints`. They isolate reader-facing signal failures and do not change runtime behavior, public API surfaces, manifest schema, or host-app policy.
 
 Browser-level smoke tests run through Playwright with:
 
