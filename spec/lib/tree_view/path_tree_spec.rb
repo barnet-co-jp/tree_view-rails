@@ -1,5 +1,5 @@
 require "spec_helper"
-PathTreeNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+PathTreeNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe TreeView::PathTree do
   def build_base_tree(records)

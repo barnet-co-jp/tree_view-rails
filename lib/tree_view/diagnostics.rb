@@ -4,7 +4,7 @@ module TreeView
   class Diagnostics
     DEFAULT_CHECKS = %i[node_keys dom_ids orphans cycles].freeze
 
-    Result = Struct.new(:checks, :errors, :warnings, keyword_init: true) do
+    Result = Struct.new(:checks, :errors, :warnings) do
       def success?
         errors.empty?
       end

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-NodePresenterTestNode = Struct.new(:id, :name, :kind, keyword_init: true)
+NodePresenterTestNode = Struct.new(:id, :name, :kind)
 
 class NodePresenterLocalizedModelName
   def human(count: 1, default: nil)

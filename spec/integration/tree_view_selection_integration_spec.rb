@@ -2,7 +2,7 @@ require "spec_helper"
 require "action_view"
 require "fileutils"
 require "tmpdir"
-SelectionNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+SelectionNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView selection integration" do
   let(:root) { SelectionNode.new(id: 1, parent_item_id: nil, name: "root") }

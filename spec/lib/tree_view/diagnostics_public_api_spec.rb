@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-DiagnosticsPublicApiTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+DiagnosticsPublicApiTestNode = Struct.new(:id, :parent_id, :name)
 
 RSpec.describe TreeView::Diagnostics do
   def dom_id_suffix(item_or_id)

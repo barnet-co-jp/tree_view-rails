@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-TreeViewWindowRowsHelperSpecNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+TreeViewWindowRowsHelperSpecNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "tree_view_rows window option" do
   let(:ui_config) do

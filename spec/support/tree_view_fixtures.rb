@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TreeViewFixtures
-  FixtureNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+  FixtureNode = Struct.new(:id, :parent_id, :name)
 
   module_function
 

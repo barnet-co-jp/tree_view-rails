@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe TreeView::Diagnostics do
   def diagnostic_node_class
-    @diagnostic_node_class ||= Struct.new(:id, :parent_id, :name, keyword_init: true)
+    @diagnostic_node_class ||= Struct.new(:id, :parent_id, :name)
   end
 
   def diagnostic_node(id:, parent_id:, name:)

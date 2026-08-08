@@ -2,7 +2,7 @@ require "spec_helper"
 require "action_view"
 require "fileutils"
 require "tmpdir"
-DemoMachineNode = Struct.new(:id, :name, :children, keyword_init: true)
+DemoMachineNode = Struct.new(:id, :name, :children)
 
 RSpec.describe "TreeView demo app integration contract" do
   let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }

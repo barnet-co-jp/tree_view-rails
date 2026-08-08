@@ -1,5 +1,5 @@
 require "spec_helper"
-SortPresetNode = Struct.new(:id, :parent_id, :position, :name, keyword_init: true)
+SortPresetNode = Struct.new(:id, :parent_id, :position, :name)
 
 RSpec.describe TreeView::Sorters do
   it "sorts by one or more methods" do

@@ -4,7 +4,7 @@ require "spec_helper"
 require "yaml"
 
 TREE_VIEW_TOOLBAR_MANIFEST_COMPATIBILITY_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-TreeViewToolbarManifestRenderState = Struct.new(:ui_config, keyword_init: true)
+TreeViewToolbarManifestRenderState = Struct.new(:ui_config)
 
 RSpec.describe "TreeView toolbar manifest compatibility" do
   def public_api_manifest

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RenderStateNodePresenterTestNode = Struct.new(:id, :name, :kind, keyword_init: true)
+RenderStateNodePresenterTestNode = Struct.new(:id, :name, :kind)
 
 RSpec.describe "RenderState node presenter integration" do
   let(:tree) { instance_double(TreeView::Tree) }

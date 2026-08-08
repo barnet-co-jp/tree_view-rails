@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-ResourceTableRenderStateSpecNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+ResourceTableRenderStateSpecNode = Struct.new(:id, :parent_id, :name)
 
 RSpec.describe TreeView::ResourceTableRenderState do
   let(:root) { ResourceTableRenderStateSpecNode.new(id: 1, parent_id: nil, name: "root") }

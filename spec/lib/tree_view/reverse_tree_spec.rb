@@ -1,5 +1,5 @@
 require "spec_helper"
-ReverseTreeNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+ReverseTreeNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe TreeView::ReverseTree do
   def build_base_tree(records)

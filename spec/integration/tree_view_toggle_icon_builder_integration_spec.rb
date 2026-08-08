@@ -3,7 +3,7 @@ require "action_view"
 require "fileutils"
 require "tmpdir"
 
-ToggleIconBuilderNode = Struct.new(:id, :parent_item_id, :name, :node_type, keyword_init: true)
+ToggleIconBuilderNode = Struct.new(:id, :parent_item_id, :name, :node_type)
 
 RSpec.describe "TreeView toggle_icon_builder integration" do
   let(:root) { ToggleIconBuilderNode.new(id: 1, parent_item_id: nil, name: "root", node_type: :folder) }

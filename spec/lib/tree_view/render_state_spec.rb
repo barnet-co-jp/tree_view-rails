@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe TreeView::RenderState do
-  RenderStateTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+  RenderStateTestNode = Struct.new(:id, :parent_id, :name)
 
   let(:tree) { instance_double(TreeView::Tree) }
   let(:ui_config) { instance_double(TreeView::UiConfig) }

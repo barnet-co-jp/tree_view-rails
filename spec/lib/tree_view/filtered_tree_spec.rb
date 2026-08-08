@@ -1,5 +1,5 @@
 require "spec_helper"
-FilterNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+FilterNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe TreeView::FilteredTree do
   let(:root) { FilterNode.new(id: 1, parent_item_id: nil, name: "root") }

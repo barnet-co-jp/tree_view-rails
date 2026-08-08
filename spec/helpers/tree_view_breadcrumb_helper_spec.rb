@@ -1,7 +1,7 @@
 require "spec_helper"
 require "action_view"
 
-BreadcrumbNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+BreadcrumbNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe TreeViewBreadcrumbHelper do
   def build_helper

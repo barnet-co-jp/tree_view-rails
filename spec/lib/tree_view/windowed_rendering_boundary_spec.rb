@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-WindowedRenderingBoundarySpecNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+WindowedRenderingBoundarySpecNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "Windowed rendering boundary guards" do
   let(:ui_config) { TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "node").build_static }

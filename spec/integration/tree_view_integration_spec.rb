@@ -3,7 +3,7 @@ require "action_view"
 require "bigdecimal"
 require "fileutils"
 require "tmpdir"
-IntegrationNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+IntegrationNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView integration" do
   let(:root) { IntegrationNode.new(id: 1, parent_item_id: nil, name: "root") }

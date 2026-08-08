@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-TreeViewErrorMessageSpecNode = Struct.new(:id, :parent_id, keyword_init: true)
+TreeViewErrorMessageSpecNode = Struct.new(:id, :parent_id)
 
 RSpec.describe "TreeView error message quality" do
   def build_node(id, parent_id = nil)

@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe "tree_remote_state_placeholder_attributes" do
   def test_node(id)
-    Struct.new(:id, keyword_init: true).new(id: id)
+    Struct.new(:id).new(id: id)
   end
 
   def helper_with_ui

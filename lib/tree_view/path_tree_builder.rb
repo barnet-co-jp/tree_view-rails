@@ -2,7 +2,7 @@
 
 module TreeView
   class PathTreeBuilder
-    FolderNode = Struct.new(:key, :parent_key, :label, :path, :node_type, keyword_init: true) do
+    FolderNode = Struct.new(:key, :parent_key, :label, :path, :node_type) do
       def folder_node?
         true
       end
@@ -12,7 +12,7 @@ module TreeView
       end
     end
 
-    RecordNode = Struct.new(:key, :parent_key, :label, :path, :record, :node_type, keyword_init: true) do
+    RecordNode = Struct.new(:key, :parent_key, :label, :path, :record, :node_type) do
       def folder_node?
         false
       end

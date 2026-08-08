@@ -3,7 +3,7 @@ require "action_view"
 require "fileutils"
 require "tmpdir"
 
-ClientModeNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+ClientModeNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView client-side toggle mode" do
   let(:root) { ClientModeNode.new(id: 1, parent_item_id: nil, name: "root") }

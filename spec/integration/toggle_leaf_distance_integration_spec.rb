@@ -2,7 +2,7 @@ require "spec_helper"
 require "action_view"
 require "fileutils"
 require "tmpdir"
-ToggleLeafNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+ToggleLeafNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView leaf-based toggle scope integration" do
   let(:root) { ToggleLeafNode.new(id: 1, parent_item_id: nil, name: "root") }

@@ -1,5 +1,5 @@
 require "spec_helper"
-BaselineNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+BaselineNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView large tree baselines" do
   def build_chain(size)

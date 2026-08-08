@@ -1,5 +1,5 @@
 require "spec_helper"
-RowEventNode = Struct.new(:id, :name, keyword_init: true)
+RowEventNode = Struct.new(:id, :name)
 
 RSpec.describe "TreeView row event payload builder" do
   let(:tree) { instance_double(TreeView::Tree) }

@@ -3,7 +3,7 @@
 require "spec_helper"
 require "yaml"
 
-PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name)
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
 JAVASCRIPT_CONTROLLER_PATHS = {

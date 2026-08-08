@@ -1,5 +1,5 @@
 require "spec_helper"
-DiagnosticNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+DiagnosticNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView builder diagnostics" do
   let(:helper_host_class) do

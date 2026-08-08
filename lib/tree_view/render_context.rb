@@ -33,8 +33,7 @@ module TreeView
       :depth_label_builder,
       :badge_builder,
       :icon_builder,
-      :toggle_icon_builder,
-      keyword_init: true
+      :toggle_icon_builder
     ) do
       def effective_initial_state
         :expanded

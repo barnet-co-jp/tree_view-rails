@@ -14,7 +14,7 @@ module TreeView
       actions
     ].freeze
 
-    Definition = Struct.new(:builders, keyword_init: true) do
+    Definition = Struct.new(:builders) do
       def initialize(builders: {})
         super
       end
