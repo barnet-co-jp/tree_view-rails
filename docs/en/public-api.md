@@ -206,6 +206,7 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
+- `TreeViewStateChangeReasons`
 - `TreeViewTransferDropPositions`
 - `TreeViewTransferDataAttributes`
 - `TreeViewTransferDataMimeTypes`
@@ -231,6 +232,7 @@ Stable enough for host apps to use:
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewEventDetailKeys` exposes the documented `event.detail` key lists as a machine-readable package-root export. Use it when host-app tests or listeners need to compare against the documented key names without changing the payload shape; the field meanings still live in [JavaScript event contract](js-events.md).
+`TreeViewStateChangeReasons` exposes the documented state snapshot publish reasons (`connect`, `refresh`, `expanded`, and `collapsed`) as immutable package-root values for host-app listeners and tests. It does not change state-controller dispatch behavior.
 `TreeViewTransferDropPositions` exposes the documented coarse drop-position values for transfer events: `before`, `inside`, and `after`. `TreeViewEventNames.transfer.*` names transfer events, `TreeViewEventDetailKeys.transfer.*` lists the documented `event.detail` keys, and `TreeViewTransferDropPositions` carries the position values described in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewTransferDataAttributes` exposes the documented transfer payload and disabled-row DOM attribute names. Use `TreeViewTransferDataAttributes.payload` for `data-tree-transfer-payload` and `TreeViewTransferDataAttributes.disabled` for `data-tree-transfer-disabled` when host-app JavaScript, browser tests, or shared helpers need transfer wiring attributes without hand-copying strings. These exports name DOM wiring attributes only; payload shape, authorization, persistence, and final drop behavior still live in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewTransferDataMimeTypes` exposes the documented TreeView transfer MIME type values: `application/json` for the primary JSON payload and `text/plain` as the browser compatibility fallback. Use it when host-app JavaScript or tests need to read or assert TreeView transfer data without hand-copying MIME strings; drag/drop behavior, payload shape, and final business handling still live in [Drag and Drop](drag-and-drop.md#drop-behavior).

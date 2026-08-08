@@ -416,6 +416,51 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Public name decisions reader journey",
+    files: [
+      [
+        "docs/en/README.md",
+        ["Public Name Decisions", "public-name-decisions.md"]
+      ],
+      [
+        "docs/ja/README.md",
+        ["公開名の判断メモ", "public-name-decisions.md"]
+      ],
+      [
+        "docs/en/public-name-decisions.md",
+        [
+          "badge_builder",
+          "recommended hook",
+          "icon_builder",
+          "compatibility alias",
+          "row_event_payload_builder",
+          "transfer-specific",
+          "not a generic event payload hook",
+          "loading_builder",
+          "error_builder",
+          "boolean predicates",
+          "do not build UI"
+        ]
+      ],
+      [
+        "docs/ja/public-name-decisions.md",
+        [
+          "badge_builder",
+          "推奨します",
+          "icon_builder",
+          "compatibility alias",
+          "row_event_payload_builder",
+          "transfer専用",
+          "汎用payload hookではありません",
+          "loading_builder",
+          "error_builder",
+          "boolean predicate",
+          "UIをbuildするhookではありません"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Mockup README smoke and review policy",
     files: [
       [

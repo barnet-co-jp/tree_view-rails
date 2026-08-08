@@ -206,6 +206,7 @@ host app が使ってよい入口:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
+- `TreeViewStateChangeReasons`
 - `TreeViewTransferDropPositions`
 - `TreeViewTransferDataAttributes`
 - `TreeViewTransferDataMimeTypes`
@@ -231,6 +232,7 @@ host app が使ってよい入口:
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewEventDetailKeys` は documented `event.detail` key list を machine-readable に参照するための package-root export です。host app の test や listener が documented key name と照合したい場合に使えますが、payload shape 自体は変えません。各 field の意味は [JavaScript event contract](js-events.md) を正本にしてください。
+`TreeViewStateChangeReasons` は documented state snapshot publish reason (`connect`、`refresh`、`expanded`、`collapsed`) を、host app の listener / test 向けimmutable package-root valueとして公開します。state controllerのdispatch behaviorは変更しません。
 `TreeViewTransferDropPositions` は transfer event の粗い drop-position value として、`before`、`inside`、`after` を公開します。`TreeViewEventNames.transfer.*` は transfer event 名、`TreeViewEventDetailKeys.transfer.*` は documented な `event.detail` key、`TreeViewTransferDropPositions` は [Drag and Drop](drag-and-drop.md#drop処理) で説明している position value を表します。
 `TreeViewTransferDataAttributes` は documented な transfer payload / disabled-row DOM attribute 名を公開します。host app の JavaScript、browser test、shared helper が transfer wiring attribute を raw string で写経したくない場合は、`data-tree-transfer-payload` に `TreeViewTransferDataAttributes.payload`、`data-tree-transfer-disabled` に `TreeViewTransferDataAttributes.disabled` を使ってください。これらの export は DOM wiring attribute 名だけを指します。payload shape、authorization、保存、最終的な drop behavior は引き続き [Drag and Drop](drag-and-drop.md#drop処理) を正本にしてください。
 `TreeViewTransferDataMimeTypes` は documented な TreeView transfer MIME type value として、primary JSON payload 用の `application/json` と browser compatibility fallback 用の `text/plain` を公開します。host app の JavaScript や test が MIME string を写経せずに TreeView transfer data を読み取ったり assert したりしたい場合に使えます。drag/drop behavior、payload shape、最終的な業務処理は引き続き [Drag and Drop](drag-and-drop.md#drop処理) を正本にしてください。

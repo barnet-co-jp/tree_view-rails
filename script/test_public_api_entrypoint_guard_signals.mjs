@@ -35,6 +35,9 @@ const readmePackageRootExportSignals = [
   "tree_view/index.js",
   "TreeViewEventNames",
   "TreeViewEventDetailKeys",
+  "TreeViewControllerEntries",
+  "TreeViewIntegrationHooks",
+  "TreeViewRemoteStateDataHooks",
   "documented data hook objects",
   "docs/en/public-api.md#javascript-surface",
   "docs/ja/public-api.md#javascript-surface",
@@ -79,6 +82,17 @@ publicApiDocs.forEach(([relativePath, document]) => {
 
 assertIncludes(manifest, "javascript_package_root:", "public API manifest JavaScript package-root boundary")
 assertIncludes(manifest, "named_exports:", "public API manifest JavaScript package-root boundary")
+
+const readmeManifestBackedExportSignals = [
+  "TreeViewControllerEntries",
+  "TreeViewIntegrationHooks",
+  "TreeViewRemoteStateDataHooks"
+]
+
+readmeManifestBackedExportSignals.forEach((signal) => {
+  assertIncludes(manifest, `- ${signal}`, `public API manifest README representative export (${signal})`)
+  assertIncludes(readme, signal, `README manifest-backed representative export (${signal})`)
+})
 
 const resourceTableManifestSignals = [
   "resource_table_render_state_call:",

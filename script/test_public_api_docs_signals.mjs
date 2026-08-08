@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
@@ -6,6 +7,36 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 
 function read(relativePath) {
   return readFileSync(path.join(repoRoot, relativePath), "utf8")
+}
+
+function loadJavaScriptNamedExports() {
+  try {
+    return JSON.parse(
+      execFileSync(
+        "ruby",
+        [
+          "-e",
+          [
+            'require "json"',
+            'require "yaml"',
+            'data = YAML.load_file("config/public_api_manifest.yml")',
+            'print JSON.generate(data.fetch("javascript_package_root").fetch("named_exports"))'
+          ].join("; ")
+        ],
+        { cwd: repoRoot, encoding: "utf8" }
+      )
+    )
+  } catch (error) {
+    const output = [error.stdout, error.stderr]
+      .filter((value) => value && value.length > 0)
+      .join("\n")
+      .trim()
+
+    throw new Error(
+      `Could not load javascript_package_root.named_exports from config/public_api_manifest.yml: ${output || error.message}`,
+      { cause: error }
+    )
+  }
 }
 
 function assert(condition, message) {
@@ -17,6 +48,7 @@ function assertIncludes(source, needle, label) {
 }
 
 const manifest = read("config/public_api_manifest.yml")
+const javascriptNamedExports = loadJavaScriptNamedExports()
 const publicApiDocs = [
   ["docs/en/public-api.md", read("docs/en/public-api.md")],
   ["docs/ja/public-api.md", read("docs/ja/public-api.md")]
@@ -413,6 +445,10 @@ hostLifecycleSignals.slice(1, 5).forEach((signal) => {
 })
 
 publicApiDocs.forEach(([relativePath, document]) => {
+  javascriptNamedExports.forEach((exportName) => {
+    assertIncludes(document, `\`${exportName}`, `${relativePath} JavaScript named export inventory`)
+  })
+
   publicConstantSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} public constant docs from config/public_api_manifest.yml public_constants`)
   })
