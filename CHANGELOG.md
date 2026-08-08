@@ -151,6 +151,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added manifest-backed bilingual docs signal coverage for controller registration guidance, UiConfigBuilder option groups, and the complete stable public constant inventory without changing runtime or manifest contracts.
 - Added focused bilingual docs signal coverage for Localized names and styling entrypoints, selection count targets, persisted-state retry and retention boundaries, and release note candidate collector navigation without changing runtime or manifest contracts.
 - Removed redundant `keyword_init: true` from Ruby `Struct.new` declarations and dropped the repository-wide `Style/RedundantStructKeywordInit` ignore as a baseline cleanup.
 - Added focused docs signal coverage for manifest-backed JavaScript export inventories, concrete README package-root examples, and bilingual Public Name Decisions reader journeys without changing runtime or manifest contracts.

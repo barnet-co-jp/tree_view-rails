@@ -26,6 +26,7 @@ host app が直接使ってよい主な入口は以下です。
 - `TreeView::DuplicateNodeKeyError`
 - `TreeView::CycleDetectedError`
 - `TreeView::InvalidRenderWindowError`
+- `TreeView::Configuration`
 - `TreeView::LocalizedNames`
 - `TreeView::Tree`
 - `TreeView::RenderState`
@@ -239,7 +240,7 @@ host app が使ってよい入口:
 `TreeViewRemoteStateValues` は lazy-loading row の documented remote-state value set として、`loading`、`loaded`、`error` を公開します。host app の JavaScript や test が `data-tree-remote-state` の値を string の写経なしに照合したい場合に使えます。controller が emit する remote-state event 名は引き続き `TreeViewEventNames.remoteState.*`、その `event.detail` key は `TreeViewEventDetailKeys.remoteState.*` で扱います。
 `TreeViewRemoteStateDataHooks` は、documented された lazy-loading / remote-state data attribute names を machine-readable に参照するための package-root export です。custom lazy-loading markup、test、copied host-app partial が `data-tree-lazy`、`data-tree-children-url`、`data-tree-loaded`、`data-tree-remote-state` を写経せず参照したい場合に使えます。request dispatch、response handling、retry UI、authorization-safe copy は [Lazy Loading](lazy-loading.md) に沿って host app 側に残ります。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
-`TreeViewControllerEntries` は、documented identifier と controller export の対応を bundled registration order で公開します。custom registration、boot-order review、test で identifier / controller tuple を写経したくない場合に使ってください。標準の登録入口は引き続き `registerTreeViewControllers(application)` であり、この entries list は selective wiring 用の manifest-backed convenience であって、新しい registration policy ではありません。
+`TreeViewControllerEntries` は、documented identifier と controller export の対応を bundled registration order で公開します。custom registration、boot-order review、test で identifier / controller tuple を写経したくない場合に使ってください。標準の登録入口は引き続き `registerTreeViewControllers(application)` であり、この entries list は selective wiring 用の manifest-backed convenience であって、新しい registration policy ではありません。default / custom registration path の全体は [Controller registration](controller-registration.md) を参照してください。
 `TreeViewIntegrationHooks` は、documented integration hook attribute name を machine-readable object として公開します。host app の JavaScript や test が TreeView-owned wiring を query / assert するとき、raw string の写経を避けるために使えます。代表 key は state row identity、remote-state children URL、transfer payload hook を扱います。詳細な挙動は feature docs と [JavaScript event contract](js-events.md) を正本にしてください。
 
 `TreeViewRemoteStateDataHooks.childrenUrlAttribute` と `TreeViewIntegrationHooks.remoteState.childrenUrl` は、どちらも同じ `data-tree-children-url` attribute を指します。lazy-loading / remote-state data hook の inventory として読む場合は `TreeViewRemoteStateDataHooks` を優先し、複数機能をまたぐ TreeView-owned wiring を integration surface や test fixture で確認する場合は `TreeViewIntegrationHooks` を使ってください。

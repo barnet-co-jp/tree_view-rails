@@ -26,6 +26,7 @@ Host apps may use these entry points directly:
 - `TreeView::DuplicateNodeKeyError`
 - `TreeView::CycleDetectedError`
 - `TreeView::InvalidRenderWindowError`
+- `TreeView::Configuration`
 - `TreeView::LocalizedNames`
 - `TreeView::Tree`
 - `TreeView::RenderState`
@@ -239,7 +240,7 @@ Stable enough for host apps to use:
 `TreeViewRemoteStateValues` exposes the documented remote-state value set for lazy-loading rows: `loading`, `loaded`, and `error`. Use it when host-app JavaScript or tests need to compare `data-tree-remote-state` values without hand-copying strings; `TreeViewEventNames.remoteState.*` still names controller-emitted events, and `TreeViewEventDetailKeys.remoteState.*` still lists their `event.detail` keys.
 `TreeViewRemoteStateDataHooks` exposes the documented lazy-loading and remote-state data attribute names as a machine-readable package-root export. Use it when custom lazy-loading markup, tests, or copied host-app partials need to reference `data-tree-lazy`, `data-tree-children-url`, `data-tree-loaded`, or `data-tree-remote-state` without hand-copying strings; request dispatch, response handling, retry UI, and authorization-safe copy stay with the host app and [Lazy Loading](lazy-loading.md).
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
-`TreeViewControllerEntries` exposes the documented identifier/controller pairs in bundled registration order. Use it when host apps need custom registration, boot-order review, or tests that should not hand-copy identifier/controller tuples. `registerTreeViewControllers(application)` remains the standard registration path; the entries list is a manifest-backed convenience for selective wiring, not a new registration policy.
+`TreeViewControllerEntries` exposes the documented identifier/controller pairs in bundled registration order. Use it when host apps need custom registration, boot-order review, or tests that should not hand-copy identifier/controller tuples. `registerTreeViewControllers(application)` remains the standard registration path; the entries list is a manifest-backed convenience for selective wiring, not a new registration policy. See [Controller registration](controller-registration.md) for the complete default and custom registration paths.
 `TreeViewIntegrationHooks` exposes documented integration hook attribute names as a machine-readable object for host-app JavaScript and tests that need to query or assert TreeView-owned wiring without hand-copying strings. Representative keys cover state row identity, remote-state children URLs, and transfer payload hooks; their detailed behavior still lives in the feature docs and [JavaScript event contract](js-events.md).
 
 `TreeViewRemoteStateDataHooks.childrenUrlAttribute` and `TreeViewIntegrationHooks.remoteState.childrenUrl` intentionally point to the same `data-tree-children-url` attribute. Prefer `TreeViewRemoteStateDataHooks` when working inside lazy-loading or remote-state data-hook inventories, and use `TreeViewIntegrationHooks` when a broader integration surface or test fixture is checking TreeView-owned wiring across features.
