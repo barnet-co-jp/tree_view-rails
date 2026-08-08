@@ -299,6 +299,59 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("heading", { name: "Vertical writing stress case" })).toBeVisible()
     await expect(page.locator("[aria-label='Vertical writing tree sample'].direction-frame--vertical .tree-row.is-selected")).toBeVisible()
     await expect(page.locator("[aria-label='Vertical writing tree sample'].direction-frame--vertical")).toHaveCSS("writing-mode", "vertical-rl")
+    await expect(page.getByRole("heading", { name: "Responsibility boundary" })).toBeVisible()
+    await expect(page.getByText("Host apps own final RTL, vertical writing, locale-specific spacing, design-system colors, and business row states.", { exact: true })).toBeVisible()
+    await expect(page.getByText("Public styling hook promotion remains outside this page", { exact: false })).toBeVisible()
+    await expect(page.getByText("without claiming complete vertical writing support", { exact: false })).toBeVisible()
+  })
+
+  test("turbo-frame-target.html preserves target attributes and host-app ownership", async ({ page }) => {
+    await openMockup(page, "turbo-frame-target.html")
+
+    await expect(page.locator(".turbo-frame-box[aria-label='turbo-frame documents_tree static boundary']")).toBeVisible()
+    await expect(page.locator("a.tree-toggle__action[data-turbo-frame='documents_tree']")).toHaveCount(2)
+    const boundary = page.locator("[aria-label='Responsibility boundary notes']")
+    await expect(boundary.getByRole("heading", { name: "TreeView owns" })).toBeVisible()
+    await expect(boundary.getByRole("heading", { name: "Host app owns" })).toBeVisible()
+    await expect(boundary.getByText("route, controller action, authorization", { exact: false })).toBeVisible()
+  })
+
+  test("selection-max-count.html preserves count and limit-exceeded feedback states", async ({ page }) => {
+    await openMockup(page, "selection-max-count.html")
+
+    await expect(page.getByRole("heading", { name: "Selected count below the limit" })).toBeVisible()
+    await expect(page.locator(".mock-limit-count--open")).toHaveText("2 / 3")
+    await expect(page.getByRole("heading", { name: "Limit reached" })).toBeVisible()
+    await expect(page.getByText("Maximum selection reached", { exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Limit-exceeded feedback" })).toBeVisible()
+    await expect(page.locator("[role='status']")).toContainText("tree-view-selection:limit-exceeded")
+  })
+
+  test("selection-multi-tree-form.html preserves source-specific hidden input boundaries", async ({ page }) => {
+    await openMockup(page, "selection-multi-tree-form.html")
+
+    const selectionGroups = page.locator(".mock-selection-group")
+    await expect(selectionGroups.nth(0)).toContainText("selected: 2")
+    await expect(selectionGroups.nth(0)).toContainText("source: policies")
+    await expect(selectionGroups.nth(1)).toContainText("selected: 1")
+    await expect(selectionGroups.nth(1)).toContainText("source: assets")
+    await expect(page.locator("[aria-label='Host app submit summary']")).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Generated hidden input boundary" })).toBeVisible()
+    const hiddenInputBoundary = page.locator(".mock-selection-hidden-stack")
+    await expect(hiddenInputBoundary).toContainText('data-tree-view-selection-source-id="policies"')
+    await expect(hiddenInputBoundary).toContainText('data-tree-view-selection-source-id="assets"')
+  })
+
+  test("children-pagination-selection-boundary.html preserves loaded-only selection ownership", async ({ page }) => {
+    await openMockup(page, "children-pagination-selection-boundary.html")
+
+    await expect(page.getByRole("heading", { name: "Loaded rows only selection" })).toBeVisible()
+    await expect(page.getByRole("checkbox", { name: "Some loaded Roadmap children selected" })).toHaveAttribute("aria-checked", "mixed")
+    await expect(page.getByText("Unloaded descendants are not checked or submitted by this DOM slice.", { exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Rendered-row cascade and indeterminate cues" })).toBeVisible()
+    await expect(page.getByText("Rendered-only rule:", { exact: false })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Host-app bulk action boundary" })).toBeVisible()
+    await expect(page.getByText("query-backed or server-side intent", { exact: false })).toBeVisible()
   })
 
   test("toolbar-actions.html preserves action and responsibility boundary signals", async ({ page }) => {
