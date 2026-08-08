@@ -6,7 +6,7 @@ This page explains how the JavaScript CI lane uses the npm cache without changin
 
 The committed `package-lock.json` remains the dependency-resolution source of truth. Local setup, Docker setup smoke, pull-request JavaScript checks, and main-push JavaScript checks use `npm ci` so verification installs exactly from the committed lockfile.
 
-The CI workflow uses `actions/setup-node@v6` with `cache: npm` in the JavaScript job. Treat that cache as an install-speed and CI-reuse optimization only. It must not be used as evidence that dependencies, package manager policy, or the lockfile changed.
+The CI workflow uses `actions/setup-node@v7` with `cache: npm` in the JavaScript job. Treat that cache as an install-speed and CI-reuse optimization only. It must not be used as evidence that dependencies, package manager policy, or the lockfile changed.
 
 ## When dependencies change
 
@@ -16,7 +16,7 @@ Do not change dependency versions, the Node major, `actions/setup-node` policy, 
 
 ## Related checks
 
-- `.github/workflows/ci.yml` keeps the JavaScript job on Node 22, `actions/setup-node@v6`, `cache: npm`, and `npm ci`.
+- `.github/workflows/ci.yml` keeps the JavaScript job on Node 22, `actions/setup-node@v7`, `cache: npm`, and `npm ci`.
 - `npm run test:node-version-sources` keeps `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` aligned.
 - `npm run test:ci-policy` keeps workflow action/version signals and lockfile drift signals visible for maintainers.
 - [Release checklist](release.md) records the release-facing `npm ci` and package-lock boundary.
