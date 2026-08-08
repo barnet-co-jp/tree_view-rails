@@ -8,6 +8,10 @@ const diagnosticsDocs = [
   ["docs/en/tree-diagnostics.md", read("docs/en/tree-diagnostics.md")],
   ["docs/ja/tree-diagnostics.md", read("docs/ja/tree-diagnostics.md")]
 ]
+const developmentDocs = [
+  ["docs/en/development.md", read("docs/en/development.md")],
+  ["docs/ja/development.md", read("docs/ja/development.md")]
+]
 
 function read(relativePath) {
   return readFileSync(path.join(repoRoot, relativePath), "utf8")
@@ -62,6 +66,30 @@ diagnosticsRunOptionSignals.forEach((signal) => {
 
 diagnosticsResultSurfaceSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest diagnostics Result surface")
+})
+
+developmentDocs.forEach(([relativePath, document]) => {
+  [
+    "diagnostics.accepted_checks",
+    "diagnostics.run_options",
+    "diagnostics.result_surface",
+    "lib/tree_view/diagnostics.rb",
+    "script/test_diagnostics_docs_signals.mjs",
+    "individual error detail shape",
+    "orphan warning semantics",
+    "cycle validation policy"
+  ].forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics docs-signal responsibility`)
+  })
+
+  assert(
+    /only keeps representative.*wording aligned|代表 wording の同期だけを担当/.test(document),
+    `${relativePath}: Diagnostics docs must limit the lightweight signal to representative bilingual wording`
+  )
+  assert(
+    /does not validate runtime execution|runtime execution を検証せず/.test(document),
+    `${relativePath}: Diagnostics docs must keep runtime validation outside the docs-signal guard`
+  )
 })
 
 diagnosticsDocs.forEach(([relativePath, document]) => {

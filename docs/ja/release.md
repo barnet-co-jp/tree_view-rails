@@ -216,9 +216,9 @@ release前に確認すること:
 
 package contents guard は package-root JavaScript entrypoint と importmap の代表 signal も確認します。`config/public_api_manifest.yml` の `javascript_package_root.named_exports` を、packaged `app/javascript/tree_view/index.js` と `app/javascript/tree_view/index.d.ts` にそろえてください。manifest-listed export が欠けた場合、guard は `Missing manifest-listed JavaScript package-root named exports in packaged <path>` を報告します。これは release evidence の確認だけなので、この checklist だけを根拠に public JavaScript export を追加・rename しないでください。
 
-RubyGems consumer-facing な descriptive metadata は、URI metadata や release metadata とは別に guard されています。`spec/gemspec_files_spec.rb` は packaged gemspec の license を `MIT`、summary を `Tree rendering primitives for Rails applications`、description を短い Rails integration overview として守るため、registry-facing identity の drift を dependency、release、package contents policy の変更と混ぜずに review できます。
+RubyGems consumer-facing な descriptive metadata は、URI metadata や release metadata とは別に guard されています。`spec/gemspec_files_spec.rb` は packaged gemspec の license を `MIT`、summary を `Tree rendering primitives for Rails applications`、description を `Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs.` として守ります。これは registry-facing identity の descriptive metadata evidence です。URI metadata と release metadata は別の package-checker evidence のまま扱い、この checklist だけを根拠にそれらの値、dependency、release policy を変更しません。
 
-同じ package verification は、importmap で gem を導入する host app 向けに `config/importmap.tree_view.rb` が `pin "tree_view", to: "tree_view/index.js"` を packaged file として維持していることも確認します。これは packaging evidence の guard であり、importmap setup behavior や public API semantics の変更は、その surface を意図的に変更する PR に閉じます。
+package verifier は、built gem に `config/importmap.tree_view.rb` が含まれ、その source が importmap host app 向けの `pin "tree_view", to: "tree_view/index.js"` を維持することも確認します。これは importmap package evidence であり、runtime package-root export guard や controller registration / behavior guard とは別責務です。importmap setup behavior、public export、controller semantics の変更は、その surface を意図的に変更する PR に閉じます。
 
 ## Repository
 

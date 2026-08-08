@@ -23,6 +23,52 @@ function assertSignals(sourcePath, feature, signals) {
   })
 }
 
+const descriptiveMetadataAndImportmapEvidenceSignals = [
+  [
+    "tree_view.gemspec",
+    [
+      "spec.license = \"MIT\"",
+      "spec.summary = \"Tree rendering primitives for Rails applications\"",
+      "spec.description = \"Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs.\""
+    ]
+  ],
+  [
+    "config/importmap.tree_view.rb",
+    ["pin \"tree_view\", to: \"tree_view/index.js\""]
+  ],
+  [
+    "script/check_gem_package_contents.rb",
+    [
+      "importmap_pin_missing",
+      "importmap_content.include?",
+      "Missing TreeView importmap pin in config/importmap.tree_view.rb:",
+      "tree_view/index.js"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "descriptive metadata evidence",
+      "URI metadata and release metadata remain separate package-checker evidence",
+      "spec/gemspec_files_spec.rb",
+      "importmap package evidence",
+      "runtime package-root export guards",
+      "controller registration or behavior guards"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "descriptive metadata evidence",
+      "URI metadata と release metadata は別の package-checker evidence",
+      "spec/gemspec_files_spec.rb",
+      "importmap package evidence",
+      "runtime package-root export guard",
+      "controller registration / behavior guard"
+    ]
+  ]
+]
+
 const packageContentsVerificationSignals = [
   [
     "script/check_gem_package_contents.rb",
@@ -129,6 +175,10 @@ const packageContentsVerificationSignals = [
     ]
   ]
 ]
+
+descriptiveMetadataAndImportmapEvidenceSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Descriptive metadata and importmap package evidence", signals)
+})
 
 packageContentsVerificationSignals.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Gem package release docs category signal", signals)

@@ -116,7 +116,6 @@ const developmentManifestRoleSignals = [
 assertAll(manifest, rubyModuleMethodManifestSignals, "public API manifest Ruby module method surface")
 assertAll(manifest, publicHelperManifestSignals, "public API manifest helper method surface")
 assertAll(manifest, specialManifestSurfaceSignals, "public API manifest specialized docs surface")
-
 assertDocs(publicApiDocPaths, rubyModuleMethodDocsSignals, "Ruby stable entrypoint docs")
 assertDocs(publicApiDocPaths, publicHelperDocsSignals, "manifest-backed public helper docs")
 assertDocs(publicApiDocPaths, ["TreeView::GraphAdapter", "TreeView::PathTreeBuilder"], "specialized public entrypoint docs")
@@ -133,3 +132,28 @@ assertDocsMatch(
 )
 
 assertDocs(developmentDocPaths, developmentManifestRoleSignals, "manifest and docs-signal role summary")
+assertDocs(
+  developmentDocPaths,
+  [
+    "path_tree_builder_node_shapes",
+    "FolderNode",
+    "RecordNode",
+    "spec/public_api_path_tree_builder_contract_spec.rb",
+    "script/test_public_api_docs_signals.mjs",
+    "folder key generation strategy",
+    "sorting algorithm",
+    "file-manager behavior",
+    "row action design"
+  ],
+  "PathTreeBuilder node-shape guard responsibility"
+)
+assertDocsMatch(
+  developmentDocPaths,
+  /field and predicate surface|field \/ predicate surface/,
+  "PathTreeBuilder manifest-backed field and predicate boundary"
+)
+assertDocsMatch(
+  developmentDocPaths,
+  /does not freeze|固定しません/,
+  "PathTreeBuilder behavior outside the node-shape manifest"
+)
