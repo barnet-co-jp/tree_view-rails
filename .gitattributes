@@ -1,5 +1,8 @@
 # See https://git-scm.com/docs/gitattributes for more about git attribute files.
 
+# Keep repository text files normalized to LF regardless of local Git settings.
+* text=auto eol=lf
+
 # Mark the database schema as having been generated.
 db/schema.rb linguist-generated
 
