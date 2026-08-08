@@ -165,6 +165,63 @@ const requiredDocsEntrypointSuiteCommandSignals = [
   ]
 ]
 
+const requiredDevelopmentGuardResponsibilitySignals = [
+  [
+    "docs/en/development.md",
+    [
+      "The command hierarchy is",
+      "`npm run test:js:core` adds Vitest",
+      "`npm run test:js` adds Playwright",
+      "CI-policy docs signals and importmap CI-policy routing belong to `npm run test:ci-policy`",
+      "Development docs command signals belong to `npm run test:development-docs-commands`",
+      "page-set parity belongs to `npm run test:docs-i18n`",
+      "`Manifest-backed public surface signals`",
+      "public constants, helper methods, setup generator paths, and event detail keys",
+      "`Localized and hook docs signals`",
+      "localized-name lookup key family",
+      "`Render window and resource table docs signals`",
+      "`render_window_metadata` and `resource_table_render_state_call`",
+      "`script/test_public_api_manifest_structure.mjs` owns manifest shape",
+      "`Host app extension diagnostics signals`",
+      "`TreeView::Diagnostics.run`",
+      "`validate_node_keys: true`",
+      "`RenderState#validate_unique_dom_ids!`",
+      "`script/test_diagnostics_docs_signals.mjs`",
+      "`script/test_controller_entries_contract.mjs` separately compares manifest-backed `javascript_package_root.controller_registrations`",
+      "runtime `TreeViewControllerEntries`",
+      "`registerTreeViewControllers(application)`",
+      "repository root with Ruby available"
+    ]
+  ],
+  [
+    "docs/ja/development.md",
+    [
+      "command hierarchy は",
+      "`npm test` で Vitest を追加する `npm run test:js:core`",
+      "`npm run test:browser` で Playwright を追加する `npm run test:js`",
+      "CI-policy docs signal と importmap CI-policy routing は `npm run test:ci-policy`",
+      "Development docs command signal は `npm run test:development-docs-commands`",
+      "page-set parity は `npm run test:docs-i18n`",
+      "`Manifest-backed public surface signals`",
+      "public constants、helper methods、setup generator paths、event detail keys",
+      "`Localized and hook docs signals`",
+      "localized-name lookup key family",
+      "`Render window and resource table docs signals`",
+      "`render_window_metadata` / `resource_table_render_state_call`",
+      "manifest shape は `script/test_public_api_manifest_structure.mjs`",
+      "`Host app extension diagnostics signals`",
+      "`TreeView::Diagnostics.run`",
+      "`validate_node_keys: true`",
+      "`RenderState#validate_unique_dom_ids!`",
+      "`script/test_diagnostics_docs_signals.mjs`",
+      "manifest-backed な `javascript_package_root.controller_registrations`",
+      "runtime の `TreeViewControllerEntries`",
+      "`registerTreeViewControllers(application)`",
+      "Ruby が使える repository root"
+    ]
+  ]
+]
+
 const requiredDevelopmentCiPolicySignals = [
   [
     "docs/en/development.md",
@@ -353,6 +410,16 @@ for (const [docPath, signals] of requiredDocsEntrypointSuiteCommandSignals) {
   for (const signal of signals) {
     if (!doc?.includes(signal)) {
       missingSignals.push(`${docPath}: docs entrypoint suite command signal ${signal}`)
+    }
+  }
+}
+
+for (const [docPath, signals] of requiredDevelopmentGuardResponsibilitySignals) {
+  const doc = docSource(docs, docPath)
+
+  for (const signal of signals) {
+    if (!doc?.includes(signal)) {
+      missingSignals.push(`${docPath}: Development guard responsibility signal ${signal}`)
     }
   }
 }
