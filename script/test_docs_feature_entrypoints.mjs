@@ -297,6 +297,55 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "NodePresenter row partial patterns",
+    rootPattern: /NodePresenter row partial patterns/,
+    links: [
+      ["README.md", "docs/en/node-presenter-row-partials.md"],
+      ["README.md", "docs/ja/node-presenter-row-partials.md"],
+      ["docs/en/README.md", "node-presenter-row-partials.md"],
+      ["docs/ja/README.md", "node-presenter-row-partials.md"],
+      ["docs/en/host-app-extension-points.md", "node-presenter-row-partials.md"],
+      ["docs/ja/host-app-extension-points.md", "node-presenter-row-partials.md"]
+    ],
+    signals: [
+      [
+        "docs/en/node-presenter-row-partials.md",
+        /host-app row partials[\s\S]*without adding a generic Column \/ Action DSL[\s\S]*`row_partial`, a builder, or host-app UI code/,
+        "English NodePresenter row partial docs no longer state the host-app ownership and no-generic-DSL boundary"
+      ],
+      [
+        "docs/ja/node-presenter-row-partials.md",
+        /汎用的な Column \/ Action DSL を追加せず[\s\S]*host app の row partial[\s\S]*`row_partial`、builder、host app 側 UI code/,
+        "Japanese NodePresenter row partial docs no longer state the host-app ownership and no-generic-DSL boundary"
+      ],
+      [
+        "docs/en/node-presenter-row-partials.md",
+        /node-presenter-row-partials\.html[\s\S]*host-app-owned columns and permissions/,
+        "English NodePresenter row partial docs no longer link the visual reference and host-owned columns/permissions boundary"
+      ],
+      [
+        "docs/ja/node-presenter-row-partials.md",
+        /host app 側の column や permission[\s\S]*node-presenter-row-partials\.html/,
+        "Japanese NodePresenter row partial docs no longer link the visual reference and host-owned columns/permissions boundary"
+      ],
+      [
+        "docs/en/node-presenter-row-partials.md",
+        /node_presenter_builder_names[\s\S]*public builder names[\s\S]*stabilizes the available builder names only[\s\S]*remains host-app owned/,
+        "English NodePresenter row partial docs no longer distinguish builder-name compatibility from host-owned meanings"
+      ],
+      [
+        "docs/ja/node-presenter-row-partials.md",
+        /node_presenter_builder_names[\s\S]*公開 builder 名[\s\S]*安定させるのは利用可能な builder 名[\s\S]*host app 側の責務/,
+        "Japanese NodePresenter row partial docs no longer distinguish builder-name compatibility from host-owned meanings"
+      ],
+      [
+        "docs/mockups/node-presenter-row-partials.html",
+        /Presenter-backed row partial sample[\s\S]*Adjacent columns stay host-app owned[\s\S]*Host-app-owned surface[\s\S]*Business columns, counts, routes, and authorization policy/,
+        "NodePresenter row partial mockup no longer preserves the host-owned columns and permissions visual boundary"
+      ]
+    ]
+  },
+  {
     feature: "Localized names",
     rootPattern: /Localized names/,
     links: [
@@ -404,6 +453,28 @@ const featureEntrypoints = [
       ["docs/README.md", "ja/accessibility-semantics.md"],
       ["docs/en/README.md", "accessibility-semantics.md"],
       ["docs/ja/README.md", "accessibility-semantics.md"]
+    ],
+    signals: [
+      [
+        "docs/en/accessibility-semantics.md",
+        /Home and End move focus to the first and last visible rendered row[\s\S]*does not add typeahead, PageUp\/PageDown traversal, roving tabindex ownership[\s\S]*WAI-ARIA treegrid cell/,
+        "English accessibility docs no longer preserve Home/End visible-row behavior and full-treegrid non-goals"
+      ],
+      [
+        "docs/ja/accessibility-semantics.md",
+        /Home \/ End は表示中の描画 row の先頭 \/ 末尾へ focus を移し[\s\S]*typeahead、PageUp \/ PageDown traversal、roving tabindex の所有[\s\S]*WAI-ARIA treegrid cell/,
+        "Japanese accessibility docs no longer preserve Home/End visible-row behavior and full-treegrid non-goals"
+      ],
+      [
+        "docs/mockups/keyboard-focus-states.html",
+        /Static reference[\s\S]*lightweight focus cue[\s\S]*focus order, shortcut keys, and full treegrid keyboard behavior remain host-app responsibilities[\s\S]*does not introduce roving tabindex, arrow-key navigation, or full WAI-ARIA treegrid behavior/,
+        "Keyboard focus mockup no longer preserves the static lightweight cue and host-owned keyboard model boundary"
+      ],
+      [
+        "docs/mockups/README.md",
+        /keyboard-focus-states\.html[\s\S]*without promising a full keyboard model[\s\S]*Keep tab order, shortcut keys, roving tabindex, and full treegrid keyboard behavior/,
+        "Mockup index no longer preserves the keyboard focus reference and host-owned keyboard model boundary"
+      ]
     ]
   },
   {
@@ -416,6 +487,28 @@ const featureEntrypoints = [
       ["docs/README.md", "ja/direction-aware-styling.md"],
       ["docs/en/README.md", "direction-aware-styling.md"],
       ["docs/ja/README.md", "direction-aware-styling.md"]
+    ],
+    signals: [
+      [
+        "docs/en/host-app-extension-points.md",
+        /direction-aware stylesheet overrides owned by the host app[\s\S]*RTL, vertical writing, or design-system-specific current-row and hierarchy cues[\s\S]*documented hooks intact[\s\S]*Direction-aware styling boundary/,
+        "English host-app extension docs no longer route host-owned direction-aware overrides to the linked boundary guide"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /host app が所有する direction-aware stylesheet override[\s\S]*RTL、vertical writing、design-system-specific な current-row \/ hierarchy cue[\s\S]*documented hook を維持[\s\S]*Direction-aware styling boundary/,
+        "Japanese host-app extension docs no longer route host-owned direction-aware overrides to the linked boundary guide"
+      ],
+      [
+        "docs/en/direction-aware-styling.md",
+        /Mockup-only classes and internal stylesheet selectors are review aids[\s\S]*public hooks[\s\S]*manifest-backed compatibility checks[\s\S]*Future public hook criteria[\s\S]*shipped CSS behavior is stable[\s\S]*English and Japanese docs[\s\S]*manifest-backed compatibility checks are updated/,
+        "English direction-aware guide no longer preserves the non-promotion boundary and future public-hook criteria"
+      ],
+      [
+        "docs/ja/direction-aware-styling.md",
+        /mockup-only class や internal stylesheet selector は[\s\S]*public hook[\s\S]*manifest-backed compatibility check[\s\S]*将来 public hook に昇格する条件[\s\S]*shipped CSS behavior[\s\S]*英日 docs[\s\S]*manifest-backed compatibility check も更新/,
+        "Japanese direction-aware guide no longer preserves the non-promotion boundary and future public-hook criteria"
+      ]
     ]
   },
   {
