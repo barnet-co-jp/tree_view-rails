@@ -113,6 +113,37 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Stacked follow-up freshness docs signal",
+    files: [
+      [
+        "docs/en/development.md",
+        [
+          "Re-evaluate stacked follow-ups after a parent squash merge",
+          "`ahead_by`, `behind_by`, and `status`",
+          "head SHA exactly matches",
+          "not fresh current-main evidence",
+          "latest `main` with only the follow-up-specific diff",
+          "PR body",
+          "close intent",
+          "pr-overlap-preflight.md"
+        ]
+      ],
+      [
+        "docs/ja/development.md",
+        [
+          "親 PR の squash merge 後に stacked follow-up を再評価する",
+          "`ahead_by`、`behind_by`、`status`",
+          "current head SHA と完全に一致",
+          "fresh current-main evidence ではありません",
+          "最新 `main` から follow-up 固有差分だけ",
+          "PR body",
+          "close intent",
+          "pr-overlap-preflight.md"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "i18n audit maintenance checklist docs signal",
     files: [
       [

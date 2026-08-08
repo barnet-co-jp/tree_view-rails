@@ -178,6 +178,15 @@ Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile
 
 A green check suite does not by itself mean a pull request is ready to merge after `main` has moved. When a branch is `diverged`, check mergeability, changed files, risk, and how far the branch is behind. Prefer refreshing the branch and observing fresh CI when GitHub reports `mergeable: false`, when the branch is far behind, or when the pull request touches workflow definitions, public API, specs, or shared docs inventory. For small docs-only changes that are only a little behind, it is enough to confirm the changed files still apply cleanly, mergeability is true, and the named checks remain green.
 
+### Re-evaluate stacked follow-ups after a parent squash merge
+
+When a parent pull request is squash merged, do not treat a green run from the old stacked base as fresh CI evidence against current `main`. Before reviewing or merging the follow-up:
+
+1. Compare its current head with current `main` and record `ahead_by`, `behind_by`, and `status`; inspect the changed files and mergeability in the same pass.
+2. Inspect the GitHub Actions workflow run whose head SHA exactly matches the follow-up's current head. An exact-head Actions result from before the parent squash merge still describes the old base and is not fresh current-main evidence.
+3. Retarget the follow-up to `main` and repeat those checks. If the review surface does not normalize, parent changes remain in the diff, or conflicts remain, rebuild the branch from the latest `main` with only the follow-up-specific diff rather than preserving stale ancestry.
+4. Update the PR body with the current base, changed files, exact-head CI evidence, and close intent. Re-run the [PR overlap preflight](pr-overlap-preflight.md); if no follow-up-specific diff remains or the issue is already satisfied, remove or revise the closing reference instead of leaving stale `Closes` intent.
+
 ### Known drift recovery
 
 A narrow pull request can fail when `main` or an unmerged base pull request already has a known public-contract drift, such as a manifest structure spec that has not learned a new top-level key or a TypeScript declaration that has not caught up with package-root exports. Treat that as CI triage, not as permission to widen the pull request automatically.
