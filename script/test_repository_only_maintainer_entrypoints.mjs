@@ -134,6 +134,31 @@ const repositoryOnlyEntrypoints = [
         "Product Profile no longer preserves the recommended first-read maintainer path"
       ]
     ]
+  },
+  {
+    feature: "Maintainer release docs",
+    links: [
+      ["docs/README.md", "en/release.md"],
+      ["docs/README.md", "ja/release.md"],
+      ["docs/en/README.md", "release.md"],
+      ["docs/ja/README.md", "release.md"],
+      ["docs/README.md", "../CHANGELOG.md"],
+      ["docs/en/README.md", "../../CHANGELOG.md"],
+      ["docs/ja/README.md", "../../CHANGELOG.md"]
+    ]
+  },
+  {
+    feature: "Maintainer development docs",
+    links: [
+      ["docs/README.md", "en/development.md"],
+      ["docs/README.md", "ja/development.md"],
+      ["docs/en/README.md", "development.md"],
+      ["docs/ja/README.md", "development.md"],
+      ["docs/README.md", "en/code-quality.md"],
+      ["docs/README.md", "ja/code-quality.md"],
+      ["docs/en/README.md", "code-quality.md"],
+      ["docs/ja/README.md", "code-quality.md"]
+    ]
   }
 ]
 

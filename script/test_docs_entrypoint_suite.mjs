@@ -13,6 +13,11 @@ const checks = [
     args: ["script/test_docs_entrypoints.mjs"]
   },
   {
+    group: "Feature docs entrypoints",
+    command: "node",
+    args: ["script/test_docs_feature_entrypoints.mjs"]
+  },
+  {
     group: "Repository-only maintainer entrypoints",
     command: "node",
     args: ["script/test_repository_only_maintainer_entrypoints.mjs"]
