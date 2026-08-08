@@ -108,6 +108,17 @@ RSpec.describe "TreeView selection integration" do
     expect(called_item_ids).to eq([1, 2, 3])
   end
 
+  it "rejects selection payload builder results that are not Hash-like" do
+    expect do
+      render_rows(tree, tree.root_items, payload_builder: ->(_item) { "not-a-hash" })
+    end.to raise_error(ActionView::Template::Error) { |error|
+      expect(error.cause).to be_a(ArgumentError)
+      expect(error.cause.message).to include("selection_payload_builder")
+      expect(error.cause.message).to include("Hash-like")
+      expect(error.cause.message).to include("node_key=1")
+    }
+  end
+
   it "renders checked selection checkboxes for selected keys" do
     rendered = render_rows(tree, tree.root_items, selected_keys: [2])
 

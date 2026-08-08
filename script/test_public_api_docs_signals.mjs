@@ -79,6 +79,10 @@ const publicApiDocs = [
   ["docs/en/public-api.md", read("docs/en/public-api.md")],
   ["docs/ja/public-api.md", read("docs/ja/public-api.md")]
 ]
+const filteredTreeDocs = [
+  ["docs/en/filtered-trees.md", read("docs/en/filtered-trees.md")],
+  ["docs/ja/filtered-trees.md", read("docs/ja/filtered-trees.md")]
+]
 const lazyLoadingDocs = [
   ["docs/en/lazy-loading.md", read("docs/en/lazy-loading.md")],
   ["docs/ja/lazy-loading.md", read("docs/ja/lazy-loading.md")]
@@ -123,6 +127,7 @@ const uiConfigBuilderOptionDocs = [
 ]
 const publicConstants = loadManifestSection("public_constants")
 const uiConfigBuilderOptionKeys = loadManifestSection("ui_config_builder_option_keys")
+const filteredTreeModes = loadManifestSection("filtered_tree_modes")
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -374,6 +379,7 @@ const developmentEntrypointGuardSignals = [
 const manifestBackedDocsSignalSurfaces = [
   ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
   ["public constants", "public_constants:"],
+  ["filtered tree modes", "filtered_tree_modes:"],
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
@@ -463,7 +469,28 @@ hostLifecycleSignals.slice(1, 5).forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest host lifecycle no-detail event names")
 })
 
+filteredTreeDocs.forEach(([relativePath, document]) => {
+  filteredTreeModes.forEach((mode) => {
+    assertIncludes(document, `\`:${mode}\``, `${relativePath} manifest-backed filtered tree mode docs`)
+  })
+
+  assert(
+    /search quer(?:y|ies), ranking, and highlighting stay host-app concerns|search query、ranking、highlighting は引き続き host app 側の責務/.test(document),
+    `${relativePath}: filtered tree docs no longer preserve the host-app-owned search, ranking, and highlighting boundary`
+  )
+})
+
 publicApiDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "filtered_tree_modes", `${relativePath} filtered tree mode manifest contract`)
+  const modeGuideLink = relativePath.includes("/en/")
+    ? "filtered-trees.md#modes"
+    : "filtered-trees.md#mode"
+  assertIncludes(document, modeGuideLink, `${relativePath} filtered tree mode guide entrypoint`)
+  assert(
+    /host-app boundary for search query, ranking, authorization, and highlighting|search query、ranking、authorization、highlighting を host app 側に置く責務境界/.test(document),
+    `${relativePath}: Public API docs no longer preserve the host-app-owned filtered tree boundary`
+  )
+
   javascriptNamedExports.forEach((exportName) => {
     assertIncludes(document, `\`${exportName}`, `${relativePath} JavaScript named export inventory`)
   })

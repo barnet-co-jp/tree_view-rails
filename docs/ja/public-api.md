@@ -60,7 +60,7 @@ host app が直接使ってよい主な入口は以下です。
 
 `TreeView::ResourceTableRenderState.call` は、別の table layer が列推論や table state を持っていて、TreeView には階層 render state の組み立てだけを任せたい場合の公開入口です。詳細は [Resource table bridge](resource-table-bridge.md) を参照してください。
 
-`TreeView::FilteredTree` は filtered tree result 用の安定した公開入口です。mode set も `config/public_api_manifest.yml` の `filtered_tree_modes` contract として追跡されています。documented mode table と、search query、ranking、authorization、highlighting を host app 側に置く責務境界は [Filtered Trees: Modes](filtered-trees.md#modes) を参照してください。
+`TreeView::FilteredTree` は filtered tree result 用の安定した公開入口です。mode set も `config/public_api_manifest.yml` の `filtered_tree_modes` contract として追跡されています。documented mode table と、search query、ranking、authorization、highlighting を host app 側に置く責務境界は [Filtered Trees: mode](filtered-trees.md#mode) を参照してください。
 
 `TreeView::GraphAdapter` は、単一の parent-id column では表せない heterogeneous / graph-like nodes のための adapter-mode 入口です。host app 側の traversal、authorization、query planning、node-key 境界は [GraphAdapter](graph-adapter.md) と [API概要: adapter mode](api-overview.md#adapter-mode) を参照してください。
 

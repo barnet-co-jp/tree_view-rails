@@ -51,7 +51,9 @@ When `selection[:enabled]` is `false`, TreeView does not render selection cells 
 
 ## Parsing submitted values
 
-The checkbox value is a JSON string. Host apps can parse submitted values with:
+The checkbox value is a JSON string. When customizing it with `selection[:payload_builder]`, the builder must return a `Hash` or another Hash-like object that responds to `to_h`; TreeView serializes that result into the checkbox JSON value. An invalid return value produces an underlying `ArgumentError` that identifies the failing node key. Rendering through ActionView may expose it as the `cause` of an `ActionView::Template::Error`. This render-time builder contract is separate from the request-time `TreeView.parse_selection_params` boundary below.
+
+Host apps can parse submitted values with:
 
 ```ruby
 selected_nodes = TreeView.parse_selection_params(params[:selected_nodes])
