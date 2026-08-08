@@ -289,6 +289,66 @@ test.describe("docs mockup browser smoke", () => {
     expect(await page.locator("[data-tree-selection-payload]").count()).toBeGreaterThanOrEqual(4)
   })
 
+  test("high-contrast-state-cues/index.html preserves non-color cues and host-app palette ownership", async ({ page }) => {
+    await openMockup(page, "high-contrast-state-cues/index.html")
+
+    await expect(page.getByText("Visible beyond color", { exact: true })).toBeVisible()
+    await expect(page.getByText("Host-app boundary", { exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Forced-colors framing" })).toBeVisible()
+    const hostBoundary = page.locator(".high-contrast-summary__item", { hasText: "Host-app boundary" })
+    await expect(hostBoundary).toContainText("Final palette, contrast policy, error copy, retry behavior, and move authorization remain app-owned decisions.")
+
+    const stateRows = page.locator("[data-tree-view-sample='high-contrast-state-cues'] .high-contrast-row")
+    await expect(stateRows).toHaveCount(5)
+    await expect(page.getByText("Current row", { exact: true })).toBeVisible()
+    await expect(page.getByText("Selected", { exact: true })).toBeVisible()
+    await expect(page.getByText("Focus-visible", { exact: true })).toBeVisible()
+    await expect(page.getByText("Error / retry", { exact: true })).toBeVisible()
+    await expect(page.getByText("Drop target", { exact: true })).toBeVisible()
+  })
+
+  test("high-contrast-state-cues/index.html keeps representative cues visible with forced colors", async ({ page }) => {
+    try {
+      await page.emulateMedia({ forcedColors: "active" })
+    } catch (_error) {
+      test.skip(true, "The current browser does not support forced-colors emulation")
+      return
+    }
+
+    await openMockup(page, "high-contrast-state-cues/index.html")
+    expect(await page.evaluate(() => window.matchMedia("(forced-colors: active)").matches)).toBe(true)
+
+    for (const selector of [
+      ".high-contrast-row--current",
+      ".high-contrast-row--selected",
+      ".high-contrast-row--focus",
+      ".high-contrast-row--error",
+      ".high-contrast-row--drop"
+    ]) {
+      await expect(page.locator(selector)).toBeVisible()
+    }
+
+    await expect(page.locator(".high-contrast-row--current td:first-child")).toHaveCSS("border-left-style", "solid")
+    await expect(page.locator(".high-contrast-row--focus")).toHaveCSS("outline-style", "solid")
+    await expect(page.locator(".high-contrast-token")).toHaveCount(5)
+  })
+
+  test("reduced-motion-state-cues.html preserves stable text, shape, and ownership boundaries", async ({ page }) => {
+    await openMockup(page, "reduced-motion-state-cues.html")
+
+    await expect(page.getByRole("heading", { name: "State cue comparison without animation" })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Loading in progress" })).toBeVisible()
+    await expect(page.locator("#low_motion_loading[aria-busy='true']")).toContainText("loading children")
+    await expect(page.getByRole("heading", { name: "Retry or error state" })).toBeVisible()
+    await expect(page.locator("#low_motion_retry")).toContainText("load failed")
+    await expect(page.getByRole("heading", { name: "Current and selected state" })).toBeVisible()
+    expect(await page.locator("#low_motion_current[aria-current='page']").evaluate((element) => getComputedStyle(element).boxShadow)).not.toBe("none")
+    await expect(page.getByRole("heading", { name: "Drop target or invalid transfer" })).toBeVisible()
+    await expect(page.locator("#low_motion_drop_target")).toHaveCSS("outline-style", "solid")
+    await expect(page.locator("#low_motion_drop_blocked[aria-disabled='true']")).toContainText("drop disabled")
+    await expect(page.getByText("Move authorization, persistence, and final business copy stay outside this mockup.", { exact: true })).toBeVisible()
+  })
+
   test("direction-aware-cues/index.html preserves LTR, RTL, and vertical representative regions", async ({ page }) => {
     await openMockup(page, "direction-aware-cues/index.html")
 
@@ -393,6 +453,7 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("heading", { name: "TreeView-owned cues" })).toBeVisible()
     await expect(page.getByRole("heading", { name: "Host-app-owned slots" })).toBeVisible()
     await expect(page.locator("code", { hasText: "tree_children_container_dom_id(node)" })).toBeVisible()
+    await expect(page.locator("code", { hasText: "tree_remote_state_placeholder_dom_id(node)" })).toBeVisible()
     await expect(page.locator("code", { hasText: "tree_remote_state_placeholder_attributes(state:)" })).toBeVisible()
 
     await expect(page.locator("#project_alpha[data-tree-remote-state='idle'][aria-expanded='false']")).toBeVisible()
