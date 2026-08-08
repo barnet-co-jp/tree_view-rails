@@ -39,7 +39,7 @@ render_state = TreeView::RenderState.new(
 
 The return value must be hash-like.
 
-TreeView renders the resulting payload on the documented `data-tree-transfer-payload` attribute. Host apps that already import the package root can use `TreeViewTransferDataAttributes.payload` instead of hand-copying that attribute name in JavaScript, browser tests, or shared helper code. `TreeViewTransferDataAttributes.disabled` names the documented disabled-row transfer hook used by transfer boundary states. These exports name DOM wiring attributes only; payload shape, authorization, persistence, and final drop behavior remain host-app responsibilities. The broader `TreeViewIntegrationHooks.transfer.payload` export remains available for existing integrations that use the grouped integration-hook object.
+TreeView renders the resulting payload on the documented `data-tree-transfer-payload` attribute. Host apps that already import the package root can use `TreeViewTransferDataAttributes.payload` instead of hand-copying that attribute name in JavaScript, browser tests, or shared helper code. `TreeViewTransferDataAttributes.disabled` names the documented disabled-row transfer hook (`data-tree-transfer-disabled`) used by transfer boundary states. These exports name DOM wiring attributes only; payload shape, authorization, persistence, and final drop behavior remain host-app responsibilities. The broader `TreeViewIntegrationHooks.transfer.payload` export remains available for existing integrations that use the grouped integration-hook object.
 
 ## View example
 

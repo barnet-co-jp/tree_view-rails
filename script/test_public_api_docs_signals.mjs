@@ -721,3 +721,153 @@ developmentDocs.forEach(([relativePath, document]) => {
     assertIncludes(document, signal, `${relativePath} public API smoke guard summary`)
   })
 })
+
+const errorHierarchyDocs = [
+  ["docs/en/errors.md", read("docs/en/errors.md")],
+  ["docs/ja/errors.md", read("docs/ja/errors.md")]
+]
+const javascriptEventDocs = [
+  ["docs/en/js-events.md", read("docs/en/js-events.md")],
+  ["docs/ja/js-events.md", read("docs/ja/js-events.md")]
+]
+const dragAndDropContractDocs = [
+  ["docs/en/drag-and-drop.md", read("docs/en/drag-and-drop.md")],
+  ["docs/ja/drag-and-drop.md", read("docs/ja/drag-and-drop.md")]
+]
+
+const publicErrorHierarchySignals = [
+  "TreeView::Error",
+  "TreeView::ConfigurationError",
+  "TreeView::InvalidTreeError",
+  "TreeView::DuplicateNodeKeyError",
+  "TreeView::CycleDetectedError",
+  "TreeView::InvalidRenderWindowError"
+]
+
+publicErrorHierarchySignals.forEach((signal) => {
+  assertIncludes(manifest, signal.replace("TreeView::", "- "), "public API manifest error hierarchy source")
+})
+
+errorHierarchyDocs.forEach(([relativePath, document]) => {
+  publicErrorHierarchySignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} public error hierarchy docs`)
+  })
+
+  assert(
+    /`TreeView::Error`.*`ArgumentError`|`ArgumentError`.*`TreeView::Error`/s.test(document),
+    `${relativePath}: public error docs no longer preserve the ArgumentError compatibility boundary`
+  )
+  assert(
+    /New code should prefer `TreeView::Error`|新しい code では.*`TreeView::Error`/s.test(document),
+    `${relativePath}: public error docs no longer recommend TreeView::Error or a documented subclass for new integrations`
+  )
+  assert(
+    /what failed.*which value or key.*what direction usually fixes it|何が失敗したか.*どの値や key.*どう直す方向か/s.test(document),
+    `${relativePath}: public error docs no longer preserve the representative message-detail policy`
+  )
+})
+
+const eventContractManifestSignals = [
+  "state_change_reasons:",
+  "connect: connect",
+  "refresh: refresh",
+  "expanded: expanded",
+  "collapsed: collapsed",
+  "event_detail_keys:",
+  "event_names_without_detail:"
+]
+
+eventContractManifestSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest state reason and event detail source")
+})
+
+javascriptEventDocs.forEach(([relativePath, document]) => {
+  [
+    "TreeViewStateChangeReasons",
+    "connect",
+    "refresh",
+    "expanded",
+    "collapsed",
+    "TreeViewEventDetailKeys",
+    "viewKey",
+    "selectedCount",
+    "childrenUrl",
+    "sourcePayload",
+    "event_names_without_detail",
+    "event_detail_keys"
+  ].forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} state reason and representative event detail docs`)
+  })
+
+  assert(
+    /intentionally do not define public `event\.detail` fields|意図的に公開 `event\.detail` field を定義していません/.test(document),
+    `${relativePath}: JavaScript event docs no longer preserve the host lifecycle no-detail boundary`
+  )
+  assert(
+    /controller-emitted|controller 自身が emit|controller-emitted events|TreeView controller 自身/.test(document),
+    `${relativePath}: JavaScript event docs no longer distinguish controller-emitted detail events from host lifecycle events`
+  )
+})
+
+const transferContractManifestSignals = [
+  "transfer_drop_positions:",
+  "before: before",
+  "inside: inside",
+  "after: after",
+  "transfer_data_attributes:",
+  "payload: data-tree-transfer-payload",
+  "disabled: data-tree-transfer-disabled",
+  "transfer_data_mime_types:",
+  "application_json: application/json",
+  "text_plain: text/plain"
+]
+
+transferContractManifestSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest transfer value and data-attribute source")
+})
+
+const transferReaderSignals = [
+  "TreeViewTransferDropPositions",
+  "before",
+  "inside",
+  "after",
+  "TreeViewTransferDataAttributes.payload",
+  "TreeViewTransferDataAttributes.disabled",
+  "data-tree-transfer-payload",
+  "data-tree-transfer-disabled",
+  "TreeViewTransferDataMimeTypes.applicationJson",
+  "TreeViewTransferDataMimeTypes.textPlain",
+  "application/json",
+  "text/plain"
+]
+
+const transferPublicApiSignals = [
+  "TreeViewTransferDropPositions",
+  "TreeViewTransferDataAttributes",
+  "data-tree-transfer-payload",
+  "data-tree-transfer-disabled",
+  "TreeViewTransferDataMimeTypes",
+  "application/json",
+  "text/plain"
+]
+
+publicApiDocs.forEach(([relativePath, document]) => {
+  transferPublicApiSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} transfer package-root public surface docs`)
+  })
+})
+
+dragAndDropContractDocs.forEach(([relativePath, document]) => {
+  transferReaderSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} transfer value and data-attribute docs`)
+  })
+
+  assert(
+    /DOM wiring attributes? only|DOM wiring attribute 名だけ/.test(document),
+    `${relativePath}: transfer data-attribute docs no longer limit the export to DOM wiring names`
+  )
+  assert(
+    /payload shape, authorization, persistence, and final drop behavior remain host-app responsibilities|payload shape、authorization、保存、最終的な drop behavior は引き続き host app 側の責務/.test(document),
+    `${relativePath}: transfer docs no longer preserve the host-app-owned payload, authorization, persistence, and operation boundary`
+  )
+})

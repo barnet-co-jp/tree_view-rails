@@ -287,13 +287,17 @@ Documented keys on `TreeViewControllerIdentifiers`:
 - `transfer`
 - `remoteState`
 
-Documented entry keys on `TreeViewControllerEntries`:
+Documented `TreeViewControllerEntries` mappings:
 
-- `state`
-- `client`
-- `selection`
-- `transfer`
-- `remoteState`
+| Key | Stimulus identifier | Controller export |
+|---|---|---|
+| `state` | `tree-view-state` | `TreeViewStateController` |
+| `client` | `tree-view-client` | `TreeViewClientController` |
+| `selection` | `tree-view-selection` | `TreeViewSelectionController` |
+| `transfer` | `tree-view-transfer` | `TreeViewTransferController` |
+| `remoteState` | `tree-view-remote-state` | `TreeViewRemoteStateController` |
+
+`registerTreeViewControllers(application)` remains the standard full-registration route. Use `TreeViewControllerEntries` only for selective or custom registration, where the host app owns filtering and boot order.
 
 Documented keys on `TreeViewIntegrationHooks`:
 

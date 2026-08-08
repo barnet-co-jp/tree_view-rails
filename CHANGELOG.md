@@ -151,6 +151,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added focused docs signal coverage for the public error rescue/inheritance/message boundary, state-change reasons and representative event detail classification, transfer drop/MIME/data-attribute values, and controller entry key/identifier/export mappings without changing runtime or manifest contracts.
 - Added a focused Dependabot maintenance evidence signal covering bilingual guidance, configured ecosystem queue limits, action-major smoke ownership, and the workflow npm cache boundary.
 
 - Added narrow maintenance guard command release evidence for `test:entrypoints-composition`, `test:ci-policy-license-prelude`, and `test:immutable-package-root-export-signals` so Development docs command signals stay aligned with package-script aliases.

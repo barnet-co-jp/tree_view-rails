@@ -39,7 +39,7 @@ render_state = TreeView::RenderState.new(
 
 戻り値はhash-like objectである必要があります。
 
-TreeView はこの payload を documented な `data-tree-transfer-payload` attribute に描画します。host app が package root をすでに import している場合、JavaScript、browser test、shared helper code では attribute 名を raw string で写経せず `TreeViewTransferDataAttributes.payload` を使えます。`TreeViewTransferDataAttributes.disabled` は transfer boundary state で使う documented な disabled-row transfer hook を指します。これらの export は DOM wiring attribute 名だけを指します。payload shape、authorization、保存、最終的な drop behavior は引き続き host app 側の責務です。既存 integration が grouped integration-hook object を使っている場合、`TreeViewIntegrationHooks.transfer.payload` も引き続き利用できます。
+TreeView はこの payload を documented な `data-tree-transfer-payload` attribute に描画します。host app が package root をすでに import している場合、JavaScript、browser test、shared helper code では attribute 名を raw string で写経せず `TreeViewTransferDataAttributes.payload` を使えます。`TreeViewTransferDataAttributes.disabled` は transfer boundary state で使う documented な disabled-row transfer hook (`data-tree-transfer-disabled`) を指します。これらの export は DOM wiring attribute 名だけを指します。payload shape、authorization、保存、最終的な drop behavior は引き続き host app 側の責務です。既存 integration が grouped integration-hook object を使っている場合、`TreeViewIntegrationHooks.transfer.payload` も引き続き利用できます。
 
 ## viewでの利用例
 

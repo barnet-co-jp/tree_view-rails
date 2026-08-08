@@ -287,13 +287,17 @@ host app が使ってよい入口:
 - `transfer`
 - `remoteState`
 
-`TreeViewControllerEntries` の documented entry key:
+`TreeViewControllerEntries` の documented mapping:
 
-- `state`
-- `client`
-- `selection`
-- `transfer`
-- `remoteState`
+| Key | Stimulus identifier | Controller export |
+|---|---|---|
+| `state` | `tree-view-state` | `TreeViewStateController` |
+| `client` | `tree-view-client` | `TreeViewClientController` |
+| `selection` | `tree-view-selection` | `TreeViewSelectionController` |
+| `transfer` | `tree-view-transfer` | `TreeViewTransferController` |
+| `remoteState` | `tree-view-remote-state` | `TreeViewRemoteStateController` |
+
+標準の full registration では引き続き `registerTreeViewControllers(application)` を使います。`TreeViewControllerEntries` は selective / custom registration の場合だけ使い、filter と boot order は host app 側で管理してください。
 
 `TreeViewIntegrationHooks` の documented key:
 
