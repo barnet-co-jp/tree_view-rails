@@ -748,6 +748,51 @@ persistedStateDocs.forEach(([relativePath, document]) => {
   )
 })
 
+const persistedStateBoundaryMockup = read("docs/mockups/persisted-state-boundary.html")
+
+assertIncludes(
+  mockupDocsReadme,
+  "persisted-state-boundary.html",
+  "docs/mockups/README.md persisted-state boundary mockup entrypoint"
+)
+;[
+  "save failure",
+  "cleanup retention",
+  "retry_policy: host app",
+  "host owns: schedule, TTL, privacy, audit, deleted-owner handling",
+  "what retention policy applies"
+].forEach((signal) => {
+  assertIncludes(
+    persistedStateBoundaryMockup,
+    signal,
+    "docs/mockups/persisted-state-boundary.html retry and cleanup retention boundary"
+  )
+})
+
+selectionDocs.forEach(([relativePath, document]) => {
+  assertIncludes(
+    document,
+    'data-tree-view-selection-target="selectedCount"',
+    `${relativePath} selectedCount target docs`
+  )
+  assert(
+    /connect.*selection changes|connect 時.*selection 変更後/.test(document),
+    `${relativePath}: selectedCount target docs no longer preserve connect/change numeric synchronization`
+  )
+  assert(
+    /target owns the number only|target が担当するのは数値だけ/.test(document),
+    `${relativePath}: selectedCount target docs no longer limit TreeView ownership to numeric synchronization`
+  )
+  assert(
+    /bulk action.*enable.*disable.*max-count messages|bulk action の enable \/ disable.*max count message/.test(document),
+    `${relativePath}: selectedCount target docs no longer preserve host-app-owned copy and action-state boundaries`
+  )
+  assert(
+    /tree-view-selection:change.*selectedCount.*selectedValues.*selectedPayloads/.test(document),
+    `${relativePath}: selectedCount target docs no longer distinguish target sync from event detail integrations`
+  )
+})
+
 developmentDocs.forEach(([relativePath, document]) => {
   developmentManifestTrackingSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} public API manifest tracking summary`)

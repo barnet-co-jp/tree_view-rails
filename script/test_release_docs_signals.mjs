@@ -701,6 +701,11 @@ const releaseNoteCandidateDocs = [
   ]
 ]
 
+assertSignals("docs/README.md", "Release note candidate docs entrypoint", [
+  "en/release-note-candidates.md",
+  "ja/release-note-candidates.md"
+])
+
 releaseNoteCandidateDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release note candidate docs", signals)
 })
