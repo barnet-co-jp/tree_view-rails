@@ -77,6 +77,16 @@ const foundationalEntrypoints = [
         "Japanese installation docs no longer expose the CSS/importmap, packaged files, and explicit Propshaft/Sprockets setup signals"
       ],
       [
+        "docs/en/installation.md",
+        /Static rendering works without dedicated TreeView JavaScript[\s\S]*registerTreeViewControllers\(application\)[\s\S]*selective registration or a custom boot order[\s\S]*Public API/,
+        "English installation docs no longer preserve the static-rendering, default controller registration, and advanced boot handoff boundary"
+      ],
+      [
+        "docs/ja/installation.md",
+        /static表示だけであれば専用JavaScriptなしでも利用できます[\s\S]*registerTreeViewControllers\(application\)[\s\S]*部分登録したい場合や custom boot order[\s\S]*Public API/,
+        "Japanese installation docs no longer preserve the static-rendering, default controller registration, and advanced boot handoff boundary"
+      ],
+      [
         "docs/en/minimal-usage.md",
         /TreeView::Tree[\s\S]*TreeView::UiConfigBuilder[\s\S]*build_static[\s\S]*TreeView::RenderState[\s\S]*tree_view_rows\(@render_state\)[\s\S]*row_partial[\s\S]*minimal-usage-first-render\.html/,
         "English minimal-usage docs no longer expose the minimal controller/view/row-partial path and first-render mockup link"

@@ -39,6 +39,32 @@ function loadJavaScriptNamedExports() {
   }
 }
 
+function loadManifestSection(section) {
+  try {
+    return JSON.parse(
+      execFileSync(
+        "ruby",
+        [
+          "-e",
+          'require "json"; require "yaml"; data = YAML.load_file("config/public_api_manifest.yml"); print JSON.generate(data.fetch(ARGV.fetch(0)))',
+          section
+        ],
+        { cwd: repoRoot, encoding: "utf8" }
+      )
+    )
+  } catch (error) {
+    const output = [error.stdout, error.stderr]
+      .filter((value) => value && value.length > 0)
+      .join("\n")
+      .trim()
+
+    throw new Error(
+      `Could not load ${section} from config/public_api_manifest.yml: ${output || error.message}`,
+      { cause: error }
+    )
+  }
+}
+
 function assert(condition, message) {
   if (!condition) throw new Error(message)
 }
@@ -91,6 +117,12 @@ const stylingStateCueDocs = [
   ["docs/en/styling-state-cues.md", read("docs/en/styling-state-cues.md")],
   ["docs/ja/styling-state-cues.md", read("docs/ja/styling-state-cues.md")]
 ]
+const uiConfigBuilderOptionDocs = [
+  ["docs/en/ui-config-builder-options.md", read("docs/en/ui-config-builder-options.md")],
+  ["docs/ja/ui-config-builder-options.md", read("docs/ja/ui-config-builder-options.md")]
+]
+const publicConstants = loadManifestSection("public_constants")
+const uiConfigBuilderOptionKeys = loadManifestSection("ui_config_builder_option_keys")
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -300,21 +332,7 @@ const persistedStateLifecycleSignals = [
   "deleted_count = store.prune!("
 ]
 
-const publicConstantSignals = [
-  "TreeView::Error",
-  "TreeView::ConfigurationError",
-  "TreeView::InvalidTreeError",
-  "TreeView::DuplicateNodeKeyError",
-  "TreeView::CycleDetectedError",
-  "TreeView::InvalidRenderWindowError",
-  "TreeView::RenderState",
-  "TreeView::ResourceTableRenderState",
-  "TreeView::VisibleRows",
-  "TreeView::RenderWindow",
-  "TreeView::PersistedState",
-  "TreeView::StateStore",
-  "TreeView::Diagnostics"
-]
+const publicConstantSignals = publicConstants.map((constantName) => `TreeView::${constantName}`)
 
 const cssCustomPropertyTokenSignals = [
   "--tree-view-selected-row-background",
@@ -366,6 +384,7 @@ const manifestBackedDocsSignalSurfaces = [
   ["toolbar actions", "toolbar_actions:"],
   ["toolbar action metadata", "toolbar_action_metadata:"],
   ["GraphAdapter initializer", "graph_adapter_initializer:"],
+  ["UiConfigBuilder option groups", "ui_config_builder_option_keys:"],
   ["diagnostics accepted checks", "diagnostics:"],
   ["diagnostics accepted checks", "accepted_checks:"],
   ["diagnostics run options", "run_options:"],
@@ -449,8 +468,32 @@ publicApiDocs.forEach(([relativePath, document]) => {
     assertIncludes(document, `\`${exportName}`, `${relativePath} JavaScript named export inventory`)
   })
 
+  const stableSectionHeading = relativePath.includes("/en/")
+    ? "## Stable public entry points"
+    : "## 安定した公開入口"
+  const stableSectionStart = document.indexOf(stableSectionHeading)
+  assert(
+    stableSectionStart >= 0,
+    `${relativePath}: missing stable public entry list heading ${stableSectionHeading}`
+  )
+  const stableSectionBody = document.slice(stableSectionStart + stableSectionHeading.length)
+  const nextSectionStart = stableSectionBody.indexOf("\n## ")
+  const stableSection = nextSectionStart >= 0
+    ? stableSectionBody.slice(0, nextSectionStart)
+    : stableSectionBody
+  const stableEntryLines = stableSection
+    .split("\n")
+    .filter((line) => line.startsWith("- `TreeView::"))
+  const documentedStableConstants = new Set(
+    [...stableEntryLines.join("\n").matchAll(/`(TreeView::[A-Za-z0-9_:]+(?:\.call)?)`/g)]
+      .map((match) => match[1].replace(/\.call$/, ""))
+  )
+
   publicConstantSignals.forEach((signal) => {
-    assertIncludes(document, signal, `${relativePath} public constant docs from config/public_api_manifest.yml public_constants`)
+    assert(
+      documentedStableConstants.has(signal),
+      `${relativePath}: stable public entry list is missing manifest public constant ${signal} from config/public_api_manifest.yml public_constants`
+    )
   })
 
   callbackBuilderSignals.forEach((signal) => {
@@ -618,6 +661,39 @@ assert(
   /helper metadata contract sources|helper metadata contract sources/.test(mockupDocsReadme),
   "docs/mockups/README.md: toolbar guidance no longer separates manifest/docs contract sources from the visual mockup responsibility boundary"
 )
+
+uiConfigBuilderOptionDocs.forEach(([relativePath, document]) => {
+  Object.entries(uiConfigBuilderOptionKeys).forEach(([methodName, optionKeys]) => {
+    const rowPrefix = `| \`${methodName}\` |`
+    const methodRow = document.split("\n").find((line) => line.startsWith(rowPrefix))
+
+    assert(methodRow, `${relativePath}: missing UiConfigBuilder ${methodName} option group from config/public_api_manifest.yml`)
+    optionKeys.forEach((optionKey) => {
+      assertIncludes(
+        methodRow,
+        `\`${optionKey}\``,
+        `${relativePath} UiConfigBuilder ${methodName} manifest-backed option group`
+      )
+    })
+  })
+
+  assert(
+    /build.*same keyword surface as.*build_turbo|build.*build_turbo.*同じ keyword surface/s.test(document),
+    `${relativePath}: UiConfigBuilder docs no longer identify build as the build_turbo convenience surface`
+  )
+  assert(
+    /build_turbo.*Turbo-oriented configuration.*Host apps still own route helpers|build_turbo.*Turbo-oriented configuration.*host app が所有します/s.test(document),
+    `${relativePath}: UiConfigBuilder docs no longer preserve the Turbo-oriented host-app responsibility boundary`
+  )
+  assert(
+    /build_static.*indentation surface.*does not accept Turbo path builders|build_static.*indentation surface のみに閉じ.*Turbo path builder は受け取りません/s.test(document),
+    `${relativePath}: UiConfigBuilder docs no longer preserve the narrow build_static boundary`
+  )
+  assert(
+    /build_client_side.*indentation surface.*does not accept Turbo path builders|build_client_side.*indentation surface のみに閉じ.*Turbo path builder は受け取りません/s.test(document),
+    `${relativePath}: UiConfigBuilder docs no longer preserve the narrow build_client_side boundary`
+  )
+})
 
 stylingStateCueDocs.forEach(([relativePath, document]) => {
   cssCustomPropertyTokenSignals.forEach((signal) => {

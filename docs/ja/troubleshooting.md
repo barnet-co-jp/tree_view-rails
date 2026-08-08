@@ -211,7 +211,7 @@ row partial や TreeView 内部を変える前に次を確認してください�
 - client-side toggle、selection、transfer hook、remote loading state など browser 側機能を使う場合は、host app 側で TreeView controller を登録する
 - host app が controller を部分登録したり custom boot order を組んだりする場合は、identifier string を写経せず `tree_view/index.js` の `TreeViewControllerIdentifiers` を使う
 - 部分登録や boot-order test で documented identifier / controller の組が必要な場合は、identifier string と controller import を写経せず `tree_view/index.js` の `TreeViewControllerEntries` を使う
-- 最小の `registerTreeViewControllers(application)` 例は [導入手順: JavaScript / importmap](installation.md#javascript--importmap) に戻って確認し、部分登録や custom boot order は [公開 API: JavaScript surface](public-api.md#javascript-surface) で確認する
+- 最小の `registerTreeViewControllers(application)` 例は [導入手順: JavaScript / importmap](installation.md#javascript--importmap)、default / custom registration path の全体は [Controller registration](controller-registration.md)、export contract は [公開 API: JavaScript surface](public-api.md#javascript-surface) で確認する
 
 次に、CSS 読み込みの症状と JavaScript 登録の症状を分けて確認してください。
 

@@ -84,6 +84,10 @@ const publicApiDocs = [
   ["docs/en/public-api.md", read("docs/en/public-api.md")],
   ["docs/ja/public-api.md", read("docs/ja/public-api.md")]
 ]
+const troubleshootingDocs = [
+  ["docs/en/troubleshooting.md", read("docs/en/troubleshooting.md")],
+  ["docs/ja/troubleshooting.md", read("docs/ja/troubleshooting.md")]
+]
 
 const documentedControllerEntryRows = [
   "| `state` | `tree-view-state` | `TreeViewStateController` |",
@@ -105,4 +109,14 @@ publicApiDocs.forEach(([relativePath, document]) => {
     /selective or custom registration|selective \/ custom registration/.test(document),
     `${relativePath}: TreeViewControllerEntries docs no longer limit the entry list to selective or custom registration`
   )
+  assertIncludes(
+    document,
+    "controller-registration.md",
+    `${relativePath} controller registration guide link`
+  )
+})
+
+troubleshootingDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeViewControllerEntries", `${relativePath} selective registration troubleshooting docs`)
+  assertIncludes(document, "controller-registration.md", `${relativePath} controller registration troubleshooting link`)
 })
