@@ -64,6 +64,31 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Cookbook common-combination reader journey",
+    files: [
+      [
+        "docs/en/cookbook.md",
+        [
+          "## Build from common combinations",
+          "decision-guide.md#common-combinations",
+          "### Large folder browser",
+          "### Bulk action page",
+          "### Status-heavy tree table"
+        ]
+      ],
+      [
+        "docs/ja/cookbook.md",
+        [
+          "## よくある組み合わせから組み立てる",
+          "decision-guide.md#よくある組み合わせ",
+          "### 大きな folder browser",
+          "### bulk action page",
+          "### status が多い tree table"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Language README user journey",
     files: [
       [
@@ -117,6 +142,13 @@ const signalGroups = [
           "Why does persisted state save as soon as the page loads?",
           "tree-view-state:state-changed",
           "initial connect",
+          "event.detail.reason",
+          "`connect`",
+          "`refresh`",
+          "`expanded`",
+          "`collapsed`",
+          "[Persisted State](persisted-state.md)",
+          "[JavaScript event contract](js-events.md)",
           "not proof that the user changed the tree",
           "host app should save only user-initiated changes",
           "dirty-state policy in the host app",
@@ -135,6 +167,13 @@ const signalGroups = [
           "persisted state が画面表示直後に保存されるのはなぜですか？",
           "tree-view-state:state-changed",
           "初回 connect",
+          "event.detail.reason",
+          "`connect`",
+          "`refresh`",
+          "`expanded`",
+          "`collapsed`",
+          "[Persisted State](persisted-state.md)",
+          "[JavaScript event contract](js-events.md)",
           "ユーザーが tree を変更した証拠ではありません",
           "host app 側の dirty-state policy",
           "resolver mode や adapter mode でも TreeView が breadcrumb を推測しますか？",

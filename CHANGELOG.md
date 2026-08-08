@@ -151,6 +151,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added focused bilingual reader-journey guards for Cookbook common-combination recipes and FAQ state-change reason guidance without changing docs content or runtime contracts.
 - Added focused ActionView integration coverage for `NodePresenter`-backed host row and row-actions partial locals, including root and child depth, without changing runtime or public contracts.
 - Added focused public-contract boundary coverage for manifest-backed filtered-tree modes and host-owned search, ranking, and highlighting guidance, `ResourceTableRenderState` grouped `RenderState` pass-through, and selection payload-builder render errors without changing runtime or manifest contracts.
 - Added manifest-backed bilingual docs signal coverage for controller registration guidance, UiConfigBuilder option groups, and the complete stable public constant inventory without changing runtime or manifest contracts.
