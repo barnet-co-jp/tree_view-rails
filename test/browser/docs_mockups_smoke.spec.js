@@ -397,9 +397,24 @@ test.describe("docs mockup browser smoke", () => {
     await expect(selectionGroups.nth(1)).toContainText("source: assets")
     await expect(page.locator("[aria-label='Host app submit summary']")).toBeVisible()
     await expect(page.getByRole("heading", { name: "Generated hidden input boundary" })).toBeVisible()
-    const hiddenInputBoundary = page.locator(".mock-selection-hidden-stack")
-    await expect(hiddenInputBoundary).toContainText('data-tree-view-selection-source-id="policies"')
-    await expect(hiddenInputBoundary).toContainText('data-tree-view-selection-source-id="assets"')
+
+    const hiddenInputRows = page.locator(".mock-selection-hidden-row")
+    await expect(hiddenInputRows).toHaveCount(3)
+
+    await expect(hiddenInputRows.nth(0)).toContainText("Policy payload 1 of 2")
+    await expect(hiddenInputRows.nth(0)).toContainText('name="bulk_review[policy_ids][]"')
+    await expect(hiddenInputRows.nth(0)).toContainText('data-tree-view-selection-source-id="policies"')
+    await expect(hiddenInputRows.nth(0)).toContainText("policy-101")
+
+    await expect(hiddenInputRows.nth(1)).toContainText("Policy payload 2 of 2")
+    await expect(hiddenInputRows.nth(1)).toContainText('name="bulk_review[policy_ids][]"')
+    await expect(hiddenInputRows.nth(1)).toContainText('data-tree-view-selection-source-id="policies"')
+    await expect(hiddenInputRows.nth(1)).toContainText("policy-122")
+
+    await expect(hiddenInputRows.nth(2)).toContainText("Asset payload 1 of 1")
+    await expect(hiddenInputRows.nth(2)).toContainText('name="bulk_review[asset_ids][]"')
+    await expect(hiddenInputRows.nth(2)).toContainText('data-tree-view-selection-source-id="assets"')
+    await expect(hiddenInputRows.nth(2)).toContainText("asset-folder-204")
   })
 
   test("children-pagination-selection-boundary.html preserves loaded-only selection ownership", async ({ page }) => {

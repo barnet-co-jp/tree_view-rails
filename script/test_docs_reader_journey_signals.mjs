@@ -421,6 +421,52 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Selection troubleshooting and form boundary reader journey",
+    files: [
+      [
+        "docs/README.md",
+        [
+          "English Selection",
+          "hidden input form sync",
+          "max-count limits",
+          "multi-tree form boundaries",
+          "unloaded-descendant boundaries",
+          "日本語Selection",
+          "複数 tree form の境界",
+          "submitted value parsing の入口"
+        ]
+      ],
+      [
+        "docs/en/troubleshooting.md",
+        [
+          "Selection payloads are missing or not what the host app expects",
+          "data-tree-view-selection-hidden-input-name-value",
+          "one hidden input per valid checked payload",
+          "one form contains multiple trees",
+          "source ids",
+          "data-tree-view-selection-max-count-value",
+          "rendered rows in the current DOM",
+          "unloaded-descendant behavior",
+          "final params grouping"
+        ]
+      ],
+      [
+        "docs/ja/troubleshooting.md",
+        [
+          "selection payload が足りない / 想定と違う",
+          "data-tree-view-selection-hidden-input-name-value",
+          "valid な checked payload ごとに hidden input を 1 つずつ",
+          "1つの form に複数 tree",
+          "source id",
+          "data-tree-view-selection-max-count-value",
+          "現在 DOM に描画されている row",
+          "unloaded descendant",
+          "最終的な params grouping"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Accessibility semantics mockup reader journey",
     files: [
       [
