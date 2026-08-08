@@ -54,6 +54,12 @@ npm run test:public-api-transfer-integration-signals
 npm run test:host-lifecycle-no-detail-signals
 npm run test:event-names-docs-signals
 npm run test:controller-registration-docs-signals
+npm run test:tree-view-rows-docs-signals
+npm run test:grouped-option-docs-signals
+npm run test:public-api-exported-controller-class-docs-signals
+npm run test:readme-quick-start-signal
+npm run test:docs-policy-signal-guards
+npm run test:public-setup-surface-docs-signals
 npm run test:host-app-extension-diagnostics-signals
 npm run test:quality-docs-smoke-signals
 npm run test:development-docs-commands
@@ -160,6 +166,19 @@ manifest-backed な reader-facing documentation guard だけを再実行する�
 - `npm run test:controller-registration-docs-signals`: controller identifiers / exports、default registration helper、host-app-owned custom boot guidance。
 
 これらは documentation signal と maintainer triage entrypoint を守る command です。runtime export の存在確認は `script/test_entrypoints.mjs`、declaration literal shape は `script/test_declaration_literal_shapes.mjs`、controller registration や event dispatch の挙動は runtime tests が担当します。public exports、manifest schema、payload、registration order、host-app policy は変更しません。
+
+### Docs guard の focused command
+
+登録済み docs entrypoint guard を単独で再実行する場合は、次の focused triage command を使います。
+
+- `npm run test:tree-view-rows-docs-signals` は `tree_view_rows helper docs signals` group の guard を直接実行し、`helper_option_keys.tree_view_rows`、`tree_view_rows` / `tree_view_window` の reader-facing surface、host app が所有する pagination と virtual scrolling の境界を確認します。
+- `npm run test:grouped-option-docs-signals` は `RenderState grouped option docs signals` group の guard を直接実行し、grouped option manifest surface と Public API、selection、row-status guidance の代表 signal を確認します。
+- `npm run test:public-api-exported-controller-class-docs-signals` は `Public API exported controller class docs signals` group の guard を直接実行し、exported class list と `registerTreeViewControllers(application)` guidance を確認します。Runtime export の存在確認は `script/test_entrypoints.mjs`、registration helper / manifest alignment は `script/test_controller_entries_contract.mjs` が引き続き担当します。
+- `npm run test:readme-quick-start-signal` は `README quick start signal` group の guard を直接実行し、root README の代表的な Installation と Controller / View / Row partial setup path を確認します。
+- `npm run test:docs-policy-signal-guards` は `Docs policy signal guards` group の guard を直接実行し、docs policy、repository-maintainer docs、technical asset responsibility の代表 signal を確認します。
+- `npm run test:public-setup-surface-docs-signals` は `Public setup surface docs signals` group の guard を直接実行し、setup generator、persisted state、installation-facing docs guidance を確認します。
+
+これらは focused triage command であり、`npm run test:docs-entrypoints` の代替ではなく、reader-facing signal failure の切り分けに使います。runtime behavior、public API surface、manifest schema、host-app policy を変更するものではありません。
 
 Browser-level smoke testsはPlaywrightで実行します。
 
