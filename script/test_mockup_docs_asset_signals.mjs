@@ -69,6 +69,16 @@ assertSignals("docs/mockups/README.md", "mockup demo app responsibility boundary
   "Do not add direct public demo links from the mockups until the demo repository is public and its publication checklist is ready."
 ])
 
+assertSignals("docs/mockups/README.md", "mockup visual evidence handoff", [
+  "## Visual evidence handoff",
+  "Treat `npm run test:browser` success as smoke coverage, not as final visual readability approval.",
+  "target mockup file",
+  "desktop and narrow viewport",
+  "readable without overlap or clipping",
+  "Keep this evidence in the pull request discussion",
+  "browser-capable review note"
+])
+
 assertSignals("docs/mockups/README.md", "table caption context mockup routing", [
   "[table-caption-context.html](table-caption-context.html)",
   "Focused table caption and surrounding page structure reference showing host-app-owned heading, caption, summary, and actions around TreeView-owned row cues.",

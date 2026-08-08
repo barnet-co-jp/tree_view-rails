@@ -525,6 +525,62 @@ function assertCiPolicyDocsCommandSurfaceSignals() {
   }
 }
 
+function assertMaintainerAndInstallationRoutingGuidanceSignals() {
+  const docsSignals = [
+    [
+      "AGENTS.md",
+      [
+        "## Testing",
+        "Package-facing docs paths (`README.md`, `CHANGELOG.md`, and `docs/**`) are package-sensitive",
+        "README, `docs/**`, and `CHANGELOG.md` run `npm run test:docs-entrypoints`",
+        "Repository-only maintainer docs stay outside package checks unless they are paired with package-facing docs",
+        "`Product Profile.md` skips JavaScript when it is the only changed path",
+        "`AGENTS.md` is CI-policy-sensitive and runs `npm run test:ci-policy` even when it is the only changed path"
+      ]
+    ],
+    [
+      "docs/en/installation.md",
+      [
+        "JavaScript checks through the changed-files policy",
+        "npm run test:docs-entrypoints",
+        "npm run test:browser",
+        "npm run test:js:core",
+        "docs-only pull requests keep the check names but skip the heavy Rails lanes"
+      ]
+    ],
+    [
+      "docs/ja/installation.md",
+      [
+        "changed-files policy による JavaScript checks",
+        "npm run test:docs-entrypoints",
+        "npm run test:browser",
+        "npm run test:js:core",
+        "docs-only PR では check name を維持したまま重い Rails lane を skip"
+      ]
+    ],
+    [
+      ".github/workflows/ci.yml",
+      [
+        "needs.changes.outputs.docs_entrypoint_sensitive == 'true'",
+        "needs.changes.outputs.mockups_changed == 'true'",
+        "needs.changes.outputs.browser_smoke_changed == 'true'",
+        "needs.changes.outputs.docs_only != 'true'",
+        "npm run test:docs-entrypoints",
+        "npm run test:browser",
+        "npm run test:js:core"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} maintainer and Installation CI routing guidance signal`)
+    }
+  }
+}
+
 function assertCiPolicyDocsSuiteRegistrationPolicySignals() {
   const docsSignals = [
     [
@@ -626,6 +682,7 @@ assertCiPolicyDocsTriggerPolicySignals()
 assertCiPolicyDocsRoutingOutputSignals()
 assertCiPolicyDocsDocsOnlyRetentionSignals()
 assertCiPolicyDocsCommandSurfaceSignals()
+assertMaintainerAndInstallationRoutingGuidanceSignals()
 assertCiPolicyDocsSuiteRegistrationPolicySignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
@@ -640,4 +697,5 @@ console.log("Checked workflow trigger policy docs signals.")
 console.log("Checked representative routing output docs signals.")
 console.log("Checked docs-only check retention docs signals.")
 console.log("Checked CI policy docs command surface signals.")
+console.log("Checked AGENTS and bilingual Installation CI routing guidance signals.")
 console.log("Checked CI policy suite registration policy docs signals.")

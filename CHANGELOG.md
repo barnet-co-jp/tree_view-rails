@@ -245,6 +245,7 @@ Release preparation notes:
 - Added controller entries contract smoke and `tree_view_rows` / Windowed Rendering docs signal coverage to the docs entrypoint suite.
 - Added Docker Ruby base image source guard coverage to the Ruby version source drift smoke.
 - Added Docker development setup workflow wiring coverage to the CI changed-file policy guard.
+- Added focused release, package, mockup visual-evidence, Installation CI-routing, and maintainer CI-routing signal coverage without changing workflow or runtime behavior.
 - Added `npm ci` CI and Docker setup smoke coverage so workflow routing, JavaScript setup, and docs install guidance stay aligned.
 - Added a standalone Public API manifest structure command and docs entrypoint suite wiring for manifest structure smoke.
 - Added Development docs command signal smoke coverage for maintainer npm command guidance.
