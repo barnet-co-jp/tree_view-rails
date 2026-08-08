@@ -24,6 +24,18 @@ docker compose run --rm app npm ci
 
 ローカルの JavaScript setup には `npm ci` を使ってください。commit 済みの `package-lock.json` が repeatable install の source of truth になり、Pull Request CI と Docker setup も同じ lockfile-backed install path を使います。`package.json` の dependency metadata や Node engine metadata を意図的に変更した場合は、`npm install` を実行して root `package-lock.json` の metadata も一緒に更新してから `npm ci` path に戻ってください。現在の CI と install path の整理は [導入手順](installation.md) を参照してください。
 
+CI の JavaScript lane は `actions/setup-node` の npm cache を有効にして download 済み package data を再利用しますが、dependency resolution は引き続き commit 済み `package-lock.json` と `npm ci` に従います。`cache: npm` は install speed の境界としてだけ扱い、dependency update や npm version policy の source of truth にはしません。npm version policy は #2501 の別 decision lane に残します。
+
+## Dependabot maintenance evidence
+
+現在の `.github/dependabot.yml` は Bundler と GitHub Actions の weekly lane を持ち、どちらも `open-pull-requests-limit: 5` です。この limit は dependency update の混雑を防ぐ queue-size boundary であり、npm schedule（#2168）、RuboCop / Standard grouping（#2494）、action SHA pinning policy（#2496）を決めるものではありません。
+
+GitHub Actions update では Dependabot が `github-actions` update lane を担い、`npm run test:ci-policy` が workflow の代表 action major tag を確認します。これが現在の update lane + action-major smoke policy です。major tag を SHA pinning または allowed-action policy に置き換えるかは #2496 に残します。
+
+npm security Dependabot Pull Request では weekly npm schedule があると推測しないでください。その policy は #2168 に残ります。代表的な changed-file surface が `package-lock.json` だけかどうか、mergeability、Pull Request の head SHA と完全に一致する successful GitHub Actions run を確認します。direct-dependency advisory で `package.json` も変更する必要がある場合は、その manifest change が advisory に閉じていることを review し、lockfile-only を普遍的なルールとして扱わないでください。次に、changed-file policy が想定どおり package / Docker setup evidence を供給していることを確認し、この review lane では lockfile を refresh しません。
+
+Bundler Dependabot Pull Request では、combined status が空でも changed files、mergeability、exact head SHA、一致する GitHub Actions workflow run を記録します。green な security update では upstream advisory または release-note source と package-sensitive CI evidence も確認します。CI が失敗した場合は run number を記録し、`ruby/setup-ruby@v1`、Bundler lockfile drift guard、`npm run test:js:core` の failure surface を分けて確認します。同じ failure pattern の Pull Request はまとめて triage し、各 dependency branch に broad cleanup を重複して積まないでください。failure recovery には [Dependabot Bundler 復旧手順](dependabot-bundler-recovery.md) を使います。security-review evidence は update が review 可能かを判断し、recovery evidence は failing branch の修復方法を判断する、という責務差があります。
+
 ## よく使うコマンド
 
 ```bash

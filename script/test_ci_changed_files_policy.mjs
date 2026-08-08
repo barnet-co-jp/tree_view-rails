@@ -15,6 +15,7 @@ const ciPolicySuiteEntrypointExclusion = {
 const ciPolicyGuardScriptPaths = [
   "script/test_ci_changed_files_policy.mjs",
   "script/test_ci_workflow_changed_file_detection_signals.mjs",
+  "script/test_ci_dependabot_maintenance_evidence_signals.mjs",
   "script/test_ci_matrix_boundary_signals.mjs",
   "script/test_ci_workflow_concurrency_signals.mjs",
   "script/test_ci_workflow_permissions_signals.mjs",

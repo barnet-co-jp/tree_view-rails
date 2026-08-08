@@ -24,6 +24,18 @@ Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the 
 
 Use `npm ci` for local JavaScript setup. The committed `package-lock.json` is now the source of truth for repeatable installs, and pull-request CI and Docker setup use the same lockfile-backed install path. When dependency metadata or Node engine metadata changes in `package.json`, run `npm install` so the root `package-lock.json` metadata changes with it before returning to the `npm ci` path. See [Installation](installation.md) for the current CI and install-path summary.
 
+The CI JavaScript lane enables the `actions/setup-node` npm cache to reuse downloaded package data, but dependency resolution still follows the committed `package-lock.json` through `npm ci`. Treat `cache: npm` only as an install-speed boundary: it is not a source of truth for dependency updates or npm version policy, which remains the separate #2501 decision lane.
+
+## Dependabot maintenance evidence
+
+The current `.github/dependabot.yml` has weekly Bundler and GitHub Actions lanes, each with `open-pull-requests-limit: 5`. That limit is the queue-size boundary used to prevent dependency-update congestion; it does not decide the npm schedule (#2168), RuboCop / Standard grouping (#2494), or action SHA-pinning policy (#2496).
+
+For GitHub Actions updates, Dependabot owns the `github-actions` update lane while `npm run test:ci-policy` checks representative workflow action major tags. This is the current update-lane plus action-major-smoke policy; whether to replace major tags with SHA pinning or an allowed-action policy remains #2496.
+
+For an npm security Dependabot pull request, do not infer a weekly npm schedule: that policy remains #2168. Confirm whether the representative changed-file surface is `package-lock.json` only, together with mergeability and the successful GitHub Actions run whose head SHA exactly matches the pull request. If a direct-dependency advisory also requires `package.json`, review that manifest change and keep it scoped to the advisory instead of treating lockfile-only as a universal rule. Then confirm the changed-file policy supplies the expected package and Docker setup evidence without refreshing the lockfile in this review lane.
+
+For a Bundler Dependabot pull request, record the changed files, mergeability, exact head SHA, and matching GitHub Actions workflow run even when combined status is empty. A green security update also needs its upstream advisory or release-note source and the package-sensitive CI evidence. If CI fails, capture the run number and distinguish `ruby/setup-ruby@v1`, the Bundler lockfile drift guard, and `npm run test:js:core` failure surfaces. Triage pull requests with the same failure pattern together and do not duplicate broad cleanup on each dependency branch. Use [Dependabot Bundler recovery](dependabot-bundler-recovery.md) for failure recovery; security-review evidence decides whether the update is reviewable, while recovery evidence decides how a failing branch should be repaired.
+
 ## Common commands
 
 ```bash

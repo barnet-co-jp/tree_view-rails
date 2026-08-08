@@ -18,6 +18,12 @@ Bundler frozen install can report the same class of failure before Ruby lint rea
 - Use a normal rebase only when the Dependabot branch has not been edited by a human or agent and Dependabot can still safely refresh it.
 - Use a manual lockfile refresh when a maintainer intentionally owns the branch or needs to keep additional reviewed changes. Run `bundle install`, commit the resulting `Gemfile.lock`, and re-run the CI policy smoke before relying on `bundle install` in frozen mode.
 
+## Capture exact-head failure evidence
+
+Before choosing a repair, record the pull request head SHA and the matching GitHub Actions workflow run number. Inspect the `ruby/setup-ruby@v1` step, the Bundler lockfile drift guard, and `npm run test:js:core` as separate failure surfaces. If multiple Dependabot pull requests show the same pattern, triage the likely cause once and avoid copying the same broad cleanup onto every dependency branch.
+
+This is the failure-recovery lane. A green Bundler security update instead uses the security-review lane in [Development](development.md): review its lockfile-only diff, mergeability, exact-head run, upstream advisory or release notes, and package-sensitive evidence. Do not turn a successful security review into an unnecessary lockfile refresh.
+
 ## Review points
 
 Confirm the failing job and the exact mismatch first. If the pull request fails only because `Gemfile.lock` metadata is stale, keep the recovery scoped to the lockfile and do not mix it with broad lint cleanup, dependency grouping changes, or CI workflow redesign.

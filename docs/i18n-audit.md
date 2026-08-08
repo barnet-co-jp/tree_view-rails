@@ -75,6 +75,7 @@ If one language must temporarily lag, leave a short note in the changed doc or P
 | Installation, importmap, JavaScript entrypoints, packaging, or asset setup | `README.md`, `docs/ja/installation.md`, `docs/en/installation.md`, and `docs/ja/minimal-usage.md` / `docs/en/minimal-usage.md` when first-run examples change |
 | Usage recommendations, decision guidance, or responsibility boundaries | `docs/ja/usage.md`, `docs/en/usage.md`, `docs/ja/decision-guide.md`, `docs/en/decision-guide.md`, plus related feature docs |
 | Release policy, compatibility policy, migration guidance, or release checklist expectations | `docs/ja/release.md`, `docs/en/release.md`, this checklist, and `CHANGELOG.md` when the public surface changed |
+| Dependency automation, CI review evidence, or maintainer recovery guidance | `docs/ja/development.md`, `docs/en/development.md`, matching bilingual recovery guides, and `docs/ja/release.md` / `docs/en/release.md` when tag-time evidence changes |
 | README-level positioning or top-level docs navigation | `README.md`, `docs/README.md`, `docs/ja/README.md`, and `docs/en/README.md` |
 
 ## CHANGELOG guidance
