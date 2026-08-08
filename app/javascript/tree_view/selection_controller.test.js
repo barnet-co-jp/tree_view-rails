@@ -32,6 +32,49 @@ describe("TreeViewSelectionController", () => {
     document.body.innerHTML = ""
   })
 
+  const mountSelectionFixture = async (
+    nodes,
+    { cascade = false, indeterminate = false } = {}
+  ) => {
+    document.body.innerHTML = `
+      <table>
+        <tbody
+          id="selection-fixture"
+          data-controller="tree-view-selection"
+          ${cascade ? 'data-tree-view-selection-cascade-value="true"' : ""}
+          ${indeterminate ? 'data-tree-view-selection-indeterminate-value="true"' : ""}>
+          ${nodes.map(({ id, depth, checked, disabled }) => `
+            <tr data-tree-depth="${depth}">
+              <td>
+                <input
+                  id="${id}"
+                  class="tree-selection-checkbox"
+                  type="checkbox"
+                  value='${JSON.stringify({ id })}'
+                  ${checked ? "checked" : ""}
+                  ${disabled ? "disabled" : ""}>
+              </td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `
+
+    await flush()
+
+    const element = document.getElementById("selection-fixture")
+    return application.getControllerForElementAndIdentifier(element, "tree-view-selection")
+  }
+
+  const selectionSnapshot = () =>
+    Array.from(document.querySelectorAll(".tree-selection-checkbox")).map((checkbox) => ({
+      id: checkbox.id,
+      depth: Number.parseInt(checkbox.closest("tr").dataset.treeDepth, 10),
+      checked: checkbox.checked,
+      indeterminate: checkbox.indeterminate,
+      disabled: checkbox.disabled
+    }))
+
   it("mirrors checked payloads into hidden inputs on the nearest form", async () => {
     document.body.innerHTML = `
       <form id="bulk-form">
@@ -433,5 +476,79 @@ describe("TreeViewSelectionController", () => {
       sourceCheckbox: parent,
       attemptedChecked: true
     })
+  })
+
+  it("cascades through deep enabled descendants without changing disabled nodes or the next root", async () => {
+    const controller = await mountSelectionFixture([
+      { id: "root", depth: 0, checked: false, disabled: false },
+      { id: "disabled-intermediate", depth: 1, checked: false, disabled: true },
+      { id: "enabled-grandchild", depth: 2, checked: false, disabled: false },
+      { id: "disabled-child", depth: 3, checked: false, disabled: true },
+      { id: "deep-leaf", depth: 4, checked: false, disabled: false },
+      { id: "next-root", depth: 0, checked: true, disabled: false },
+      { id: "next-root-child", depth: 1, checked: false, disabled: false }
+    ], { cascade: true })
+    const root = document.getElementById("root")
+
+    root.checked = true
+    controller.toggle({ target: root })
+
+    expect(selectionSnapshot()).toEqual([
+      { id: "root", depth: 0, checked: true, indeterminate: false, disabled: false },
+      { id: "disabled-intermediate", depth: 1, checked: false, indeterminate: false, disabled: true },
+      { id: "enabled-grandchild", depth: 2, checked: true, indeterminate: false, disabled: false },
+      { id: "disabled-child", depth: 3, checked: false, indeterminate: false, disabled: true },
+      { id: "deep-leaf", depth: 4, checked: true, indeterminate: false, disabled: false },
+      { id: "next-root", depth: 0, checked: true, indeterminate: false, disabled: false },
+      { id: "next-root-child", depth: 1, checked: false, indeterminate: false, disabled: false }
+    ])
+  })
+
+  it("calculates mixed descendant states bottom-up while excluding disabled descendants", async () => {
+    await mountSelectionFixture([
+      { id: "root", depth: 0, checked: false, disabled: false },
+      { id: "complete-branch", depth: 1, checked: false, disabled: false },
+      { id: "selected-leaf", depth: 2, checked: true, disabled: false },
+      { id: "disabled-unselected-leaf", depth: 2, checked: false, disabled: true },
+      { id: "mixed-branch", depth: 1, checked: false, disabled: false },
+      { id: "mixed-selected-leaf", depth: 2, checked: true, disabled: false },
+      { id: "mixed-unselected-leaf", depth: 2, checked: false, disabled: false }
+    ], { indeterminate: true })
+
+    expect(selectionSnapshot()).toEqual([
+      { id: "root", depth: 0, checked: false, indeterminate: true, disabled: false },
+      { id: "complete-branch", depth: 1, checked: true, indeterminate: false, disabled: false },
+      { id: "selected-leaf", depth: 2, checked: true, indeterminate: false, disabled: false },
+      { id: "disabled-unselected-leaf", depth: 2, checked: false, indeterminate: false, disabled: true },
+      { id: "mixed-branch", depth: 1, checked: false, indeterminate: true, disabled: false },
+      { id: "mixed-selected-leaf", depth: 2, checked: true, indeterminate: false, disabled: false },
+      { id: "mixed-unselected-leaf", depth: 2, checked: false, indeterminate: false, disabled: false }
+    ])
+  })
+
+  it("stops cascade at sibling and next-root subtree boundaries", async () => {
+    const controller = await mountSelectionFixture([
+      { id: "root", depth: 0, checked: false, disabled: false },
+      { id: "source-branch", depth: 1, checked: false, disabled: false },
+      { id: "source-deep-leaf", depth: 2, checked: false, disabled: false },
+      { id: "sibling-branch", depth: 1, checked: true, disabled: false },
+      { id: "sibling-child", depth: 2, checked: false, disabled: false },
+      { id: "next-root", depth: 0, checked: true, disabled: false },
+      { id: "next-root-child", depth: 1, checked: false, disabled: false }
+    ], { cascade: true })
+    const source = document.getElementById("source-branch")
+
+    source.checked = true
+    controller.toggle({ target: source })
+
+    expect(selectionSnapshot()).toEqual([
+      { id: "root", depth: 0, checked: false, indeterminate: false, disabled: false },
+      { id: "source-branch", depth: 1, checked: true, indeterminate: false, disabled: false },
+      { id: "source-deep-leaf", depth: 2, checked: true, indeterminate: false, disabled: false },
+      { id: "sibling-branch", depth: 1, checked: true, indeterminate: false, disabled: false },
+      { id: "sibling-child", depth: 2, checked: false, indeterminate: false, disabled: false },
+      { id: "next-root", depth: 0, checked: true, indeterminate: false, disabled: false },
+      { id: "next-root-child", depth: 1, checked: false, indeterminate: false, disabled: false }
+    ])
   })
 })
