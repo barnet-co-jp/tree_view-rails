@@ -1,5 +1,5 @@
 require "spec_helper"
-PathNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+PathNode = Struct.new(:id, :parent_item_id, :name)
 PathCountry = Struct.new(:id, :name, :children)
 
 RSpec.describe "TreeView::Tree parent path helpers" do

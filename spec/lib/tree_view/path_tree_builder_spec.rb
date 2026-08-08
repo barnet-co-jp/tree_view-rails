@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-PathTreeBuilderDocument = Struct.new(:id, :source_relative_path, :title, keyword_init: true)
+PathTreeBuilderDocument = Struct.new(:id, :source_relative_path, :title)
 
 RSpec.describe TreeView::PathTreeBuilder do
   it "builds folder nodes and record nodes from slash-separated paths" do

@@ -1,5 +1,5 @@
 require "spec_helper"
-ItemNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+ItemNode = Struct.new(:id, :parent_item_id, :name)
 CountryNode = Struct.new(:id, :name, :cities)
 CityNode = Struct.new(:id, :name, :recipes)
 RecipeNode = Struct.new(:id, :name, :steps)

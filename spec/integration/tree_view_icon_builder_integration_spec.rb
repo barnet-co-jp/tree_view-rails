@@ -2,7 +2,7 @@ require "spec_helper"
 require "action_view"
 require "fileutils"
 require "tmpdir"
-IconNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+IconNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView icon builder integration" do
   let(:root) { IconNode.new(id: 1, parent_item_id: nil, name: "root") }

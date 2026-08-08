@@ -23,7 +23,7 @@ RSpec.describe "tree_view_window public helper option contract" do
   end
 
   it "keeps representative tree_view_window metadata available" do
-    node = Struct.new(:id, :parent_id, :name, keyword_init: true)
+    node = Struct.new(:id, :parent_id, :name)
     root = node.new(id: 1, parent_id: nil, name: "Root")
     child = node.new(id: 2, parent_id: 1, name: "Child")
     tree = TreeView::Tree.new(records: [root, child], parent_id_method: :parent_id)

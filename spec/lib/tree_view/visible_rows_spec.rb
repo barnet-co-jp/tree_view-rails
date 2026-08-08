@@ -1,5 +1,5 @@
 require "spec_helper"
-VisibleRowsNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+VisibleRowsNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe TreeView::VisibleRows do
   let(:root) { VisibleRowsNode.new(id: 1, parent_item_id: nil, name: "root") }

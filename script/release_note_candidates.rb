@@ -6,7 +6,7 @@ require "net/http"
 require "optparse"
 
 module ReleaseNoteCandidates
-  Entry = Struct.new(:type, :number, :title, :url, :closed_at, :merged_at, keyword_init: true)
+  Entry = Struct.new(:type, :number, :title, :url, :closed_at, :merged_at)
 
   class GitHubClient
     def initialize(token: ENV["GITHUB_TOKEN"], api_base: "https://api.github.com")

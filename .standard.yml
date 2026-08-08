@@ -3,5 +3,3 @@ ignore:
   - vendor/**/*
   - node_modules/**/*
   - spec/lib/tree_view/render_state_spec.rb
-  - "**/*.rb":
-    - Style/RedundantStructKeywordInit

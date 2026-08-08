@@ -5,7 +5,7 @@ require "action_view"
 require "fileutils"
 require "tmpdir"
 
-AccessibilityNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+AccessibilityNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView accessibility semantics" do
   let(:root) { AccessibilityNode.new(id: 1, parent_item_id: nil, name: "root") }

@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe "TreeView errors" do
-  let(:node_class) { Struct.new(:id, :parent_item_id, :name, keyword_init: true) }
+  let(:node_class) { Struct.new(:id, :parent_item_id, :name) }
 
   it "exposes a TreeView-specific base error that preserves ArgumentError compatibility" do
     expect(TreeView::Error).to be < ArgumentError

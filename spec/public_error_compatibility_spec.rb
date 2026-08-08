@@ -3,7 +3,7 @@
 require "spec_helper"
 require "yaml"
 
-PublicErrorCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+PublicErrorCompatibilityTestNode = Struct.new(:id, :parent_id, :name)
 PUBLIC_ERROR_COMPATIBILITY_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 
 RSpec.describe "TreeView public error compatibility" do

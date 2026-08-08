@@ -151,6 +151,7 @@ Release preparation notes:
 
 ### Tests
 
+- Removed redundant `keyword_init: true` from Ruby `Struct.new` declarations and dropped the repository-wide `Style/RedundantStructKeywordInit` ignore as a baseline cleanup.
 - Added focused docs signal coverage for manifest-backed JavaScript export inventories, concrete README package-root examples, and bilingual Public Name Decisions reader journeys without changing runtime or manifest contracts.
 - Added focused docs signal coverage for selection and transfer event detail keys, selection checkbox hooks, tree row/window helper options, VisibleRows metadata, NodePresenter builder names, and the Node 22 release-source boundary without changing runtime or manifest contracts.
 - Added focused docs signal coverage for the public error rescue/inheritance/message boundary, state-change reasons and representative event detail classification, transfer drop/MIME/data-attribute values, and controller entry key/identifier/export mappings without changing runtime or manifest contracts.

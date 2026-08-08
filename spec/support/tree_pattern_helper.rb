@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TreePatternHelper
-  GeneratedTreeNode = Struct.new(:id, :parent_id, :label, keyword_init: true)
+  GeneratedTreeNode = Struct.new(:id, :parent_id, :label)
 
   def generated_tree_node(id:, parent_id:, label: nil)
     GeneratedTreeNode.new(id: id, parent_id: parent_id, label: label || "node-#{id}")

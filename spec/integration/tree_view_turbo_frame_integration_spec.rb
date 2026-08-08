@@ -5,7 +5,7 @@ require "action_view"
 require "fileutils"
 require "tmpdir"
 
-TurboFrameIntegrationNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+TurboFrameIntegrationNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe "TreeView turbo frame integration" do
   let(:root) { TurboFrameIntegrationNode.new(id: 1, parent_item_id: nil, name: "root") }

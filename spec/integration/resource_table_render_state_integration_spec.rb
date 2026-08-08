@@ -3,7 +3,7 @@
 require "spec_helper"
 require "action_view"
 
-ResourceTableNode = Struct.new(:id, :parent_item_id, :name, :status, keyword_init: true)
+ResourceTableNode = Struct.new(:id, :parent_item_id, :name, :status)
 
 RSpec.describe "Resource table render state integration" do
   let(:root) { ResourceTableNode.new(id: 1, parent_item_id: nil, name: "root", status: "active") }

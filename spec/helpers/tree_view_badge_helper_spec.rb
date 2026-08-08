@@ -1,5 +1,5 @@
 require "spec_helper"
-BadgeNode = Struct.new(:id, :name, keyword_init: true)
+BadgeNode = Struct.new(:id, :name)
 
 RSpec.describe "TreeView badge helper" do
   let(:helper_host_class) do

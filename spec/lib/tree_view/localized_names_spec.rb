@@ -30,7 +30,7 @@ end
 class LocalizedNamesPlainDocument
 end
 
-LocalizedNamesTypedNode = Struct.new(:node_type, keyword_init: true)
+LocalizedNamesTypedNode = Struct.new(:node_type)
 
 RSpec.describe TreeView::LocalizedNames do
   around do |example|

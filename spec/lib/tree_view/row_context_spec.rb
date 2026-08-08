@@ -1,5 +1,5 @@
 require "spec_helper"
-Node = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+Node = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe TreeView::RowContext do
   let(:root) { Node.new(id: 1, parent_item_id: nil, name: "root") }

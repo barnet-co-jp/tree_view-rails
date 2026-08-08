@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe TreeView::RenderState, "toggle icon lookup" do
-  let(:node_class) { Struct.new(:id, :node_type, keyword_init: true) }
+  let(:node_class) { Struct.new(:id, :node_type) }
   let(:tree) { instance_double(TreeView::Tree) }
   let(:ui_config) { instance_double(TreeView::UiConfig) }
 

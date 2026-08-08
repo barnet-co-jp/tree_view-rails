@@ -4,7 +4,7 @@ require "spec_helper"
 require "action_view"
 require "yaml"
 
-BreadcrumbPublicContractNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+BreadcrumbPublicContractNode = Struct.new(:id, :parent_id, :name)
 BREADCRUMB_PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 
 RSpec.describe "Breadcrumb public contract" do

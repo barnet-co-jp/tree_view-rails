@@ -10,8 +10,7 @@ module TreeView
       :node_key,
       :parent_key,
       :has_children,
-      :expanded,
-      keyword_init: true
+      :expanded
     ) do
       def has_children?
         has_children == true
