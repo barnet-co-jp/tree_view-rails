@@ -370,7 +370,7 @@ const workflowActionMajorSignals = [
   ["rails_matrix", railsMatrixJob, "ruby/setup-ruby@v1"],
   ["javascript", javascriptJob, "ruby/setup-ruby@v1"],
   ["gem_package", gemPackageJob, "ruby/setup-ruby@v1"],
-  ["javascript", javascriptJob, "actions/setup-node@v6"]
+  ["javascript", javascriptJob, "actions/setup-node@v7"]
 ]
 
 workflowActionMajorSignals.forEach(([jobName, jobSource, action]) => {
