@@ -142,6 +142,111 @@ releaseDocsRubyEvidenceSignals.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release docs Ruby and Rails evidence signal", signals)
 })
 
+const releaseTagAlignmentSignals = [
+  [
+    "lib/tree_view/release_check.rb",
+    [
+      "ENV[\"TREE_VIEW_REQUIRE_RELEASE_TAG\"] == \"1\"",
+      "tag_name = \"v#{version}\"",
+      "expected git tag #{tag_name} to exist",
+      "expected #{head_sha}"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "Tag alignment is skipped until `vX.Y.Z` exists",
+      "TREE_VIEW_REQUIRE_RELEASE_TAG=1 bundle exec rake release:check",
+      "Use the default command during release preparation PRs",
+      "Use the flagged command after tagging",
+      "missing or points at a different commit"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "tag alignment は skip",
+      "TREE_VIEW_REQUIRE_RELEASE_TAG=1 bundle exec rake release:check",
+      "release preparation PR の段階",
+      "tag 後はこの flag 付き command",
+      "別の commit を指している場合"
+    ]
+  ]
+]
+
+releaseTagAlignmentSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs tag alignment signal", signals)
+})
+
+const changelogTestsEvidenceSignals = [
+  [
+    "CHANGELOG.md",
+    [
+      "## Unreleased",
+      "Keep `Documentation` and `Tests` entries available as release evidence",
+      "### Tests",
+      "docs smoke",
+      "package verification"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "- Tests",
+      "Record test, CI, docs smoke, and package verification changes under Tests."
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "- Tests",
+      "test、CI、docs smoke、package verification の変更は Tests に記録します。"
+    ]
+  ]
+]
+
+changelogTestsEvidenceSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs and CHANGELOG Tests evidence signal", signals)
+})
+
+const mainPushFullCiSignals = [
+  [
+    ".github/workflows/ci.yml",
+    [
+      "ruby_matrix:",
+      "rails_matrix:",
+      "javascript:",
+      "gem_package:"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "main-push full CI is green",
+      "Ruby version matrix",
+      "Rails version matrix",
+      "JavaScript tests through `npm ci` and `npm run test:js`",
+      "Gem package verification",
+      "Use the broader `main` CI for release decisions"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "main-push full CI が green",
+      "Ruby version matrix",
+      "Rails version matrix",
+      "`npm ci` と `npm run test:js` による JavaScript tests",
+      "Gem package verification",
+      "release判定には"
+    ]
+  ]
+]
+
+mainPushFullCiSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs main-push full CI matrix signal", signals)
+})
+
 const downstreamHostAppEvidenceSignals = [
   [
     "docs/en/release.md",
