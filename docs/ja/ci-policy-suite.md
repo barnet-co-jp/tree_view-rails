@@ -104,6 +104,28 @@ Pull Request workflow は、Docker-based maintainer setup の confidence を確�
 
 このメモは Docker base image、compose volume policy、Node / Ruby support policy、package scripts、CI workflow jobs、required checks、branch protection を変更しません。
 
+## Job execution policy
+
+9個すべての CI job は、exact runner label `runs-on: ubuntu-latest` と明示的な job-level `timeout-minutes` safety bound を使います。
+
+| Job | Timeout（分） |
+| --- | ---: |
+| `changes` | 10 |
+| `lint` | 10 |
+| `pr_specs` | 15 |
+| `pr_rails_matrix` | 20 |
+| `ruby_matrix` | 20 |
+| `rails_matrix` | 20 |
+| `javascript` | 30 |
+| `docker_development_setup` | 40 |
+| `gem_package` | 15 |
+
+timeout は runaway または hung execution を有限時間で停止する safety bound であり、通常所要時間の SLA ではありません。matrix job では、matrix 全体で共有する予算ではなく、各 matrix execution に個別に適用されます。timeout conclusion は、test assertion failure、missing check、または changed-file routing による intentionally skipped check と分けて調査してください。
+
+Playwright browser dependency、Docker behavior、native gem build、Ruby / Node setup action を runner migration で検証するまでは、`ubuntu-latest` を意図的に維持します。runner label または timeout を変更する場合は、`.github/workflows/ci.yml`、`script/test_ci_workflow_changed_file_detection_signals.mjs`、このメモの英日両方を同時に更新してください。
+
+この execution policy は job selection、changed-file classification、required check name、branch protection、test command を変更しません。
+
 ## Read-only workflow permissions
 
 Pull Request と main-push workflow は、workflow top level の `permissions: contents: read` によって `GITHUB_TOKEN` を read-only に保ちます。これにより CI は repository contents を checkout し、policy / docs / JavaScript / Ruby / Docker / package verification lane を実行できますが、各 job には default で repository write access を与えません。

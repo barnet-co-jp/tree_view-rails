@@ -104,6 +104,28 @@ When that lane is true, the `docker_development_setup` job builds the `app` serv
 
 This note does not change the Docker base image, compose volume policy, Node or Ruby support policy, package scripts, CI workflow jobs, required checks, or branch protection.
 
+## Job execution policy
+
+All nine CI jobs use the exact runner label `runs-on: ubuntu-latest` and an explicit job-level `timeout-minutes` safety bound:
+
+| Job | Timeout (minutes) |
+| --- | ---: |
+| `changes` | 10 |
+| `lint` | 10 |
+| `pr_specs` | 15 |
+| `pr_rails_matrix` | 20 |
+| `ruby_matrix` | 20 |
+| `rails_matrix` | 20 |
+| `javascript` | 30 |
+| `docker_development_setup` | 40 |
+| `gem_package` | 15 |
+
+A timeout stops a runaway or hung execution after a finite period; it is a safety bound, not a normal-duration SLA. For matrix jobs, the timeout applies separately to each matrix execution rather than to the matrix as one shared budget. Investigate a timeout conclusion separately from a test assertion failure, a missing check, or an intentionally skipped check caused by changed-file routing.
+
+Keep `ubuntu-latest` intentional until a runner migration has verified Playwright browser dependencies, Docker behavior, native gem builds, and the Ruby and Node setup actions. When changing a runner label or timeout, update `.github/workflows/ci.yml`, `script/test_ci_workflow_changed_file_detection_signals.mjs`, and both language versions of this note together.
+
+This execution policy does not change job selection, changed-file classification, required check names, branch protection, or test commands.
+
 ## Read-only workflow permissions
 
 The pull request and main-push workflow keeps `GITHUB_TOKEN` read-only at the workflow top level with `permissions: contents: read`. This lets CI checkout repository contents and run the policy, docs, JavaScript, Ruby, Docker, and package verification lanes without granting repository write access to jobs by default.
