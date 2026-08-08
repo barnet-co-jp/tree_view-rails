@@ -178,6 +178,15 @@ Pull Request の Rails lanes では、lower / current / next-major の代表範�
 
 `main` が進んで branch が `diverged` になった後は、green checks だけでは merge ready と判断しません。`mergeable`、changed files、risk、behind の大きさを確認します。GitHub が `mergeable: false` を返す場合、behind が大きい場合、または workflow 定義、public API、spec、shared docs inventory に触れる Pull Request では、branch refresh 後に fresh CI を観測することを優先します。小さく少しだけ behind している docs-only 変更では、changed files が clean に適用でき、`mergeable` が true で、同じ check 名が green のままなら、過度に重い refresh を必須にしなくてかまいません。
 
+### 親 PR の squash merge 後に stacked follow-up を再評価する
+
+親 Pull Request が squash merge された場合、旧 stacked base 上の green run を current `main` に対する fresh CI evidence として扱わないでください。follow-up の review / merge 前に次を確認します。
+
+1. current head と current `main` を比較して `ahead_by`、`behind_by`、`status` を記録し、同じ時点の changed files と mergeability も確認する。
+2. follow-up の current head SHA と完全に一致する GitHub Actions workflow run を確認する。親の squash merge 前に得た exact-head Actions result でも旧 base を示すため、fresh current-main evidence ではありません。
+3. follow-up の base を `main` へ retarget して同じ確認を繰り返す。review surface が正常化しない、親差分が残る、または conflict が残る場合は、古い ancestry を維持せず、最新 `main` から follow-up 固有差分だけで branch を再構成する。
+4. PR body の current base、changed files、exact-head CI evidence、close intent を更新する。[PR overlap preflight](pr-overlap-preflight.md) を再実行し、follow-up 固有差分が残らない場合や Issue が既に満たされている場合は、古い `Closes` intent を残さず closing reference を削除または修正する。
+
 ### 既知 drift の recovery
 
 狭い Pull Request でも、`main` または未 merge の base Pull Request 側に既知の public contract drift があると CI が赤くなることがあります。たとえば manifest structure spec が新しい top-level key に追従していない、TypeScript declaration が package-root exports に追従していない、などです。この場合は CI triage として扱い、Pull Request scope を自動で広げないでください。
