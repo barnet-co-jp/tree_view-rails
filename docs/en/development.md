@@ -37,6 +37,11 @@ npm test
 npm run test:vitest-ui
 npm run test:entrypoints
 npm run test:docs-entrypoints
+npm run test:public-api-entrypoint-signals
+npm run test:public-api-transfer-integration-signals
+npm run test:host-lifecycle-no-detail-signals
+npm run test:event-names-docs-signals
+npm run test:controller-registration-docs-signals
 npm run test:host-app-extension-diagnostics-signals
 npm run test:quality-docs-smoke-signals
 npm run test:development-docs-commands
@@ -131,6 +136,18 @@ npm run test:docs-entrypoints
 ```
 
 That command runs the docs entrypoint smoke, repository-only maintainer entrypoint smoke, docs entrypoint signal smoke, README Quick Start signal, Public API docs signal, and i18n parity checks without the broader entrypoint and CI policy checks. Use `npm run test:docs-entrypoints -- --list` to see the numbered groups, then `npm run test:docs-entrypoints -- --only <group-or-index>` to run one group by its 1-based number, exact name, case-insensitive name, or unique partial name. The repository-only maintainer entrypoint smoke keeps checkout-only files such as `Product Profile.md`, `AGENTS.md`, `CHANGELOG.md`, and `docs/i18n-audit.md` discoverable from `docs/README.md` and the language README files without treating them as gem-packaged host-app API guides. Use it when a docs-only change fails before moving on to `npm run test:entrypoints` or `npm run test:browser`.
+
+### Focused public docs guards
+
+Use these commands to rerun one manifest-backed, reader-facing documentation guard without running the full docs entrypoint suite:
+
+- `npm run test:public-api-entrypoint-signals`: package-root guidance, TypeScript declaration boundary, manifest source of truth, and ResourceTable bridge documentation.
+- `npm run test:public-api-transfer-integration-signals`: transfer drop positions, integration hooks, and the Public API / Drag and Drop documentation boundary.
+- `npm run test:host-lifecycle-no-detail-signals`: intentional no-detail host lifecycle events versus remote-state event names and values.
+- `npm run test:event-names-docs-signals`: event names, state-change reasons, transfer drop positions, and documented detail-key boundaries.
+- `npm run test:controller-registration-docs-signals`: controller identifiers, exports, the default registration helper, and host-app-owned custom boot guidance.
+
+These commands guard documentation signals and maintainer triage entrypoints. Runtime export existence remains owned by `script/test_entrypoints.mjs`, declaration literal shapes by `script/test_declaration_literal_shapes.mjs`, and controller registration or event dispatch behavior by the runtime tests. They do not change public exports, manifest schema, payloads, registration order, or host-app policy.
 
 Browser-level smoke tests run through Playwright with:
 
