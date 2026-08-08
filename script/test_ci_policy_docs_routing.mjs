@@ -238,12 +238,14 @@ function assertCiPolicyDocsNonPullRequestDefaultOutputSignals() {
       [
         "For non-pull-request events such as `main` pushes",
         "does not derive a changed-file list",
-        "default outputs with `docs_only=false`",
+        "Before the base-ref fetch and pull-request diff logic",
+        "conservative default outputs with `docs_only=false`",
         "`mockups_changed=false`",
         "`browser_smoke_changed=false`",
         "`package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` set to `true`",
         "default-branch evidence routing",
-        "prefer broad package, Docker setup, docs entrypoint, and CI policy confidence over a docs-only shortcut",
+        "pull requests may use changed-file shortcuts",
+        "main-push runs use the conservative defaults to run broad release-facing package, Docker setup, docs entrypoint, and CI policy gates",
         "without changing pull-request classifier behavior"
       ]
     ],
@@ -252,13 +254,15 @@ function assertCiPolicyDocsNonPullRequestDefaultOutputSignals() {
       [
         "`main` push など Pull Request ではない event",
         "changed-file list を作りません",
-        "default outputs として `docs_only=false`",
+        "base-ref fetch と Pull Request 用 diff logic より前",
+        "保守的な default outputs として `docs_only=false`",
         "`mockups_changed=false`",
         "`browser_smoke_changed=false`",
         "`package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` を `true`",
         "default branch evidence routing",
-        "docs-only shortcut より、package、Docker setup、docs entrypoint、CI policy の広い confidence lane を優先",
-        "Pull Request classifier の挙動を変えるものではありません"
+        "Pull Request は changed-file shortcut を利用できます",
+        "main-push run はこの保守的な default によって package、Docker setup、docs entrypoint、CI policy の広い release-facing gate を実行します",
+        "Pull Request classifier の挙動を変えず"
       ]
     ]
   ]
@@ -382,6 +386,12 @@ function assertCiPolicyDocsRoutingOutputSignals() {
       assertIncludes(docsSource, signal, `${docsPath} routing output docs signal`)
     }
 
+    assertRoutingOutputRowIncludes(
+      docsSource,
+      "package_sensitive",
+      ".nvmrc",
+      `${docsPath} missing .nvmrc package-sensitive Node install-source confidence routing signal`
+    )
     assertRoutingOutputRowIncludes(
       docsSource,
       "package_sensitive",
