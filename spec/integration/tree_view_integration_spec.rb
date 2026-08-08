@@ -70,6 +70,39 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include("project_2:child")
     end
 
+    it "passes NodePresenter and row context locals to host row partials" do
+      File.write(
+        File.join(host_view_dir, "projects", "_presented_columns.html.erb"),
+        "<td>row:<%= tree.node_key_for(item) %>:<%= render_state.node_presenter.equal?(node_presenter) %>:<%= node_presenter.label_for(item) %>:<%= row_context.depth %></td>"
+      )
+      File.write(
+        File.join(host_view_dir, "projects", "_presented_actions.html.erb"),
+        "<td>actions:<%= tree.node_key_for(item) %>:<%= render_state.node_presenter.equal?(node_presenter) %>:<%= node_presenter.actions_for(item).join(\",\") %>:<%= row_context.depth %></td>"
+      )
+      node_presenter = TreeView::NodePresenter.define do
+        label { |item| "label-#{item.name}" }
+        actions { |item| ["open-#{item.name}"] }
+      end
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/presented_columns",
+        row_actions_partial: "projects/presented_actions",
+        ui_config: tree_ui,
+        node_presenter: node_presenter,
+        initial_state: :expanded,
+        max_render_depth: 1
+      )
+
+      rendered = build_view(tree_ui: nil).tree_view_rows(render_state)
+
+      expect(rendered).to include("row:1:true:label-root:0")
+      expect(rendered).to include("row:2:true:label-child:1")
+      expect(rendered).to include("actions:1:true:open-root:0")
+      expect(rendered).to include("actions:2:true:open-child:1")
+    end
+
     it "renders row transfer data when row event payload builder is configured" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       render_state = TreeView::RenderState.new(
