@@ -53,6 +53,30 @@ const nodeVersionSourceSignals = [
       "npm run test:entrypoints",
       "lockfile-backed install policy を変えずに確認します"
     ]
+  },
+  {
+    feature: "English release docs Node 22 version-source boundary",
+    sourcePath: "docs/en/release.md",
+    signals: [
+      "Node 22 source guard",
+      ".nvmrc",
+      "`engines.node`",
+      "workflow `node-version`",
+      "script/test_node_version_sources.mjs",
+      "lockfile-backed install path confirms dependency resolution"
+    ]
+  },
+  {
+    feature: "Japanese release docs Node 22 version-source boundary",
+    sourcePath: "docs/ja/release.md",
+    signals: [
+      "Node 22 source guard",
+      ".nvmrc",
+      "`engines.node`",
+      "workflow の `node-version`",
+      "script/test_node_version_sources.mjs",
+      "lockfile-backed install path は dependency resolution の整合を確認する"
+    ]
   }
 ]
 

@@ -735,6 +735,29 @@ const dragAndDropContractDocs = [
   ["docs/ja/drag-and-drop.md", read("docs/ja/drag-and-drop.md")]
 ]
 
+const selectionEventDetailSignals = [
+  "selectedCount",
+  "selectedValues",
+  "selectedPayloads",
+  "sourceCheckbox",
+  "attemptedChecked",
+  "payloads",
+  "maxCount",
+  "attemptedCount",
+  "checkbox",
+  "value"
+]
+
+const transferEventDetailSignals = [
+  "sourcePayload",
+  "sourceRow",
+  "targetPayload",
+  "targetRow",
+  "position",
+  "value",
+  "row"
+]
+
 const publicErrorHierarchySignals = [
   "TreeView::Error",
   "TreeView::ConfigurationError",
@@ -781,6 +804,15 @@ eventContractManifestSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest state reason and event detail source")
 })
 
+assertIncludes(manifest, "selection:", "public API manifest selection event detail group")
+selectionEventDetailSignals.forEach((signal) => {
+  assertIncludes(manifest, `- ${signal}`, "public API manifest selection event detail keys")
+})
+assertIncludes(manifest, "transfer:", "public API manifest transfer event detail group")
+transferEventDetailSignals.forEach((signal) => {
+  assertIncludes(manifest, `- ${signal}`, "public API manifest transfer event detail keys")
+})
+
 javascriptEventDocs.forEach(([relativePath, document]) => {
   [
     "TreeViewStateChangeReasons",
@@ -790,11 +822,11 @@ javascriptEventDocs.forEach(([relativePath, document]) => {
     "collapsed",
     "TreeViewEventDetailKeys",
     "viewKey",
-    "selectedCount",
     "childrenUrl",
-    "sourcePayload",
     "event_names_without_detail",
-    "event_detail_keys"
+    "event_detail_keys",
+    ...selectionEventDetailSignals,
+    ...transferEventDetailSignals
   ].forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} state reason and representative event detail docs`)
   })
@@ -806,6 +838,26 @@ javascriptEventDocs.forEach(([relativePath, document]) => {
   assert(
     /controller-emitted|controller 自身が emit|controller-emitted events|TreeView controller 自身/.test(document),
     `${relativePath}: JavaScript event docs no longer distinguish controller-emitted detail events from host lifecycle events`
+  )
+})
+
+selectionDocs.forEach(([relativePath, document]) => {
+  ["selectedCount", "selectedPayloads", "maxCount", "checkbox", "value"].forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection event detail reader docs`)
+  })
+  assert(
+    /host app.*responsib|host app 側.*責務|host app側で実装/.test(document),
+    `${relativePath}: selection docs no longer preserve host-app-owned business actions and authorization`
+  )
+})
+
+dragAndDropContractDocs.forEach(([relativePath, document]) => {
+  transferEventDetailSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} transfer event detail reader docs`)
+  })
+  assert(
+    /authorization.*persistence|認可.*保存|host app.*responsib|host app側の責務/.test(document),
+    `${relativePath}: transfer docs no longer preserve host-app-owned authorization and persistence`
   )
 })
 
