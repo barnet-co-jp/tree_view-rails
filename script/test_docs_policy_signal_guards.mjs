@@ -151,12 +151,43 @@ const signalGroups = [
         [
           "Documentation maintenance checklist",
           "Root-level prose docs should stay limited to intentional entry points, maintenance notes, or technical assets",
+          "## Page-level language coverage and translation priority",
           "## Update matrix",
           "## Root-level docs policy",
+          "## Release and PR review checklist",
           "## Technical assets",
           "docs/mockups/README.md` is the source of truth for the current static mockup file inventory",
           "this checklist should describe responsibility rather than repeat every individual mockup HTML page",
+          "Treat the High lane in the page-level coverage table above as the minimum same-sweep translation set promised by the language READMEs",
           "Update this technical-assets section only when the source-of-truth rule or asset-group responsibility changes"
+        ]
+      ],
+      [
+        "docs/README.md",
+        [
+          "[Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage",
+          "Documentation language-sync rules and ongoing maintenance checks are tracked in [Documentation maintenance checklist](i18n-audit.md)",
+          "Root-level docs should stay limited to intentional entry points, maintenance notes, and technical assets"
+        ]
+      ],
+      [
+        "docs/en/development.md",
+        [
+          "using `docs/i18n-audit.md` as the cross-language checklist",
+          "root-level docs policy updates",
+          "check the update matrix in `docs/i18n-audit.md`",
+          "focused smoke target definitions describe the same inventory",
+          "leave the mismatch visible in the PR body or a follow-up issue"
+        ]
+      ],
+      [
+        "docs/ja/development.md",
+        [
+          "`docs/i18n-audit.md` を cross-language checklist として",
+          "root-level docs policy の更新",
+          "`docs/i18n-audit.md` の update matrix を確認する",
+          "focused smoke target definitions が同じ inventory を説明しているか確認する",
+          "PR 本文または follow-up issue で mismatch を見える状態にする"
         ]
       ]
     ]
