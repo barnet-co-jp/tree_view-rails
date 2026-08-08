@@ -48,7 +48,7 @@ For pull requests, the `changes` job fetches the base branch, then tries to find
 
 The resulting file list is passed to `script/ci_changed_files_policy.mjs`, which is the source of truth for the `docs_only`, `package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` outputs. `script/test_ci_workflow_changed_file_detection_signals.mjs` protects the workflow command signals; this note explains the maintainer-facing meaning of that routing and does not change the classification logic.
 
-For non-pull-request events such as `main` pushes, the `changes` job does not derive a changed-file list. Before the pull-request diff logic runs, it emits default outputs with `docs_only=false`, `mockups_changed=false`, `browser_smoke_changed=false`, and `package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` set to `true`. Treat those defaults as default-branch evidence routing: main-push runs prefer broad package, Docker setup, docs entrypoint, and CI policy confidence over a docs-only shortcut, without changing pull-request classifier behavior.
+For non-pull-request events such as `main` pushes, the `changes` job does not derive a changed-file list. Before the base-ref fetch and pull-request diff logic, it emits conservative default outputs with `docs_only=false`, `mockups_changed=false`, `browser_smoke_changed=false`, and `package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` set to `true`. Treat those defaults as default-branch evidence routing: pull requests may use changed-file shortcuts, while main-push runs use the conservative defaults to run broad release-facing package, Docker setup, docs entrypoint, and CI policy gates. This preserves broad default-branch confidence without changing pull-request classifier behavior.
 
 ## Pull request run concurrency
 
@@ -72,7 +72,7 @@ The changed-file policy exposes representative output flags rather than a full r
 | `mockups_changed` | `docs/mockups/**` | Static mockup routes changed and may need browser-smoke or gallery review. |
 | `browser_smoke_changed` | `test/browser/**` | Browser smoke definitions changed and should be treated as executable test-surface changes. |
 
-`.nvmrc` appears under both `package_sensitive` and `docker_setup_sensitive`: Node version source drift affects the package/install confidence path and the Docker setup alignment path.
+`.nvmrc` appears under both `package_sensitive` and `docker_setup_sensitive`. Its Node version source can change package and Node install-source confidence, so it runs the package confidence path; the same drift can break container alignment, so it also runs Docker setup confidence.
 
 `app/javascript/**` changes remain package-sensitive full JavaScript confidence changes, but they do not set `browser_smoke_changed` by themselves. Keep real-browser smoke routing reserved for changed browser smoke definitions, static mockup routes, or pull requests where maintainers explicitly request browser evidence for an interaction change.
 

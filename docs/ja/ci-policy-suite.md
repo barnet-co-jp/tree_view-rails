@@ -48,7 +48,7 @@ Pull Request では、`changes` job が base branch を fetch し、`origin/${{ 
 
 得られた file list は `script/ci_changed_files_policy.mjs` に渡されます。この script が `docs_only`、`package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` output の source of truth です。`script/test_ci_workflow_changed_file_detection_signals.mjs` は workflow command signal を守ります。このメモは、その routing の保守者向けの意味を説明するだけで、classification logic は変更しません。
 
-`main` push など Pull Request ではない event では、`changes` job は changed-file list を作りません。Pull Request 用 diff logic に進む前に、default outputs として `docs_only=false`、`mockups_changed=false`、`browser_smoke_changed=false`、さらに `package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` を `true` として出力します。これらは default branch evidence routing として扱います。main-push run では docs-only shortcut より、package、Docker setup、docs entrypoint、CI policy の広い confidence lane を優先するためのもので、Pull Request classifier の挙動を変えるものではありません。
+`main` push など Pull Request ではない event では、`changes` job は changed-file list を作りません。base-ref fetch と Pull Request 用 diff logic より前に、保守的な default outputs として `docs_only=false`、`mockups_changed=false`、`browser_smoke_changed=false`、さらに `package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` を `true` として出力します。これらは default branch evidence routing として扱います。Pull Request は changed-file shortcut を利用できますが、main-push run はこの保守的な default によって package、Docker setup、docs entrypoint、CI policy の広い release-facing gate を実行します。これにより Pull Request classifier の挙動を変えず、default branch の広い confidence を維持します。
 
 ## Pull request run concurrency
 
@@ -72,7 +72,7 @@ changed-file policy は、repository 全体の file inventory ではなく代表
 | `mockups_changed` | `docs/mockups/**` | static mockup route が変わり、browser-smoke または gallery review が必要になる場合があります。 |
 | `browser_smoke_changed` | `test/browser/**` | browser smoke definition が変わったため、executable test-surface change として扱います。 |
 
-`.nvmrc` は `package_sensitive` と `docker_setup_sensitive` の両方に載ります。Node version source drift は package / install confidence path と Docker setup alignment path の両方に影響します。
+`.nvmrc` は `package_sensitive` と `docker_setup_sensitive` の両方に載ります。この Node version source は package / Node install source の confidence を変え得るため package confidence path を実行し、同じ drift が container alignment を壊し得るため Docker setup confidence も実行します。
 
 `app/javascript/**` の変更は package-sensitive な full JavaScript confidence change のままですが、それだけでは `browser_smoke_changed` を立てません。real-browser smoke routing は、browser smoke definition の変更、static mockup route、または interaction change に対して maintainer が明示的に browser evidence を求める Pull Request に限定してください。
 
