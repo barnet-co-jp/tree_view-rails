@@ -147,8 +147,11 @@ Release preparation notes:
 - Clarified CI policy suite explicit exclusion guidance so candidate guard scripts must be registered in `checks` or carry a reasoned exclusion such as the suite self-test entrypoint.
 - Added CI policy docs release evidence for main-push default outputs, covering package, Docker setup, docs entrypoint, and CI policy confidence lanes without changing pull-request classifier behavior.
 - Added release evidence for Dependabot maintainer policy docs and JavaScript CI cache boundary docs, clarifying they are maintainer-facing documentation additions without changing dependency policy, package manager policy, or CI workflow behavior.
+- Documented bilingual review evidence for npm and Bundler security updates, Bundler CI failure recovery, Dependabot queue limits, GitHub Actions update lanes, and the setup-node npm cache boundary.
 
 ### Tests
+
+- Added a focused Dependabot maintenance evidence signal covering bilingual guidance, configured ecosystem queue limits, action-major smoke ownership, and the workflow npm cache boundary.
 
 - Added narrow maintenance guard command release evidence for `test:entrypoints-composition`, `test:ci-policy-license-prelude`, and `test:immutable-package-root-export-signals` so Development docs command signals stay aligned with package-script aliases.
 - Added package script composition guard release evidence for `test:entrypoints`, `test:js:core`, and `test:js` so maintainers can verify JavaScript command hierarchy drift during release preparation.

@@ -22,6 +22,11 @@ const checks = [
     args: ["script/test_ci_workflow_changed_file_detection_signals.mjs"]
   },
   {
+    group: "Dependabot maintenance evidence signals",
+    command: "node",
+    args: ["script/test_ci_dependabot_maintenance_evidence_signals.mjs"]
+  },
+  {
     group: "CI matrix boundary signals",
     command: "node",
     args: ["script/test_ci_matrix_boundary_signals.mjs"]

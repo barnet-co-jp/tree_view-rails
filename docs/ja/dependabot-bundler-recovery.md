@@ -18,6 +18,12 @@ Bundler の frozen install でも、Ruby lint が repository source を読む前
 - Dependabot branch が人間や agent に編集されておらず、Dependabot が安全に更新できる場合だけ、通常の rebase を使います。
 - maintainer が branch を意図的に引き受けている場合、または追加の review 済み変更を保つ必要がある場合は、手動で lockfile を更新します。`bundle install` を実行し、生成された `Gemfile.lock` を commit してから、frozen mode の `bundle install` に頼る前に CI policy smoke を再確認します。
 
+## exact-head failure evidence を記録する
+
+修復方法を選ぶ前に、Pull Request の head SHA と一致する GitHub Actions workflow run number を記録します。`ruby/setup-ruby@v1` step、Bundler lockfile drift guard、`npm run test:js:core` を別々の failure surface として確認してください。複数の Dependabot Pull Request が同じ pattern を示す場合は原因候補を一度まとめて triage し、各 dependency branch に同じ broad cleanup を重複して積まないでください。
+
+これは failure-recovery lane です。green な Bundler security update では、代わりに [Development](development.md) の security-review lane を使い、lockfile-only diff、mergeability、exact-head run、upstream advisory / release notes、package-sensitive evidence を確認します。成功している security review を不要な lockfile refresh に広げないでください。
+
 ## review point
 
 まず失敗した job と exact mismatch を確認します。Pull Request が `Gemfile.lock` metadata の古さだけで失敗しているなら、復旧は lockfile に閉じ、広い lint cleanup、dependency grouping 変更、CI workflow redesign は混ぜないでください。
