@@ -62,6 +62,8 @@
 - [日本語Breadcrumb helper](ja/breadcrumb.md): current nodeや対象nodeのancestor path contextを描画し、routeやnavigation policyはhost app側に残す入口。
 - [English Persisted State](en/persisted-state.md): save, restore, clear, and prune TreeView expansion state through host-app-owned storage and retention policy boundaries.
 - [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元・clear・pruneし、retention policy / cleanup schedule の責務境界を確認する入口。
+- [English Localized names](en/localized-names.md): resolve model, attribute, and node type labels through ActiveModel / I18n.
+- [日本語ローカライズされた名前](ja/localized-names.md): ActiveModel / I18n 経由で model、attribute、node type の表示名を解決する入口。
 - [English Public Setup Surface](en/public-setup-surface.md): path-level contract for the persisted-state install generator and the boundary between setup destinations and host-app review.
 - [日本語Public Setup Surface](ja/public-setup-surface.md): persisted-state install generator の生成先 path-level contract と、setup surface / host-app review の責務境界。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.

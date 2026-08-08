@@ -403,6 +403,28 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Localized names",
+    rootPattern: /Localized names/,
+    links: [
+      ["README.md", "docs/en/localized-names.md"],
+      ["README.md", "docs/ja/localized-names.md"],
+      ["docs/README.md", "en/localized-names.md"],
+      ["docs/README.md", "ja/localized-names.md"],
+      ["docs/en/README.md", "localized-names.md"],
+      ["docs/ja/README.md", "localized-names.md"]
+    ]
+  },
+  {
+    feature: "Styling state cues",
+    rootPattern: /Packaged stylesheet state cues|Styling state cues/,
+    links: [
+      ["README.md", "docs/en/styling-state-cues.md"],
+      ["README.md", "docs/ja/styling-state-cues.md"],
+      ["docs/README.md", "en/styling-state-cues.md"],
+      ["docs/README.md", "ja/styling-state-cues.md"]
+    ]
+  },
+  {
     feature: "Render log level",
     rootPattern: /render log silencing|render_log_level/i,
     links: [
