@@ -51,7 +51,9 @@ render_state = TreeView::RenderState.new(
 
 ## 送信値のparse
 
-checkboxのvalueはJSON文字列です。host app側では以下でparseできます。
+checkbox の value は JSON 文字列です。`selection[:payload_builder]` で customize する場合、builder は `Hash` または `to_h` に応答する Hash-like object を返す必要があり、TreeView はその結果を checkbox の JSON value に serialize します。不正な戻り値では、失敗した node key を示す `ArgumentError` が underlying error になります。ActionView 経由の render では、その error が `ActionView::Template::Error` の `cause` として公開される場合があります。この render-time builder contract は、下記の request-time `TreeView.parse_selection_params` 境界とは別です。
+
+host app側では以下でparseできます。
 
 ```ruby
 selected_nodes = TreeView.parse_selection_params(params[:selected_nodes])

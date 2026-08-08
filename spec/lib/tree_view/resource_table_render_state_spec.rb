@@ -22,6 +22,22 @@ RSpec.describe TreeView::ResourceTableRenderState do
     )
   end
 
+  it "passes grouped RenderState options through the resource-table bridge" do
+    state = build_state(
+      initial_expansion: {default: :collapsed},
+      selection: {enabled: true, checkbox_name: "selected_resources[]"},
+      lazy_loading: {enabled: true, loaded_keys: [1], scope: "children"}
+    )
+
+    expect(state).to be_a(TreeView::RenderState)
+    expect(state.effective_initial_state).to eq(:collapsed)
+    expect(state.selection_enabled?).to eq(true)
+    expect(state.selection_checkbox_name).to eq("selected_resources[]")
+    expect(state.lazy_loading_enabled?).to eq(true)
+    expect(state.lazy_loading_loaded_keys).to eq([1])
+    expect(state.lazy_loading_scope).to eq("children")
+  end
+
   it "keeps the bridge-owned row data hooks without a host builder" do
     state = build_state
 
