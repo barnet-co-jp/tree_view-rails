@@ -522,7 +522,7 @@ assertSameMembers(
 );
 
 assertWorkflowActionVersions(workflowSource, "actions/checkout", ["v7"]);
-assertWorkflowActionVersions(workflowSource, "actions/setup-node", ["v6"]);
+assertWorkflowActionVersions(workflowSource, "actions/setup-node", ["v7"]);
 assertWorkflowActionVersions(workflowSource, "ruby/setup-ruby", ["v1"]);
 
 const changesJob = workflowJobBlock(workflowSource, "changes");
@@ -650,7 +650,7 @@ assert.match(
 );
 assertJobMatches(javascriptJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.javascript must keep Ruby setup for manifest-loading Node smokes`);
 assertJobMatches(javascriptJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.javascript must keep Ruby 3.3 for manifest-loading Node smokes`);
-assertJobMatches(javascriptJob, /uses: actions\/setup-node@v6/, `${workflowPath} jobs.javascript must keep setup-node v6`);
+assertJobMatches(javascriptJob, /uses: actions\/setup-node@v7/, `${workflowPath} jobs.javascript must keep setup-node v7`);
 assertJobMatches(javascriptJob, /node-version: "22"/, `${workflowPath} jobs.javascript must keep the Node 22 CI lane`);
 assertJobMatches(javascriptJob, /cache: npm/, `${workflowPath} jobs.javascript must keep npm cache enabled`);
 assertJobMatches(javascriptJob, /run: npm ci/, `${workflowPath} jobs.javascript must use npm ci for lockfile-backed installs`);
