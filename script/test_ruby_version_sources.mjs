@@ -16,6 +16,8 @@ const workflow = read(".github/workflows/ci.yml");
 const dockerfile = read("Dockerfile");
 const englishDevelopment = read("docs/en/development.md");
 const japaneseDevelopment = read("docs/ja/development.md");
+const englishRelease = read("docs/en/release.md");
+const japaneseRelease = read("docs/ja/release.md");
 const packageJson = JSON.parse(read("package.json"));
 
 function assertIncludes(content, signal, path) {
@@ -81,6 +83,43 @@ assert.ok(
   assertIncludes(content, "Rails 7.1", `${path} Rails 7.1 main-matrix wording`);
 });
 
+[
+  [
+    englishRelease,
+    "docs/en/release.md",
+    [
+      "npm run test:ruby-version-sources",
+      "README.md",
+      "tree_view.gemspec",
+      "CI workflow",
+      "Dockerfile Ruby base image",
+      "Development docs",
+      "package script",
+      "representative Ruby version matrix",
+      "does not change the supported Ruby policy by itself"
+    ]
+  ],
+  [
+    japaneseRelease,
+    "docs/ja/release.md",
+    [
+      "npm run test:ruby-version-sources",
+      "README.md",
+      "tree_view.gemspec",
+      "CI workflow",
+      "Dockerfile の Ruby base image",
+      "Development docs",
+      "package script",
+      "代表 Ruby version matrix",
+      "supported Ruby policy を変更するものではありません"
+    ]
+  ]
+].forEach(([content, path, signals]) => {
+  signals.forEach((signal) => {
+    assertIncludes(content, signal, `${path} Ruby version source release signal`);
+  });
+});
+
 console.log(
-  `Ruby version sources stay aligned with Ruby ${minimumRubyVersion}+ and representative Ruby ${minimumRubyVersion}/${currentRubyVersion} CI lanes, Rails 7.1 main-matrix coverage, plus Docker Ruby ${dockerRubyBaseImage.groups.version}.`
+  `Ruby version sources stay aligned with Ruby ${minimumRubyVersion}+ and representative Ruby ${minimumRubyVersion}/${currentRubyVersion} CI lanes, Rails 7.1 main-matrix coverage, bilingual release guidance, plus Docker Ruby ${dockerRubyBaseImage.groups.version}.`
 );

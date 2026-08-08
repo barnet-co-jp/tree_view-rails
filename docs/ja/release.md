@@ -69,6 +69,12 @@ Ruby dependency metadata を変更する場合は、release verification の前�
 
 この guard は Bundler metadata の release / package verification confidence として使います。これだけを根拠に dependency version、Bundler policy、Dependabot grouping、CI workflow behavior を変更しないでください。
 
+### Ruby CI dependency cache boundary
+
+Pull Request と main-push の Rails matrix lane は、matrix-specific な `BUNDLE_GEMFILE` で各 dependency set を選び、`ruby/setup-ruby@v1` の `bundler-cache: true` で verification install を行います。この cache は反復 verification を高速化するだけで、dependency や lockfile の更新責務を持ちません。
+
+contributor と dependency-update Pull Request は、対象 Gemfile で `bundle install` を実行し、同期した dependency metadata または lockfile を commit する責務を引き続き持ちます。CI は Bundler policy、dependency version、lockfile を変更せず、cached install path から commit 済み state を検証します。
+
 ### Ruby support source guard
 
 Ruby support wording や source files を変更する場合は、`npm run test:ruby-version-sources` が見る source set と release checklist の説明をそろえてください。対象は `README.md`、`tree_view.gemspec`、CI workflow、Dockerfile の Ruby base image、Development docs、package script です。この guard は supported Ruby sources と代表 Ruby version matrix の整合を確認しますが、それ自体で supported Ruby policy を変更するものではありません。
