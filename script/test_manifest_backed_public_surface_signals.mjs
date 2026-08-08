@@ -166,11 +166,65 @@ const javascriptEntrypointDocsSignals = [
   "config/public_api_manifest.yml"
 ]
 
+const visibleRowsManifestSignals = [
+  "visible_rows_row_metadata:",
+  "fields:",
+  "- item",
+  "- depth",
+  "- node_key",
+  "- parent_key",
+  "- has_children",
+  "- expanded",
+  "predicates:",
+  "- has_children?",
+  "- expanded?"
+]
+
+const visibleRowsDocsSignals = [
+  "TreeView::VisibleRows",
+  "`item`",
+  "`depth`",
+  "`node_key`",
+  "`parent_key`",
+  "`has_children?`",
+  "`expanded?`"
+]
+
+const nodePresenterManifestSignals = [
+  "node_presenter_builder_names:",
+  "- key",
+  "- label",
+  "- href",
+  "- tooltip",
+  "- row_class",
+  "- row_data",
+  "- icon",
+  "- badge",
+  "- actions"
+]
+
+const nodePresenterDocsSignals = [
+  "TreeView::NodePresenter",
+  "node_presenter_builder_names",
+  "key",
+  "label",
+  "href",
+  "tooltip",
+  "row_class",
+  "row_data",
+  "icon",
+  "badge",
+  "actions",
+  "host app"
+]
+
 assertAll(manifest, publicConstantSignals, "public API manifest public constants surface")
 assertAll(manifest, localizedNameManifestSignals, "public API manifest localized-name surface")
 assertAll(manifest, setupGeneratorManifestSignals, "public API manifest setup-generator surface")
 assertAll(manifest, stateEventDetailManifestSignals, "public API manifest state and remote-state event detail surface")
 assertAll(manifest, helperMethodManifestSignals, "public API manifest helper method surface")
+assertAll(manifest, visibleRowsManifestSignals, "public API manifest VisibleRows row metadata surface")
+assertAll(manifest, nodePresenterManifestSignals, "public API manifest NodePresenter builder-name surface")
 
 assertDocs(
   ["docs/en/errors.md", "docs/ja/errors.md"],
@@ -194,6 +248,18 @@ assertDocs(
   ["docs/en/public-api.md", "docs/ja/public-api.md"],
   javascriptEntrypointDocsSignals,
   "package-root JavaScript entrypoint docs"
+)
+
+assertDocs(
+  ["docs/en/api.md", "docs/ja/api.md"],
+  visibleRowsDocsSignals,
+  "VisibleRows row metadata docs"
+)
+
+assertDocs(
+  ["docs/en/node-presenter-row-partials.md", "docs/ja/node-presenter-row-partials.md"],
+  nodePresenterDocsSignals,
+  "NodePresenter builder-name and host-app boundary docs"
 )
 
 assertDocs(

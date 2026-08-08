@@ -37,6 +37,10 @@ const jsEventDocs = [
   ["docs/en/js-events.md", read("docs/en/js-events.md")],
   ["docs/ja/js-events.md", read("docs/ja/js-events.md")]
 ]
+const selectionCheckboxHookDocs = [
+  ["docs/en/selection-checkbox-hooks.md", read("docs/en/selection-checkbox-hooks.md")],
+  ["docs/ja/selection-checkbox-hooks.md", read("docs/ja/selection-checkbox-hooks.md")]
+]
 
 const localizedNameManifestSignals = [
   "localized_name_i18n_keys:",
@@ -102,6 +106,11 @@ const publicApiHookExports = [
     name: "TreeViewToolbarDataHooks",
     docs: ["data-tree-view-toolbar", "data-tree-view-toolbar-action", "data-tree-view-toolbar-disabled"],
     boundary: /action policy|authorization copy|final UI|action policy、label、authorization copy、最終 UI/
+  },
+  {
+    name: "TreeViewSelectionCheckboxHooks",
+    docs: ["tree-selection-checkbox", "data-tree-selection-disabled-reason"],
+    boundary: /rendered selection checkbox|selection checkbox element|描画済み selection checkbox|selection cell partial/
   }
 ]
 
@@ -119,6 +128,33 @@ publicApiDocs.forEach(([relativePath, document]) => {
 
     assertMatches(document, boundary, `${relativePath}: ${name} docs no longer name the host-app responsibility boundary`)
   })
+})
+
+;[
+  "selection_checkbox_hooks:",
+  "checkbox_class: tree-selection-checkbox",
+  "disabled_reason_attribute: data-tree-selection-disabled-reason"
+].forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest selection checkbox hook source")
+})
+
+selectionCheckboxHookDocs.forEach(([relativePath, document]) => {
+  [
+    "TreeViewSelectionCheckboxHooks",
+    "checkboxClass",
+    "tree-selection-checkbox",
+    "disabledReasonAttribute",
+    "data-tree-selection-disabled-reason",
+    "TreeViewSelectionDataHooks"
+  ].forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection checkbox hook docs`)
+  })
+
+  assertMatches(
+    document,
+    /generated hidden-input bookkeeping|payload semantics|host-app business actions|generated hidden-input bookkeeping attribute|payload semantics|host app の business action/,
+    `${relativePath}: selection checkbox hook docs no longer separate checkbox DOM hooks from broader selection behavior`
+  )
 })
 
 const remoteStateDataHookManifestSignals = [

@@ -45,6 +45,8 @@ Host apps own product-specific rendering:
 
 `TreeView::NodePresenter` and its builder names are part of the public compatibility contract. The machine-readable builder list lives in `config/public_api_manifest.yml` as `node_presenter_builder_names`, and compatibility specs check it against `TreeView::NodePresenter::BUILDER_NAMES`.
 
+The public builder names are `key`, `label`, `href`, `tooltip`, `row_class`, `row_data`, `icon`, `badge`, and `actions`.
+
 That contract stabilizes the available builder names only. The meaning of returned labels, links, row data, action identifiers, badges, icons, and any authorization or formatting decisions remains host-app owned and is intentionally shown here as cookbook guidance.
 
 ## Example presenter

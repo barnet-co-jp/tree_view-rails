@@ -9,7 +9,7 @@ function read(relativePath) {
   return readFileSync(path.join(repoRoot, relativePath), "utf8")
 }
 
-function loadTreeViewRowsOptionKeys() {
+function loadTreeViewHelperOptionKeys() {
   try {
     return JSON.parse(
       execFileSync(
@@ -20,7 +20,7 @@ function loadTreeViewRowsOptionKeys() {
             'require "json"',
             'require "yaml"',
             'data = YAML.load_file("config/public_api_manifest.yml")',
-            'print JSON.generate(data.fetch("helper_option_keys").fetch("tree_view_rows"))'
+            'print JSON.generate(data.fetch("helper_option_keys").slice("tree_view_rows", "tree_view_window"))'
           ].join("; ")
         ],
         { encoding: "utf8" }
@@ -35,8 +35,8 @@ function loadTreeViewRowsOptionKeys() {
 
     throw new Error(
       [
-        "Could not load helper_option_keys.tree_view_rows from config/public_api_manifest.yml.",
-        "The docs signal smoke expects the manifest to track mode, collapsed, and window as the public tree_view_rows option keys.",
+        "Could not load helper_option_keys.tree_view_rows and helper_option_keys.tree_view_window from config/public_api_manifest.yml.",
+        "The docs signal smoke expects the manifest to track row rendering and companion window metadata option keys separately.",
         `Loader output: ${detail}`
       ].join("\n"),
       { cause: error }
@@ -52,20 +52,35 @@ function assertIncludes(source, needle, label) {
   assert(source.includes(needle), `${label}: missing ${needle}`)
 }
 
-const treeViewRowsOptionKeys = loadTreeViewRowsOptionKeys()
-const expectedOptionKeys = ["mode", "collapsed", "window"]
+const helperOptionKeys = loadTreeViewHelperOptionKeys()
+const treeViewRowsOptionKeys = helperOptionKeys.tree_view_rows
+const treeViewWindowOptionKeys = helperOptionKeys.tree_view_window
+const expectedRowsOptionKeys = ["mode", "collapsed", "window"]
+const expectedWindowOptionKeys = ["offset", "limit"]
 
-expectedOptionKeys.forEach((key) => {
+expectedRowsOptionKeys.forEach((key) => {
   assert(
     treeViewRowsOptionKeys.includes(key),
     `config/public_api_manifest.yml helper_option_keys.tree_view_rows is missing ${key}`
   )
 })
 
-assert(
-  treeViewRowsOptionKeys.length === new Set(treeViewRowsOptionKeys).size,
-  "config/public_api_manifest.yml helper_option_keys.tree_view_rows contains duplicate keys"
-)
+expectedWindowOptionKeys.forEach((key) => {
+  assert(
+    treeViewWindowOptionKeys.includes(key),
+    `config/public_api_manifest.yml helper_option_keys.tree_view_window is missing ${key}`
+  )
+})
+
+;[
+  ["tree_view_rows", treeViewRowsOptionKeys],
+  ["tree_view_window", treeViewWindowOptionKeys]
+].forEach(([helperName, optionKeys]) => {
+  assert(
+    optionKeys.length === new Set(optionKeys).size,
+    `config/public_api_manifest.yml helper_option_keys.${helperName} contains duplicate keys`
+  )
+})
 
 const publicApiDocs = [
   ["docs/en/public-api.md", read("docs/en/public-api.md")],

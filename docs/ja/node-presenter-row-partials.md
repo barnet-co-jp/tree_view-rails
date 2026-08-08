@@ -45,6 +45,8 @@ Host app が担当するもの:
 
 `TreeView::NodePresenter` とその builder 名は public compatibility contract の一部です。machine-readable な builder list は `config/public_api_manifest.yml` の `node_presenter_builder_names` に置き、compatibility spec で `TreeView::NodePresenter::BUILDER_NAMES` と照合します。
 
+公開 builder 名は `key`、`label`、`href`、`tooltip`、`row_class`、`row_data`、`icon`、`badge`、`actions` です。
+
 この contract が安定させるのは利用可能な builder 名です。返される label、link、row data、action identifier、badge、icon の意味や、authorization / formatting の判断は host app 側の責務であり、この guide では cookbook として例示します。
 
 ## presenter 例

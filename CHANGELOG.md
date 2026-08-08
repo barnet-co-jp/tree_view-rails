@@ -151,6 +151,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added focused docs signal coverage for selection and transfer event detail keys, selection checkbox hooks, tree row/window helper options, VisibleRows metadata, NodePresenter builder names, and the Node 22 release-source boundary without changing runtime or manifest contracts.
 - Added focused docs signal coverage for the public error rescue/inheritance/message boundary, state-change reasons and representative event detail classification, transfer drop/MIME/data-attribute values, and controller entry key/identifier/export mappings without changing runtime or manifest contracts.
 - Added a focused Dependabot maintenance evidence signal covering bilingual guidance, configured ecosystem queue limits, action-major smoke ownership, and the workflow npm cache boundary.
 
