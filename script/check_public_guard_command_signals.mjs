@@ -55,7 +55,7 @@ for (const [docPath, doc] of docs) {
   }
 }
 
-if (!packageJson.scripts?.["test:development-docs-commands"]?.includes("node script/test_public_docs_guard_command_signals.mjs")) {
+if (!packageJson.scripts?.["test:development-docs-commands"]?.includes("node script/check_public_guard_command_signals.mjs")) {
   missingSignals.push("package.json scripts.test:development-docs-commands")
 }
 
