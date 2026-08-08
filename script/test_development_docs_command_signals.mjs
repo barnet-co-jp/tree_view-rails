@@ -281,18 +281,29 @@ const requiredManifestStructureDuplicateKeySignals = [
     "docs/en/development.md",
     [
       "`npm run test:public-api-manifest-structure`",
+      "narrow Node smoke",
+      "Ruby with the Psych / YAML loader",
+      "repository root with Ruby available",
+      "CI JavaScript lane sets up Ruby before Node checks",
+      "Ruby-backed manifest loader",
       "duplicate-key guardrails",
       "duplicate YAML keys",
       "manifest structure smoke",
       "silently overwrite a manifest section",
       "source-of-truth drift safety guard",
-      "not as a public API adoption decision"
+      "rather than a public API adoption decision"
     ]
   ],
   [
     "docs/ja/development.md",
     [
       "`npm run test:public-api-manifest-structure`",
+      "Node smoke",
+      "Ruby の Psych / YAML loader",
+      "Ruby が使える repository root",
+      "CI の JavaScript lane",
+      "Node checks より前に Ruby setup",
+      "Ruby-backed manifest loader",
       "duplicate-key guardrails",
       "duplicate YAML keys",
       "manifest structure",

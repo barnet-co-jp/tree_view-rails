@@ -215,6 +215,117 @@ releaseDocsPrJavaScriptConditionalLaneSignals.forEach(([sourcePath, signals]) =>
   assertSignals(sourcePath, "Release docs PR JavaScript conditional lane signal", signals)
 })
 
+const releaseDocsBundlerCacheBoundarySignals = [
+  [
+    "docs/en/release.md",
+    [
+      "Ruby CI dependency cache boundary",
+      "matrix-specific `BUNDLE_GEMFILE`",
+      "`ruby/setup-ruby@v1`",
+      "`bundler-cache: true`",
+      "cache speeds repeated verification",
+      "Contributors and dependency-update pull requests still own running `bundle install`",
+      "committing synchronized dependency metadata or lockfiles"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "Ruby CI dependency cache boundary",
+      "matrix-specific な `BUNDLE_GEMFILE`",
+      "`ruby/setup-ruby@v1`",
+      "`bundler-cache: true`",
+      "cache は反復 verification を高速化するだけ",
+      "dependency-update Pull Request",
+      "`bundle install`",
+      "同期した dependency metadata または lockfile"
+    ]
+  ],
+  [
+    ".github/workflows/ci.yml",
+    [
+      "pr_rails_matrix:",
+      "rails_matrix:",
+      "BUNDLE_GEMFILE: ${{ matrix.gemfile }}",
+      "uses: ruby/setup-ruby@v1",
+      "bundler-cache: true"
+    ]
+  ]
+]
+
+releaseDocsBundlerCacheBoundarySignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Ruby CI Bundler cache and BUNDLE_GEMFILE boundary signal", signals)
+})
+
+const releaseDocsRepresentativeRailsSkipSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "These representative Rails lanes run for non-docs PRs",
+      "Docs-only PR: skipping representative Rails compatibility lane.",
+      "skips checkout, Ruby setup, and `bundle exec rake`"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "representative Rails lane は docs-only ではない PR で実行します",
+      "Docs-only PR: skipping representative Rails compatibility lane.",
+      "checkout、Ruby setup、`bundle exec rake` を skip"
+    ]
+  ],
+  [
+    ".github/workflows/ci.yml",
+    [
+      "pr_rails_matrix:",
+      "needs.changes.outputs.docs_only == 'true'",
+      "Docs-only PR: skipping representative Rails compatibility lane.",
+      "needs.changes.outputs.docs_only != 'true'",
+      "run: bundle exec rake"
+    ]
+  ]
+]
+
+releaseDocsRepresentativeRailsSkipSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs representative Rails docs-only skip signal", signals)
+})
+
+const releaseDocsBundlerLockfileDriftSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "Bundler lockfile drift guard",
+      "script/test_gemfile_lock_dependency_drift.mjs",
+      "direct `Gemfile` gem requirements",
+      "`Gemfile.lock` `DEPENDENCIES` metadata",
+      "`bundle install`",
+      "release/package verification confidence"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "Bundler lockfile drift guard",
+      "script/test_gemfile_lock_dependency_drift.mjs",
+      "direct `Gemfile` gem requirements",
+      "`Gemfile.lock` の `DEPENDENCIES` metadata",
+      "`bundle install`",
+      "release / package verification confidence"
+    ]
+  ],
+  [
+    "script/test_gemfile_lock_dependency_drift.mjs",
+    [
+      "DEPENDENCIES must match direct ${gemfilePath} gem requirements",
+      "run bundle install after changing Gemfile dependency metadata"
+    ]
+  ]
+]
+
+releaseDocsBundlerLockfileDriftSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs Bundler lockfile drift signal", signals)
+})
+
 const gemPackageWorkflowSignals = [
   [
     ".github/workflows/ci.yml",

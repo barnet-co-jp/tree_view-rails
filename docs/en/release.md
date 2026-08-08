@@ -69,6 +69,12 @@ When Ruby dependency metadata changes, keep `Gemfile` and `Gemfile.lock` aligned
 
 Use this guard as release/package verification confidence for Bundler metadata only. It does not change dependency versions, Bundler policy, Dependabot grouping, or CI workflow behavior by itself.
 
+### Ruby CI dependency cache boundary
+
+The pull-request and main-push Rails matrix lanes select each dependency set through matrix-specific `BUNDLE_GEMFILE` and let `ruby/setup-ruby@v1` perform the verification install with `bundler-cache: true`. The cache speeds repeated verification; it does not own dependency or lockfile updates.
+
+Contributors and dependency-update pull requests still own running `bundle install` with the applicable Gemfile and committing synchronized dependency metadata or lockfiles. CI consumes that committed state through its cached install path without changing Bundler policy, dependency versions, or lockfiles.
+
 ### Ruby support source guard
 
 When Ruby support wording or source files change, keep the release checklist aligned with the same source set used by `npm run test:ruby-version-sources`: `README.md`, `tree_view.gemspec`, the CI workflow, the Dockerfile Ruby base image, Development docs, and the package script. This guard confirms the supported Ruby sources and representative Ruby version matrix stay consistent; it does not change the supported Ruby policy by itself.
