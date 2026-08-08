@@ -34,6 +34,36 @@ function workflowJobBlock(workflowSource, jobName) {
   return nextJobOffset === -1 ? remainingWorkflow : remainingWorkflow.slice(0, nextJobOffset + 1)
 }
 
+function workflowTopLevelJobNames(workflowSource) {
+  const jobsStart = workflowSource.indexOf("\njobs:\n")
+  assert(jobsStart !== -1, `${workflowPath} must define a top-level jobs block`)
+
+  return [...workflowSource.slice(jobsStart).matchAll(/^  (?<jobName>[a-z_]+):$/gm)]
+    .map((match) => match.groups.jobName)
+}
+
+function assertJobExecutionPolicy(jobName, jobSource, timeoutMinutes) {
+  const runnerLines = jobSource.split(/\r?\n/).filter((line) => line.trimStart().startsWith("runs-on:"))
+  const timeoutLines = jobSource.split(/\r?\n/).filter((line) => line.trimStart().startsWith("timeout-minutes:"))
+  const expectedRunner = "    runs-on: ubuntu-latest"
+  const expectedTimeout = `    timeout-minutes: ${timeoutMinutes}`
+
+  assert(
+    runnerLines.length === 1 && runnerLines[0] === expectedRunner,
+    `${workflowPath} jobs.${jobName} runner policy: expected ${expectedRunner}; actual ${runnerLines.join(", ") || "(missing)"}`
+  )
+  assert(
+    timeoutLines.length === 1 && timeoutLines[0] === expectedTimeout,
+    `${workflowPath} jobs.${jobName} timeout policy: expected ${expectedTimeout}; actual ${timeoutLines.join(", ") || "(missing)"}`
+  )
+  assertOrdered(
+    jobSource,
+    expectedRunner,
+    expectedTimeout,
+    `${workflowPath} jobs.${jobName} execution policy`
+  )
+}
+
 function assertOrdered(source, earlier, later, label) {
   const earlierIndex = source.indexOf(earlier)
   const laterIndex = earlierIndex === -1 ? source.indexOf(later) : source.indexOf(later, earlierIndex + earlier.length)
@@ -266,6 +296,28 @@ const railsMatrixJob = workflowJobBlock(workflowSource, "rails_matrix")
 const javascriptJob = workflowJobBlock(workflowSource, "javascript")
 const dockerDevelopmentSetupJob = workflowJobBlock(workflowSource, "docker_development_setup")
 const gemPackageJob = workflowJobBlock(workflowSource, "gem_package")
+
+const workflowJobExecutionPolicies = [
+  ["changes", changesJob, 10],
+  ["lint", lintJob, 10],
+  ["pr_specs", prSpecsJob, 15],
+  ["pr_rails_matrix", prRailsMatrixJob, 20],
+  ["ruby_matrix", rubyMatrixJob, 20],
+  ["rails_matrix", railsMatrixJob, 20],
+  ["javascript", javascriptJob, 30],
+  ["docker_development_setup", dockerDevelopmentSetupJob, 40],
+  ["gem_package", gemPackageJob, 15]
+]
+const expectedWorkflowJobNames = workflowJobExecutionPolicies.map(([jobName]) => jobName).sort()
+const actualWorkflowJobNames = workflowTopLevelJobNames(workflowSource).sort()
+
+assert(
+  JSON.stringify(actualWorkflowJobNames) === JSON.stringify(expectedWorkflowJobNames),
+  `${workflowPath} job execution policy inventory: expected ${expectedWorkflowJobNames.join(", ")}; actual ${actualWorkflowJobNames.join(", ")}`
+)
+workflowJobExecutionPolicies.forEach(([jobName, jobSource, timeoutMinutes]) => {
+  assertJobExecutionPolicy(jobName, jobSource, timeoutMinutes)
+})
 
 const nonPullRequestDefaultOutputs = {
   docs_only: false,
@@ -559,6 +611,7 @@ assertOrdered(
 console.log("Checked CI workflow trigger policy signals.")
 console.log("Checked CI workflow permissions policy signals.")
 console.log("Checked CI workflow concurrency policy signals.")
+console.log(`Checked ${workflowJobExecutionPolicies.length} CI job runner and timeout policies.`)
 console.log("Checked CI changed-file detection workflow signals.")
 console.log("Checked CI changed-file output key-set synchronization signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)

@@ -16,6 +16,7 @@ concurrency:
 jobs:
   changes:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       docs_only: ${{ steps.detect.outputs.docs_only }}
       mockups_changed: ${{ steps.detect.outputs.mockups_changed }}
@@ -56,6 +57,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
@@ -67,6 +69,7 @@ jobs:
   pr_specs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
@@ -79,6 +82,7 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: changes
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -111,6 +115,7 @@ jobs:
   ruby_matrix:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -128,6 +133,7 @@ jobs:
   rails_matrix:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -157,6 +163,7 @@ jobs:
   javascript:
     needs: changes
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed != 'true' && needs.changes.outputs.browser_smoke_changed != 'true' && needs.changes.outputs.docs_entrypoint_sensitive != 'true' && needs.changes.outputs.ci_policy_sensitive != 'true'
         run: 'echo "Docs-only PR without package-facing docs, CI-policy, mockup, or browser-smoke changes: skipping JavaScript checks."'
@@ -188,6 +195,7 @@ jobs:
     if: github.event_name == 'pull_request' && needs.changes.outputs.docker_setup_sensitive == 'true'
     needs: changes
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v7
       - run: docker compose build app
@@ -197,6 +205,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'pull_request' && needs.changes.outputs.package_sensitive == 'true'
     needs: changes
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1

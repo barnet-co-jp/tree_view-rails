@@ -190,6 +190,56 @@ function assertCiPolicyDocsDockerSetupSignals() {
   }
 }
 
+function assertCiPolicyDocsJobExecutionPolicySignals() {
+  const jobTimeoutRows = [
+    "| `changes` | 10 |",
+    "| `lint` | 10 |",
+    "| `pr_specs` | 15 |",
+    "| `pr_rails_matrix` | 20 |",
+    "| `ruby_matrix` | 20 |",
+    "| `rails_matrix` | 20 |",
+    "| `javascript` | 30 |",
+    "| `docker_development_setup` | 40 |",
+    "| `gem_package` | 15 |"
+  ]
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "## Job execution policy",
+        "runs-on: ubuntu-latest",
+        "timeout-minutes",
+        "each matrix execution",
+        "safety bound, not a normal-duration SLA",
+        "intentionally skipped check",
+        "Playwright browser dependencies",
+        "required check names"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "## Job execution policy",
+        "runs-on: ubuntu-latest",
+        "timeout-minutes",
+        "各 matrix execution",
+        "safety bound であり、通常所要時間の SLA ではありません",
+        "intentionally skipped check",
+        "Playwright browser dependency",
+        "required check name"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of [...signals, ...jobTimeoutRows]) {
+      assertIncludes(docsSource, signal, `${docsPath} job execution policy docs signal`)
+    }
+  }
+}
+
 function assertCiPolicyDocsChangedFileDetectionSignals() {
   const docsSignals = [
     [
@@ -676,6 +726,7 @@ assertWorkflowDispatchNotConfigured()
 assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
 assertCiPolicyDocsDockerSetupSignals()
+assertCiPolicyDocsJobExecutionPolicySignals()
 assertCiPolicyDocsChangedFileDetectionSignals()
 assertCiPolicyDocsNonPullRequestDefaultOutputSignals()
 assertCiPolicyDocsTriggerPolicySignals()
@@ -691,6 +742,7 @@ console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked workflow_dispatch remains outside the current workflow trigger policy.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
 console.log("Checked Docker development setup CI docs signals.")
+console.log(`Checked ${ciPolicyDocsPaths.length} CI job execution policy docs.`)
 console.log("Checked pull request changed-file detection docs signals.")
 console.log("Checked non-pull-request default output docs signals.")
 console.log("Checked workflow trigger policy docs signals.")
