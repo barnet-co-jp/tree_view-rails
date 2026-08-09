@@ -97,7 +97,7 @@ const focusedMockupSmokeTargets = [
   { file: "interactive-marker-behaviors.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "windowed-rendering.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "breadcrumb-paths.html", sample: ".mock-breadcrumb-path", minimumCount: 2 },
-  { file: "filtered-tree-modes.html", sample: "[aria-label='ReverseTree leaf-to-root visual reference'] tbody tr", minimumCount: 3 },
+  { file: "filtered-tree-modes.html", sample: "[aria-label='ReverseTree leaf-to-root visual reference'] tbody tr", minimumCount: 5 },
   { file: "path-tree-builder-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "node-presenter-row-partials.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "localized-row-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
@@ -292,6 +292,46 @@ test.describe("docs mockup browser smoke", () => {
       expect(await page.locator(mockup.sample).count()).toBeGreaterThanOrEqual(mockup.minimumCount)
     })
   }
+
+  test("stylesheet-theme-boundary/index.html uses packaged state selectors across host themes", async ({ page }) => {
+    await openMockup(page, "stylesheet-theme-boundary/index.html")
+
+    const packagedStylesheet = readFileSync(path.join(repoRoot, "app/assets/stylesheets/tree_view.scss"), "utf8")
+    for (const selector of [
+      ".tree-row.is-selected",
+      '.tree-row[aria-current="page"] > td:first-child',
+      ".tree-row.is-collapsed",
+      ".tree-row.is-loading",
+      ".tree-row.is-error",
+      ".tree-row.is-drop-target"
+    ]) {
+      expect(packagedStylesheet).toContain(selector)
+    }
+
+    for (const cue of ["current", "selected", "collapsed", "loading", "error", "drop"]) {
+      await expect(page.locator(`[data-theme-cue='${cue}']`)).toHaveCount(3)
+    }
+
+    await expect(page.locator("[data-theme-cue='current'] td:first-child").first()).not.toHaveCSS("box-shadow", "none")
+    for (const cue of ["selected", "collapsed", "loading", "error", "drop"]) {
+      const background = await page.locator(`[data-theme-cue='${cue}']`).first().evaluate((element) => getComputedStyle(element).backgroundColor)
+      expect(background).not.toBe("rgba(0, 0, 0, 0)")
+    }
+
+    await expect(page.getByText("Host-owned theme", { exact: true })).toBeVisible()
+    await expect(page.getByText("No dark-mode implementation", { exact: false })).toBeVisible()
+  })
+
+  test("filtered-tree-modes.html shows ReverseTree shared ancestors only on the first path", async ({ page }) => {
+    await openMockup(page, "filtered-tree-modes.html")
+
+    const reverseTree = page.getByRole("table", { name: "ReverseTree leaf-to-root visual reference" })
+    await expect(reverseTree.locator(".is-reverse-root")).toHaveCount(2)
+    await expect(reverseTree.locator("[data-reverse-path='invoice-aging']")).toHaveCount(3)
+    await expect(reverseTree.locator("[data-reverse-path='supplier-status']")).toHaveCount(2)
+    await expect(reverseTree.locator("[data-reverse-shared-ancestor='operations']")).toHaveCount(1)
+    await expect(page.locator("[data-reverse-shared-ancestor-omitted='operations']")).toContainText("first encountered reverse path only")
+  })
 
   test("table-caption-context.html preserves host and TreeView responsibility boundary signals", async ({ page }) => {
     await openMockup(page, "table-caption-context.html")
