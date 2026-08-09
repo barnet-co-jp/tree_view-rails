@@ -64,6 +64,7 @@ Release preparation notes:
 
 ### Documentation
 
+- Updated gemspec contact email from placeholder to GitHub noreply and added a Support section in README pointing to GitHub Issues.
 - Added `empty_message`, `hidden_message_builder`, and `state_messages` to the English and Japanese RenderState API reference, the grouped-option table, and the public API manifest.
 - Added the existing row-action menu and unsaved-edit replacement-risk mockups to the canonical mockup inventory, review flow, gallery previews, and browser smoke coverage.
 - Linked the existing large-tree strategy and GraphAdapter heterogeneous-node mockups from the mockup Files inventory, recommended review flow, and review-gallery strategy/data-shape families, with aligned browser smoke coverage.
