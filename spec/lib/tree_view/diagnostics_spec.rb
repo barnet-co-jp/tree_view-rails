@@ -113,6 +113,30 @@ RSpec.describe TreeView::Diagnostics do
     )
   end
 
+  it "keeps structural cycle diagnostics separate from sorter return validation" do
+    root = diagnostic_node(id: 1, parent_id: nil, name: "Root")
+    sorter_calls = 0
+    tree = TreeView::Tree.new(
+      records: [root],
+      parent_id_method: :parent_id,
+      sorter: lambda do |_items, _tree|
+        sorter_calls += 1
+        nil
+      end
+    )
+
+    result = described_class.run(tree: tree, checks: [:cycles])
+
+    expect(result).to be_success
+    expect(result.errors).to eq([])
+    expect(sorter_calls).to eq(0)
+    expect { tree.root_items }.to raise_error(
+      TreeView::ConfigurationError,
+      /sorter must return an Array-like object, got: NilClass/
+    )
+    expect(sorter_calls).to eq(1)
+  end
+
   it "reports missing inputs as diagnostics errors" do
     result = described_class.run(checks: [:dom_ids])
 

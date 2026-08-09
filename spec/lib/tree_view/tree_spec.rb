@@ -166,6 +166,70 @@ RSpec.describe TreeView::Tree do
       expect(tree.sort_items(tree.children_for(alpha_root)).map(&:id)).to eq([5, 6])
     end
 
+    it "keeps representative tied, deep, and wide sorter patterns deterministic" do
+      tied_roots = [3, 1, 2].map do |id|
+        ItemNode.new(id: id, parent_item_id: nil, name: "same-rank")
+      end
+      deep_records = Array.new(24) do |index|
+        id = index + 1
+        ItemNode.new(id: id, parent_item_id: index.zero? ? nil : id - 1, name: format("node-%02d", id))
+      end.reverse
+      wide_root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      wide_children = (2..21).reverse_each.map do |id|
+        ItemNode.new(id: id, parent_item_id: 1, name: format("child-%02d", id))
+      end
+
+      patterns = [
+        {
+          name: "same-rank roots preserve input order with an explicit stable tie-breaker",
+          records: tied_roots,
+          sorter: lambda do |items, _tree|
+            items.each_with_index.sort_by { |(item, index)| [item.name, index] }.map(&:first)
+          end,
+          expected_ids: [3, 1, 2],
+          observed_ids: ->(tree) { tree.root_items.map(&:id) }
+        },
+        {
+          name: "deep chain traversal through sorted child collections",
+          records: deep_records,
+          sorter: ->(items, _tree) { items.sort_by(&:id) },
+          expected_ids: (1..24).to_a,
+          observed_ids: lambda do |tree|
+            ids = []
+            current = tree.root_items.first
+            while current
+              ids << current.id
+              current = tree.sort_items(tree.children_for(current)).first
+            end
+            ids
+          end
+        },
+        {
+          name: "wide sibling collection",
+          records: [wide_root, *wide_children],
+          sorter: ->(items, _tree) { items.sort_by(&:id) },
+          expected_ids: (2..21).to_a,
+          observed_ids: ->(tree) { tree.sort_items(tree.children_for(wide_root)).map(&:id) }
+        }
+      ]
+
+      patterns.each do |pattern|
+        tree = described_class.new(
+          records: pattern.fetch(:records),
+          parent_id_method: :parent_item_id,
+          sorter: pattern.fetch(:sorter)
+        )
+        observed_ids = pattern.fetch(:observed_ids).call(tree)
+        failure_context = [
+          pattern.fetch(:name),
+          "input_ids=#{pattern.fetch(:records).map(&:id).inspect}",
+          "sorter_return_ids=#{observed_ids.inspect}"
+        ].join("; ")
+
+        expect(observed_ids).to eq(pattern.fetch(:expected_ids)), failure_context
+      end
+    end
+
     it "accepts array-like sorter return values" do
       root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
       array_like_items = Struct.new(:items) do
