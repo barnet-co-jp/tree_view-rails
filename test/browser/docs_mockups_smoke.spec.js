@@ -104,6 +104,8 @@ const focusedMockupSmokeTargets = [
   { file: "node-presenter-row-partials.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "localized-row-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "form-editing-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "row-action-menu-boundary/index.html", sample: ".menu-trigger", minimumCount: 3 },
+  { file: "form-editing-replacement-risk/index.html", sample: ".dirty-row", minimumCount: 1 },
   { file: "toolbar-actions.html", sample: ".mock-toolbar-frame", minimumCount: 3 },
   { file: "selection-max-count.html", sample: ".mock-limit-state", minimumCount: 3 },
   { file: "selection-multi-tree-form.html", sample: ".mock-selection-group", minimumCount: 2 },
@@ -282,7 +284,9 @@ test.describe("docs mockup browser smoke", () => {
       "narrow-sidebar-tree.html",
       "current-branch-sidebar.html",
       "stylesheet-theme-boundary/index.html",
-      "lazy-loading-handoff.html"
+      "lazy-loading-handoff.html",
+      "row-action-menu-boundary/index.html",
+      "form-editing-replacement-risk/index.html"
     ])
     expect(invalidExceptions).toEqual([])
   })
