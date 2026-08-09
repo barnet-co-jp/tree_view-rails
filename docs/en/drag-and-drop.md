@@ -62,7 +62,7 @@ row_data_builder: ->(document) {
 
 ## Interactive controls inside draggable rows
 
-Rows that are draggable can still contain host-app controls such as links, buttons, inputs, selects, textareas, and `contenteditable` labels. TreeView ignores drag start events that originate from those native interactive controls so that using the control does not accidentally start a row transfer.
+Rows that are draggable can still contain host-app controls such as links, buttons, inputs, selects, textareas, and `contenteditable` labels. TreeView ignores transfer-controller drag start, drag-over, and drop events that originate from those native interactive controls, so using a control does not accidentally start or target a row transfer.
 
 For custom widgets that are not native controls, add a TreeView marker to the widget or an ancestor inside the row.
 
@@ -72,7 +72,7 @@ For custom widgets that are not native controls, add a TreeView marker to the wi
 </td>
 ```
 
-Use `data-tree-view-ignore-drag="true"` when only drag start should be ignored and other TreeView behaviors may still apply.
+Use `data-tree-view-ignore-drag="true"` when only drag-related TreeView behavior should be ignored and other TreeView behaviors may still apply.
 
 ```erb
 <td>
@@ -158,7 +158,7 @@ For the full JavaScript event contract, see [JavaScript event contract](js-event
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
 | browser transfer cue | sets the current helper cue to `move` | decides the business operation and final UX |
-| interactive-control drag-start guard | yes | marks custom widgets when needed |
+| interactive-control transfer guard | ignores transfer-controller drag start, drag-over, and drop | marks custom widgets when needed |
 | transfer event detail | yes | listens and applies business behavior |
 | source payload parse failure | reports `invalid-transfer` for non-empty invalid JSON | decides user-facing rejection, logging, and recovery |
 | missing source payload | reports `sourcePayload: null` on drop | rejects or handles unsupported drops according to host-app policy |

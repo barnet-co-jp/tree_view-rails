@@ -62,7 +62,7 @@ row_data_builder: ->(document) {
 
 ## draggable row内のinteractive control
 
-`draggable` なrowにも、link、button、input、select、textarea、`contenteditable` label などのhost app controlを配置できます。TreeViewはこれらのnative interactive controlから発生したdrag start eventを無視するため、control操作が誤ってrow transferを開始することはありません。
+`draggable` なrowにも、link、button、input、select、textarea、`contenteditable` label などのhost app controlを配置できます。TreeViewはこれらのnative interactive controlから発生したtransfer controllerのdrag start、drag-over、drop eventを無視するため、control操作が誤ってrow transferを開始したりdrop targetになったりすることはありません。
 
 native controlではないcustom widgetでは、row内のwidgetまたはその祖先にTreeView markerを付けます。
 
@@ -72,7 +72,7 @@ native controlではないcustom widgetでは、row内のwidgetまたはその�
 </td>
 ```
 
-Drag startだけを無視し、他のTreeView動作は残したい場合は `data-tree-view-ignore-drag="true"` を使います。
+drag関連のTreeView動作だけを無視し、他のTreeView動作は残したい場合は `data-tree-view-ignore-drag="true"` を使います。
 
 ```erb
 <td>
@@ -158,7 +158,7 @@ JavaScript event contract全体は [JavaScript event contract](js-events.md#tran
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
 | browser transfer cue | 現在の helper cue を `move` にする | 業務 operation と最終UXを決める |
-| interactive-control drag-start guard | yes | marks custom widgets when needed |
+| interactive-control transfer guard | transfer controllerのdrag start、drag-over、dropを無視する | 必要に応じてcustom widgetをmarkする |
 | transfer event detail | yes | listens and applies business behavior |
 | source payload parse failure | 空ではない invalid JSON では `invalid-transfer` を通知する | user-facing rejection、logging、recovery を決める |
 | missing source payload | drop event で `sourcePayload: null` を返す | unsupported drop を reject / handle する policy を決める |

@@ -22,6 +22,8 @@ export class TreeViewTransferController extends Controller {
   }
 
   over(event) {
+    if (isTreeViewInteractiveTarget(event.target, "drag", this.element)) return
+
     const row = this.rowFromEvent(event)
     if (!row || row.dataset.treeTransferDisabled === "true") return
 
@@ -36,6 +38,8 @@ export class TreeViewTransferController extends Controller {
   }
 
   drop(event) {
+    if (isTreeViewInteractiveTarget(event.target, "drag", this.element)) return
+
     const targetRow = this.rowFromEvent(event)
     if (!targetRow || targetRow.dataset.treeTransferDisabled === "true") return
 

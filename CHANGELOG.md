@@ -54,6 +54,7 @@ Release preparation notes:
 
 ### Fixed
 
+- Ignored transfer-controller drag-over and drop events from native controls and marked interactive targets, matching the existing drag-start guard.
 - Improved `tree_view_toolbar` errors for non-Hash-like `html:` and `action_html:` values.
 - Cleaned up generated selection hidden inputs when selection controllers disconnect, scoped to each controller source id.
 
