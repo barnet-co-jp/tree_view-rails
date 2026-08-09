@@ -150,6 +150,8 @@ For any public API manifest change, confirm the release-facing trail is complete
 - breaking changes, removals, or deprecations include migration notes rather than only manifest or spec wording
 - docs-only manifest guidance changes are listed as Documentation entries and do not imply runtime behavior changes
 
+Pull request CI runs `node script/ci_public_contract_release_trail.mjs` for this focused review. Changes to `config/public_api_manifest.yml`, `app/javascript/tree_view/index.js`, or `app/javascript/tree_view/index.d.ts` must include `CHANGELOG.md`; changes limited to the English and Japanese Public API guidance do not require a changelog entry. Breaking, deprecation, removal, or rename wording also requires a concrete migration action in the changelog or synchronized migration guides. Run `npm run test:public-contract-release-trail` to verify the representative manifest-only, docs-only, changelog-present, and migration-note fixtures.
+
 Documentation files to review when public behavior or public compatibility surfaces change:
 
 - `README.md`

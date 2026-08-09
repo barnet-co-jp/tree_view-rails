@@ -150,6 +150,8 @@ public API manifest を変更する場合は、tag を打つ前に release-facin
 - breaking change、削除、deprecation には、manifest や spec の説明だけでなく migration note がある
 - docs-only の manifest guidance 変更は Documentation entry として扱い、runtime behavior の変更を示唆しない
 
+Pull Request CI は、この focused review のために `node script/ci_public_contract_release_trail.mjs` を実行します。`config/public_api_manifest.yml`、`app/javascript/tree_view/index.js`、`app/javascript/tree_view/index.d.ts` の変更には `CHANGELOG.md` が必要です。英日 Public API guidance だけの変更には changelog entry を要求しません。breaking、deprecation、removal、rename を示す文言がある場合は、changelog または同期した migration guide に具体的な移行 action も必要です。代表的な manifest-only、docs-only、changelog あり、migration note の fixture は `npm run test:public-contract-release-trail` で確認できます。
+
 public behavior や public compatibility surface が変わるときに確認する docs:
 
 - `README.md`
