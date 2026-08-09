@@ -193,4 +193,49 @@ describe("TreeView JavaScript public event contract", () => {
       targetRow
     })
   })
+
+  it("dispatches tree-view-transfer:drop with null source payload when transfer data is unavailable or invalid", async () => {
+    document.body.innerHTML = `
+      <section id="root">
+        <table data-controller="tree-view-transfer">
+          <tbody>
+            <tr id="target" data-tree-depth="0" data-tree-transfer-payload='{"key":"project:2"}'></tr>
+          </tbody>
+        </table>
+      </section>
+    `
+    const root = document.querySelector("#root")
+    const dropSpy = vi.fn()
+    const invalidTransferSpy = vi.fn()
+    root.addEventListener("tree-view-transfer:drop", dropSpy)
+    root.addEventListener("tree-view-transfer:invalid-transfer", invalidTransferSpy)
+    await nextFrame()
+
+    const element = document.querySelector("[data-controller='tree-view-transfer']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-transfer")
+    const targetRow = document.querySelector("#target")
+    targetRow.getBoundingClientRect = () => ({ top: 0, height: 90 })
+    const event = (dataTransfer) => ({
+      target: targetRow,
+      clientY: 45,
+      preventDefault: vi.fn(),
+      ...(dataTransfer === undefined ? {} : { dataTransfer })
+    })
+
+    controller.drop(event(undefined))
+    controller.drop(event({ getData: () => "" }))
+    controller.drop(event({ getData: (type) => (type === "application/json" ? "not-json" : "") }))
+
+    expect(dropSpy).toHaveBeenCalledTimes(3)
+    for (const [dropEvent] of dropSpy.mock.calls) {
+      expect(dropEvent.detail).toEqual({
+        sourcePayload: null,
+        targetPayload: { key: "project:2" },
+        position: "inside",
+        targetRow
+      })
+    }
+    expect(invalidTransferSpy).toHaveBeenCalledOnce()
+    expect(invalidTransferSpy.mock.calls[0][0].detail).toEqual({ value: "not-json" })
+  })
 })
