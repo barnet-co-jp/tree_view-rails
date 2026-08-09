@@ -87,16 +87,17 @@ const focusedMockupSmokeTargets = [
   { file: "accessibility-semantics.html", sample: "[data-tree-view-sample='accessibility-semantics'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-current-row/index.html", sample: ".keyboard-current-row, .keyboard-current-focus", minimumCount: 3 },
   { file: "high-contrast-state-cues/index.html", sample: "[data-tree-view-sample='high-contrast-state-cues']", minimumCount: 1 },
+  { file: "stylesheet-theme-boundary/index.html", sample: "[data-tree-view-sample='stylesheet-theme-boundary'] .theme-boundary-frame", minimumCount: 3 },
   { file: "direction-aware-cues/index.html", sample: ".direction-frame .tree-view-table tbody tr", minimumCount: 10 },
   { file: "lazy-loading-handoff.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "drop-positions.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
+  { file: "drop-positions.html", sample: "[data-tree-view-sample='post-drop-outcomes'] .drop-position-outcome-card", minimumCount: 4 },
   { file: "persisted-state-boundary.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "turbo-frame-target.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "drag-interactive-controls.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "interactive-marker-behaviors.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "windowed-rendering.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "breadcrumb-paths.html", sample: ".mock-breadcrumb-path", minimumCount: 2 },
-  { file: "filtered-tree-modes.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "filtered-tree-modes.html", sample: "[aria-label='ReverseTree leaf-to-root visual reference'] tbody tr", minimumCount: 3 },
   { file: "path-tree-builder-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "node-presenter-row-partials.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "localized-row-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
@@ -216,9 +217,25 @@ test.describe("docs mockup browser smoke", () => {
   test("review gallery links every focused mockup listed in README", () => {
     const expectedFiles = readmeMockupFiles().filter((file) => file !== "review-gallery.html").sort()
     const galleryFiles = reviewGalleryMockupFiles().sort()
-    const missingGalleryFiles = expectedFiles.filter((file) => !galleryFiles.includes(file))
 
-    expect(missingGalleryFiles).toEqual([])
+    expect(galleryFiles).toEqual(expectedFiles)
+  })
+
+  test("review gallery previews every focused smoke target", async ({ page }) => {
+    test.setTimeout(60_000)
+    await openMockup(page, "review-gallery.html")
+
+    for (const mockup of focusedMockupSmokeTargets) {
+      const iframeSelector = `iframe[src="${mockup.file}"]`
+      const iframe = page.locator(iframeSelector)
+
+      await expect(iframe).toHaveCount(1)
+      await iframe.scrollIntoViewIfNeeded()
+
+      const preview = page.frameLocator(iframeSelector)
+      await expect(preview.locator("main.mock-page")).toBeVisible()
+      await expect.poll(() => preview.locator(mockup.sample).count()).toBeGreaterThanOrEqual(mockup.minimumCount)
+    }
   })
 
   test("README review flow stays aligned with review gallery links and anchors", () => {
@@ -260,6 +277,7 @@ test.describe("docs mockup browser smoke", () => {
       "minimal-usage-first-render.html",
       "narrow-sidebar-tree.html",
       "current-branch-sidebar.html",
+      "stylesheet-theme-boundary/index.html",
       "lazy-loading-handoff.html"
     ])
     expect(invalidExceptions).toEqual([])
