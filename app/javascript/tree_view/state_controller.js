@@ -136,6 +136,8 @@ export class TreeViewStateController extends Controller {
       return
     }
 
+    // Preserve legacy static/turbo row markup as a private DOM compatibility fallback.
+    // The client action selector remains authoritative and the legacy classes are not public hooks.
     const showButton = row.querySelector(".show-button")
     const hideButton = row.querySelector(".remove-button")
     const button = preferredAction === "show" ? showButton : preferredAction === "hide" ? hideButton : showButton || hideButton
