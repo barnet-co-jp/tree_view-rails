@@ -15,12 +15,9 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ## Unreleased
 
-Release preparation notes:
+No unreleased changes.
 
-- Treat `Added`, `Changed`, and `Fixed` entries as the primary reader-facing release notes. Many entries in this section expand public configuration, helper, JavaScript, or manifest-backed surfaces and should stay visible to host-app maintainers.
-- Keep `Documentation` and `Tests` entries available as release evidence, but summarize or group them during the release preparation PR when they are maintenance-only and do not change runtime behavior.
-- Record public API manifest, package-root export, and documented hook changes by their user-visible effect. Use `Documentation` only when docs or manifest guidance changed without a runtime or compatibility-surface change.
-- No breaking change, deprecation, or removal is currently called out in `Unreleased`. If a later release review identifies one, add the migration note before moving these entries into a dated version section.
+## 1.0.0 - 2026-08-09
 
 ### Added
 
