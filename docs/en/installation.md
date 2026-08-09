@@ -46,7 +46,7 @@ gem "tree_view"
 When you need unreleased `main` changes, use the GitHub source explicitly:
 
 ```ruby
-gem "tree_view", git: "https://github.com/matsuo-haruhito/tree_view-rails.git"
+gem "tree_view", git: "https://github.com/barnet-co-jp/tree_view-rails.git"
 ```
 
 Then run `bundle install` as usual.

@@ -4,7 +4,7 @@ This directory contains static HTML/CSS mockups for reviewing TreeView's baselin
 
 These files are intentionally small, reviewable assets in the gem repository. They show representative DOM structure, CSS hooks, ARIA attributes, and row states emitted by the reusable TreeView primitives.
 
-They are **not** a complete Rails application and should not grow into host-app CRUD, query, authorization, seed data, or controller examples. Full playground/application examples belong in `matsuo-haruhito/tree_view-rails-demo` once that demo repository is public.
+They are **not** a complete Rails application and should not grow into host-app CRUD, query, authorization, seed data, or controller examples. Full playground/application examples belong in `barnet-co-jp/tree_view-rails-demo` once that demo repository is public.
 
 When a review starts from the gallery or a focused mockup page, confirm this static mockup / real demo app boundary before requesting new routes, persistence, CRUD flows, seeded records, or authorization examples in this directory.
 

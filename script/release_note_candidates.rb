@@ -156,7 +156,7 @@ module ReleaseNoteCandidates
       options = {}
       OptionParser.new do |parser|
         parser.banner = "Usage: ruby script/release_note_candidates.rb --repo OWNER/REPO (--since YYYY-MM-DD | --since-tag vX.Y.Z)"
-        parser.on("--repo REPO", "GitHub repository, for example matsuo-haruhito/tree_view-rails") { |value| options[:repo] = value }
+        parser.on("--repo REPO", "GitHub repository, for example barnet-co-jp/tree_view-rails") { |value| options[:repo] = value }
         parser.on("--since DATE", "Collect merged PRs and closed issues since YYYY-MM-DD") { |value| options[:since] = value }
         parser.on("--since-tag TAG", "Collect candidates referenced by commits since TAG") { |value| options[:since_tag] = value }
       end.parse!(argv)

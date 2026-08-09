@@ -46,7 +46,7 @@ gem "tree_view"
 まだ release に入っていない `main` の変更が必要なときだけ、GitHub source を明示します。
 
 ```ruby
-gem "tree_view", git: "https://github.com/matsuo-haruhito/tree_view-rails.git"
+gem "tree_view", git: "https://github.com/barnet-co-jp/tree_view-rails.git"
 ```
 
 その後、通常どおり bundle install します。

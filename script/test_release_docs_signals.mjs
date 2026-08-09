@@ -678,7 +678,7 @@ const releaseNoteCandidateDocs = [
       "It does not decide the final release notes.",
       "--since 2026-06-01",
       "--since-tag v0.1.0",
-      "# Release note candidates for matsuo-haruhito/tree_view-rails",
+      "# Release note candidates for barnet-co-jp/tree_view-rails",
       "## Merged pull requests",
       "## Closed issues",
       "release preparation notes, not committed as the final release text"
@@ -693,7 +693,7 @@ const releaseNoteCandidateDocs = [
       "最終的な release notes を自動判断しません。",
       "--since 2026-06-01",
       "--since-tag v0.1.0",
-      "# Release note candidates for matsuo-haruhito/tree_view-rails",
+      "# Release note candidates for barnet-co-jp/tree_view-rails",
       "## Merged pull requests",
       "## Closed issues",
       "release preparation の確認メモへ貼るためのもの"

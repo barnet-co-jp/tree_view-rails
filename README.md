@@ -121,7 +121,7 @@ gem "tree_view"
 If you need unreleased `main` changes, use the GitHub source explicitly:
 
 ```ruby
-gem "tree_view", git: "https://github.com/matsuo-haruhito/tree_view-rails.git"
+gem "tree_view", git: "https://github.com/barnet-co-jp/tree_view-rails.git"
 ```
 
 Then run `bundle install` as usual.
@@ -285,4 +285,4 @@ Use `npm ci` for local JavaScript setup. The committed `package-lock.json` is th
 
 ## Support
 
-Bug reports and feature requests are welcome on [GitHub Issues](https://github.com/matsuo-haruhito/tree_view-rails/issues).
+Bug reports and feature requests are welcome on [GitHub Issues](https://github.com/barnet-co-jp/tree_view-rails/issues).

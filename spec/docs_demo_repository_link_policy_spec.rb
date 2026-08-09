@@ -18,7 +18,7 @@ module DocsDemoRepositoryLinkPolicySpec
   MOCKUPS_README = "docs/mockups/README.md"
   DIRECT_DEMO_REPOSITORY_PATTERN = %r{
     (?:https?://|git://|git@)github\.com[:/]
-    matsuo-haruhito/tree_view-rails-demo(?:\.git)?(?:[/?#][^\s)\]]*)?
+    barnet-co-jp/tree_view-rails-demo(?:\.git)?(?:[/?#][^\s)\]]*)?
   }ix
   MARKDOWN_LINK_HREF_PATTERN = /\[[^\]]+\]\(([^)]+)\)/
 

@@ -18,7 +18,7 @@ This document is also part of the gem package verification surface. `script/chec
 Use a date window when you want GitHub Search to return merged pull requests and closed issues directly:
 
 ```bash
-ruby script/release_note_candidates.rb --repo matsuo-haruhito/tree_view-rails --since 2026-06-01
+ruby script/release_note_candidates.rb --repo barnet-co-jp/tree_view-rails --since 2026-06-01
 ```
 
 This mode queries:
@@ -33,7 +33,7 @@ Set `GITHUB_TOKEN` when you need a higher API rate limit or private repository a
 Use a tag when you want a local release review based on commit references after the previous release tag:
 
 ```bash
-ruby script/release_note_candidates.rb --repo matsuo-haruhito/tree_view-rails --since-tag v0.1.0
+ruby script/release_note_candidates.rb --repo barnet-co-jp/tree_view-rails --since-tag v0.1.0
 ```
 
 This mode compares the tag to `HEAD`, extracts `#123` style references from commit messages, and resolves those numbers as pull requests or issues. It is useful as a fallback when a date window is not obvious, but it only finds references that appear in commit messages.
@@ -43,7 +43,7 @@ This mode compares the tag to `HEAD`, extracts `#123` style references from comm
 The script prints Markdown that is meant to be copied into release preparation notes, not committed as the final release text:
 
 ```markdown
-# Release note candidates for matsuo-haruhito/tree_view-rails
+# Release note candidates for barnet-co-jp/tree_view-rails
 
 Source: closed or merged since 2026-06-01
 
@@ -52,12 +52,12 @@ This is a maintainer review aid. It does not rewrite CHANGELOG.md and does not d
 ## Merged pull requests
 
 - #1691 Persisted State cleanup guide entrypoints (2026-06-09T09:16:47Z)
-  https://github.com/matsuo-haruhito/tree_view-rails/pull/1691
+  https://github.com/barnet-co-jp/tree_view-rails/pull/1691
 
 ## Closed issues
 
 - #1549 Persisted State cleanup docs entrypoint (2026-06-09T09:16:48Z)
-  https://github.com/matsuo-haruhito/tree_view-rails/issues/1549
+  https://github.com/barnet-co-jp/tree_view-rails/issues/1549
 ```
 
 During the release preparation PR, paste or link this output as review evidence, then compare it with `CHANGELOG.md`, the merged PR history, and any release-facing compatibility notes. Keep only the human-approved highlights in GitHub Release notes.

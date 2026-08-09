@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Tree rendering primitives for Rails applications"
   spec.description = "Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs."
-  spec.homepage = "https://github.com/matsuo-haruhito/tree_view-rails"
+  spec.homepage = "https://github.com/barnet-co-jp/tree_view-rails"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2"
 
