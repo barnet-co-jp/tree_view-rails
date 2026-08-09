@@ -96,14 +96,19 @@ module TreeViewHelper
     end
 
     def tree_view_toolbar_html_options(class_name, html)
-      options = html.to_h.dup
+      options = normalize_tree_view_toolbar_html_options(html, option_name: :html)
       options[:class] = class_names(class_name, options[:class])
       options[:data] = options.fetch(:data, {}).to_h.merge(tree_view_toolbar: true)
       options
     end
 
     def tree_view_toolbar_action_html_options(action, button_class_name, action_html)
-      options = resolve_tree_view_toolbar_action_html(action, action_html).to_h.dup
+      action_name = action.fetch(:action)
+      options = normalize_tree_view_toolbar_html_options(
+        resolve_tree_view_toolbar_action_html(action, action_html),
+        option_name: :action_html,
+        action: action_name
+      )
       options[:class] = class_names(button_class_name, options[:class])
       options[:data] = options.fetch(:data, {}).to_h.merge(action.fetch(:data))
       options
@@ -114,11 +119,23 @@ module TreeViewHelper
       when nil
         {}
       when Proc
-        action_html.call(action) || {}
+        action_html.call(action)
       else
-        options = action_html.to_h
+        options = normalize_tree_view_toolbar_html_options(
+          action_html,
+          option_name: :action_html,
+          action: action.fetch(:action)
+        )
         options.fetch(action.fetch(:action), options.fetch(action.fetch(:action).to_s, options))
       end
+    end
+
+    def normalize_tree_view_toolbar_html_options(value, option_name:, action: nil)
+      return {} if value.nil?
+      return value.to_h.dup if value.respond_to?(:to_h)
+
+      action_context = action ? " for action #{action}" : ""
+      raise ArgumentError, "#{option_name} must resolve to a Hash-like object#{action_context}"
     end
   end
 end
