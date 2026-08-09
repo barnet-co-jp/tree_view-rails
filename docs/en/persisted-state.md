@@ -134,6 +134,10 @@ persisted_state = store.save!(
 )
 ```
 
+`StateStore#save!` looks up or initializes the backing row by `owner:` plus `tree_instance_key:` and replaces its `expanded_keys` snapshot. For the generated polymorphic model, the logical owner is stored as `owner_type` and `owner_id`; the generated migration's unique index on `owner_type`, `owner_id`, and `tree_instance_key` enforces one row for that identity.
+
+The lookup followed by `save!` is not an atomic upsert. Two concurrent first saves for the same identity can both initialize a row, and one insert can raise the backing database or model unique-constraint exception. TreeView propagates that exception; it does not automatically retry, reload and merge `expanded_keys`, choose a last-write policy, or acquire application or database locks. The host app owns rescue, retry, and conflict policy.
+
 Clear saved expansion state for the same owner and tree instance key:
 
 ```ruby

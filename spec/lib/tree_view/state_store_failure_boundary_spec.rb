@@ -22,6 +22,23 @@ RSpec.describe TreeView::StateStore do
     end.to raise_error(error_class, "database unavailable")
   end
 
+  it "propagates a concurrent uniqueness violation without retrying" do
+    error_class = Class.new(StandardError)
+    error = error_class.new("duplicate owner/tree_instance_key")
+    record = double("persisted state record")
+
+    expect(model).to receive(:find_or_initialize_by)
+      .with(owner: :user, tree_instance_key: "documents")
+      .once
+      .and_return(record)
+    expect(record).to receive(:expanded_keys=).with(["node-1"]).once
+    expect(record).to receive(:save!).once.and_raise(error)
+
+    expect do
+      store.save!(owner: :user, tree_instance_key: "documents", expanded_keys: ["node-1"])
+    end.to raise_error { |raised| expect(raised).to equal(error) }
+  end
+
   it "coerces expanded keys before attempting to save" do
     record = double("persisted state record", expanded_keys: ["node-1"])
 
