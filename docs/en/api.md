@@ -309,6 +309,9 @@ render_state = TreeView::RenderState.new(
 | `row_status_builder:` | no | Callable that returns row state. |
 | `row_event_payload_builder:` | no | Callable that returns drag/drop transfer payloads. This is transfer-specific, not a generic row event hook. |
 | `persisted_state:` | no | Saved expansion state. |
+| `empty_message:` | no | String shown when root items are empty. Host app owns final copy and CTA. |
+| `hidden_message_builder:` | no | Callable returning a message for hidden descendants. Receives the hidden count. Must respond to `call`. |
+| `state_messages:` | no | Grouped state message settings. Supported keys are `empty` and `hidden_builder`. Flat options take priority when both are supplied. |
 
 When both flat keyword options and `initial_expansion:` are supplied, the flat keyword options win. `auto_expand_ancestors:` only opens the current node's path; keep using `expanded_keys:` when sibling branches or additional paths should also start open. For a practical example, see [Cookbook: Expand only the current branch initially](cookbook.md#expand-only-the-current-branch-initially).
 
@@ -326,6 +329,7 @@ The exact machine-readable grouped-option contract for `TreeView::RenderState` l
 | `selection:` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | Mirrors the documented `TreeView::RenderState::SelectionConfig` keys. See [Selection](selection.md) for behavior and host-app responsibilities. |
 | `lazy_loading:` | `enabled`, `loaded_keys`, `scope` | Mirrors the documented lazy-loading row-state hooks and optional host-app scope passthrough. See [Lazy Loading](lazy-loading.md). |
 | `row_status:` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | Mirrors the documented row disabled / readonly state hooks and disabled-reason surface. |
+| `state_messages:` | `empty`, `hidden_builder` | Grouped empty and hidden message settings. `empty` maps to `empty_message:` and `hidden_builder` maps to `hidden_message_builder:`. Flat options take priority. |
 
 ## TreeView::UiConfig / UiConfigBuilder
 

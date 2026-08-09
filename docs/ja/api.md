@@ -309,6 +309,9 @@ render_state = TreeView::RenderState.new(
 | `row_status_builder:` | no | row 状態を返す callable。 |
 | `row_event_payload_builder:` | no | drag/drop transfer payload を返す callable。transfer 専用であり、汎用 row event hook ではない。 |
 | `persisted_state:` | no | 保存済み展開状態。 |
+| `empty_message:` | no | root items が空のときに表示する文字列。最終文言と CTA は host app の責務。 |
+| `hidden_message_builder:` | no | 非表示 descendant 件数を受け取りメッセージを返す callable。`call` に応答する必要がある。 |
+| `state_messages:` | no | グループ化された state message 設定。サポートキーは `empty` と `hidden_builder`。同名の flat option が優先。 |
 
 個別引数と `initial_expansion:` を同時に指定した場合は、個別引数を優先します。`auto_expand_ancestors:` が開くのは current node に至る path だけなので、兄弟 branch や別 path も最初から開きたい場合は引き続き `expanded_keys:` を併用してください。実用例は [Cookbook の「現在のブランチだけ初期展開する」](cookbook.md#現在のブランチだけ初期展開する) を参照してください。
 
@@ -326,6 +329,7 @@ render_state = TreeView::RenderState.new(
 | `selection:` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | documented された `TreeView::RenderState::SelectionConfig` key と対応します。挙動と host app の責務は [Selection](selection.md) を参照してください。 |
 | `lazy_loading:` | `enabled`, `loaded_keys`, `scope` | lazy-loading row-state hook と任意の host-app scope passthrough に対応します。詳細は [Lazy Loading](lazy-loading.md) を参照してください。 |
 | `row_status:` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | row disabled / readonly state hook と disabled reason surface に対応します。 |
+| `state_messages:` | `empty`, `hidden_builder` | empty/hidden message のグループ設定。`empty` は `empty_message:` に、`hidden_builder` は `hidden_message_builder:` に対応します。flat option が優先。 |
 
 ## TreeView::UiConfig / UiConfigBuilder
 
