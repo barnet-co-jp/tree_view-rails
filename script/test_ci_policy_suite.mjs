@@ -17,6 +17,11 @@ const checks = [
     args: ["script/test_ci_changed_files_policy.mjs"]
   },
   {
+    group: "Public contract release trail",
+    command: "node",
+    args: ["script/test_ci_public_contract_release_trail.mjs"]
+  },
+  {
     group: "Workflow changed-file detection signals",
     command: "node",
     args: ["script/test_ci_workflow_changed_file_detection_signals.mjs"]

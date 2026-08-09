@@ -54,6 +54,8 @@ jobs:
           node script/ci_changed_files_policy.mjs <<EOF >> "$GITHUB_OUTPUT"
           $changed_files
           EOF
+      - if: github.event_name == 'pull_request'
+        run: node script/ci_public_contract_release_trail.mjs --base "origin/${{ github.base_ref }}" --head HEAD
 
   lint:
     runs-on: ubuntu-latest

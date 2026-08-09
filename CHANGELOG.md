@@ -154,6 +154,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added a focused pull request guard for public manifest and package-root JavaScript contract changes, requiring a CHANGELOG trail while skipping docs-only Public API guidance and requesting migration action evidence for breaking, deprecation, removal, or rename wording.
 - Added CI job execution policy coverage so all nine workflow jobs retain exact `ubuntu-latest` runners and explicit job-level timeout limits, with bilingual maintainer guidance for timeout and runner migrations.
 - Added focused browser smoke coverage for direction-aware review boundaries, selection state and pagination ownership, and Turbo Frame target ownership without changing mockup or runtime behavior.
 - Added focused bilingual reader-journey guards for Cookbook common-combination recipes and FAQ state-change reason guidance without changing docs content or runtime contracts.

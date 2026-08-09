@@ -10,6 +10,7 @@
     "test:vitest-ui": "vitest --ui",
     "test:browser": "playwright test",
     "test:ci-policy": "node script/test_license_package_sensitive_signal.mjs && node script/test_ci_policy_suite.mjs --self-test && node script/test_ci_policy_suite.mjs",
+    "test:public-contract-release-trail": "node script/test_ci_public_contract_release_trail.mjs",
     "test:ci-policy-suite": "node script/test_ci_policy_suite.mjs",
     "test:ci-policy-license-prelude": "node script/test_license_package_sensitive_signal.mjs",
     "test:node-version-sources": "node script/test_node_version_sources.mjs",

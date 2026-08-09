@@ -72,6 +72,7 @@ npm run test:toggle-icons-docs
 npm run test:release-docs
 npm run test:release-package-contents
 npm run test:docs-i18n
+npm run test:public-contract-release-trail
 npm run test:ci-policy
 npm run test:node-version-sources
 npm run test:ruby-version-sources

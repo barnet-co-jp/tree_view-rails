@@ -105,8 +105,10 @@ function isCiPolicySensitivePath(file) {
     file === "docs/en/ci-policy-suite.md" ||
     file === "docs/ja/ci-policy-suite.md" ||
     file === "script/ci_changed_files_policy.mjs" ||
+    file === "script/ci_public_contract_release_trail.mjs" ||
     file === "script/test_ci_policy_suite.mjs" ||
     file === "script/test_ci_changed_files_policy.mjs" ||
+    file === "script/test_ci_public_contract_release_trail.mjs" ||
     file === "script/test_ci_dependabot_maintenance_evidence_signals.mjs" ||
     file === "script/test_ci_policy_docs_routing.mjs" ||
     file === "script/test_ci_workflow_changed_file_detection_signals.mjs" ||
