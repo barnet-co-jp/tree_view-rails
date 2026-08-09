@@ -64,6 +64,7 @@ Release preparation notes:
 
 ### Documentation
 
+- Linked the existing large-tree strategy and GraphAdapter heterogeneous-node mockups from the mockup Files inventory, recommended review flow, and review-gallery strategy/data-shape families, with aligned browser smoke coverage.
 - Clarified the bilingual persisted-state guide and StateStore failure-boundary coverage for the owner/tree-instance lookup, its generated three-column unique index, and host-app-owned handling of concurrent uniqueness violations without gem-managed retry, merge, or locking; runtime API and schema are unchanged.
 - Added localized names docs in Japanese and English.
 - Added Turbo Frame option docs in Japanese and English.
