@@ -249,19 +249,57 @@ describe("TreeViewStateController", () => {
     expect(document.activeElement).toBe(row1)
   })
 
-  it("uses keyboard navigation to activate row toggles", () => {
+  it("prefers the client toggle selector over legacy fallback buttons", () => {
     const element = document.querySelector("[data-controller='tree-view-state']")
     const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
-    const button = document.querySelector("#row-2 .show-button")
-    const click = vi.spyOn(button, "click")
+    const row = document.querySelector("#row-2")
+    const legacyButton = row.querySelector(".show-button")
+    const clientButton = document.createElement("button")
+    clientButton.className = "tree-toggle__client-action"
+    row.querySelector("td").prepend(clientButton)
+    const legacyClick = vi.spyOn(legacyButton, "click")
+    const clientClick = vi.spyOn(clientButton, "click")
 
-    controller.keydown({
-      key: "ArrowRight",
-      preventDefault: vi.fn(),
-      target: document.querySelector("#row-2")
-    })
+    controller.keydown({ key: "ArrowRight", preventDefault: vi.fn(), target: row })
 
-    expect(click).toHaveBeenCalledOnce()
+    expect(clientClick).toHaveBeenCalledOnce()
+    expect(legacyClick).not.toHaveBeenCalled()
+  })
+
+  it("does not reactivate client toggles already in the preferred state", () => {
+    const element = document.querySelector("[data-controller='tree-view-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const expandedRow = document.querySelector("#row-1")
+    const collapsedRow = document.querySelector("#row-2")
+    const expandedButton = document.createElement("button")
+    const collapsedButton = document.createElement("button")
+    expandedButton.className = "tree-toggle__client-action"
+    collapsedButton.className = "tree-toggle__client-action"
+    expandedRow.querySelector("td").prepend(expandedButton)
+    collapsedRow.querySelector("td").prepend(collapsedButton)
+    const expandedClick = vi.spyOn(expandedButton, "click")
+    const collapsedClick = vi.spyOn(collapsedButton, "click")
+
+    controller.keydown({ key: "ArrowRight", preventDefault: vi.fn(), target: expandedRow })
+    controller.keydown({ key: "ArrowLeft", preventDefault: vi.fn(), target: collapsedRow })
+
+    expect(expandedClick).not.toHaveBeenCalled()
+    expect(collapsedClick).not.toHaveBeenCalled()
+  })
+
+  it("keeps legacy show and remove buttons as private keyboard fallbacks", () => {
+    const element = document.querySelector("[data-controller='tree-view-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const collapsedRow = document.querySelector("#row-2")
+    const expandedRow = document.querySelector("#row-1")
+    const showClick = vi.spyOn(collapsedRow.querySelector(".show-button"), "click")
+    const removeClick = vi.spyOn(expandedRow.querySelector(".remove-button"), "click")
+
+    controller.keydown({ key: "ArrowRight", preventDefault: vi.fn(), target: collapsedRow })
+    controller.keydown({ key: "ArrowLeft", preventDefault: vi.fn(), target: expandedRow })
+
+    expect(showClick).toHaveBeenCalledOnce()
+    expect(removeClick).toHaveBeenCalledOnce()
   })
 
   it("ignores keyboard navigation from interactive row controls", () => {
