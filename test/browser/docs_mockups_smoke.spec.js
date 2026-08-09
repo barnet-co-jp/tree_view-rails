@@ -297,6 +297,35 @@ test.describe("docs mockup browser smoke", () => {
     })
   }
 
+  test("large-tree-strategy/index.html preserves strategy and ownership boundary signals", async ({ page }) => {
+    await openMockup(page, "large-tree-strategy/index.html")
+
+    for (const strategy of ["Full render", "Depth or scope limit", "Windowed rows", "Lazy loading", "Virtual scrolling"]) {
+      await expect(page.locator(".mock-large-tree-card").getByRole("heading", { name: strategy })).toHaveCount(1)
+    }
+    await expect(page.getByRole("heading", { name: "Ownership boundary" })).toBeVisible()
+    await expect(page.locator(".mock-large-tree-chip--tree")).toHaveCount(2)
+    await expect(page.locator(".mock-large-tree-chip--host")).toHaveCount(3)
+    await expect(page.getByText("Host-owned: virtual scroll policy", { exact: true })).toBeVisible()
+    await expect(page.getByText("Compare lazy loading and children pagination as ways to defer child output.", { exact: true })).toBeVisible()
+  })
+
+  test("graph-adapter-heterogeneous-nodes/index.html preserves heterogeneous host boundary signals", async ({ page }) => {
+    await openMockup(page, "graph-adapter-heterogeneous-nodes/index.html")
+
+    await expect(page.getByRole("heading", { name: "TreeView-owned cues" })).toBeVisible()
+    const hostOwnedLabels = page.locator(".graph-adapter-card", { has: page.getByRole("heading", { name: "Host-owned labels" }) })
+    await expect(hostOwnedLabels).toContainText("row actions")
+    await expect(page.getByRole("heading", { name: "GraphAdapter scope" })).toBeVisible()
+    for (const nodeType of ["project", "folder", "document", "external"]) {
+      await expect(page.locator(`.graph-adapter-type--${nodeType}`, { hasText: nodeType })).toHaveCount(1)
+    }
+    expect(await page.locator(".graph-adapter-actions button").count()).toBeGreaterThan(0)
+    const actionOwnership = page.locator(".graph-adapter-boundary tr", { hasText: "Who owns node type badge, icon, status, and actions?" })
+    await expect(actionOwnership).toContainText("The host app")
+    await expect(page.getByText("No. Runtime adapter behavior, authorization, persistence, and routes stay outside this static reference.", { exact: true })).toBeVisible()
+  })
+
   test("stylesheet-theme-boundary/index.html uses packaged state selectors across host themes", async ({ page }) => {
     await openMockup(page, "stylesheet-theme-boundary/index.html")
 
