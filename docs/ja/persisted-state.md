@@ -134,6 +134,10 @@ persisted_state = store.save!(
 )
 ```
 
+`StateStore#save!` は、`owner:` と `tree_instance_key:` の組み合わせで backing row を検索または初期化し、`expanded_keys` の snapshot を置き換えます。generated polymorphic model では、論理的な owner は `owner_type` と `owner_id` として保存され、generated migration の `owner_type`、`owner_id`、`tree_instance_key` に対する unique index が同一 identity につき1 rowを保証します。
+
+lookup 後の `save!` は atomic upsert ではありません。同じ identity への初回保存が並行すると双方が row を初期化し、片方の insert が backing database または model の unique constraint 例外になることがあります。TreeView はその例外を caller へ伝播し、自動 retry、reload 後の `expanded_keys` merge、last-write policy の選択、application / database lock の取得を行いません。rescue、retry、競合解決 policy は host app の責務です。
+
 同じ owner と tree instance key の保存済み開閉状態をクリアする例:
 
 ```ruby

@@ -64,6 +64,7 @@ Release preparation notes:
 
 ### Documentation
 
+- Clarified the bilingual persisted-state guide and StateStore failure-boundary coverage for the owner/tree-instance lookup, its generated three-column unique index, and host-app-owned handling of concurrent uniqueness violations without gem-managed retry, merge, or locking; runtime API and schema are unchanged.
 - Added localized names docs in Japanese and English.
 - Added Turbo Frame option docs in Japanese and English.
 - Added NodePresenter row partial cookbook docs and clarified criteria for promoting app-specific UI patterns into TreeView.
