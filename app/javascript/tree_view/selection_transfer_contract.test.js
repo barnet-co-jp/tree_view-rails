@@ -199,6 +199,47 @@ describe("TreeViewTransferController integration contracts", () => {
     expect(dropSpy).not.toHaveBeenCalled()
   })
 
+  it("ignores drag-over and drop from interactive targets", () => {
+    const element = document.querySelector("[data-controller='tree-view-transfer']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-transfer")
+    const targetRow = document.querySelector("#target-row")
+    targetRow.insertAdjacentHTML(
+      "beforeend",
+      `
+        <button id="interactive-button" type="button">Edit</button>
+        <span id="interactive-marker" data-tree-view-interactive="true">Picker</span>
+        <span id="ignore-drag-marker" data-tree-view-ignore-drag="true">Drag-safe</span>
+      `
+    )
+    const interactiveTargets = [
+      document.querySelector("#interactive-button"),
+      document.querySelector("#interactive-marker"),
+      document.querySelector("#ignore-drag-marker")
+    ]
+
+    const dragOverSpy = vi.fn()
+    const dropSpy = vi.fn()
+    const invalidTransferSpy = vi.fn()
+    element.addEventListener("tree-view-transfer:drag-over", dragOverSpy)
+    element.addEventListener("tree-view-transfer:drop", dropSpy)
+    element.addEventListener("tree-view-transfer:invalid-transfer", invalidTransferSpy)
+
+    for (const target of interactiveTargets) {
+      const dataTransfer = { dropEffect: null, getData: vi.fn(() => "not-json") }
+      const preventDefault = vi.fn()
+
+      controller.over({ target, dataTransfer, preventDefault })
+      controller.drop({ target, dataTransfer, preventDefault })
+
+      expect(dataTransfer.dropEffect).toBeNull()
+      expect(dataTransfer.getData).not.toHaveBeenCalled()
+      expect(preventDefault).not.toHaveBeenCalled()
+    }
+    expect(dragOverSpy).not.toHaveBeenCalled()
+    expect(dropSpy).not.toHaveBeenCalled()
+    expect(invalidTransferSpy).not.toHaveBeenCalled()
+  })
+
   it("reports malformed source row payloads", () => {
     const element = document.querySelector("[data-controller='tree-view-transfer']")
     const controller = application.getControllerForElementAndIdentifier(element, "tree-view-transfer")
