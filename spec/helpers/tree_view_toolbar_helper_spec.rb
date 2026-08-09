@@ -227,6 +227,39 @@ RSpec.describe "tree_view_toolbar helper" do
     expect(html).to include("aria-label=\"Analytics Expand all\"")
   end
 
+  it "merges flat action HTML attributes for every toolbar action" do
+    html = helper.tree_view_toolbar(
+      render_state,
+      actions: [:expand_all],
+      action_html: {
+        class: "qa-action",
+        data: {testid: "tree-action"},
+        aria: {label: "Tree action"}
+      }
+    )
+
+    expect(html).to include("class=\"tree-view-toolbar__button qa-action\"")
+    expect(html).to include("data-testid=\"tree-action\"")
+    expect(html).to include("data-tree-view-toolbar-action=\"expand_all\"")
+    expect(html).to include("aria-label=\"Tree action\"")
+  end
+
+  it "rejects non-Hash-like toolbar container HTML options" do
+    expect do
+      helper.tree_view_toolbar(render_state, actions: [:expand_all], html: "invalid")
+    end.to raise_error(ArgumentError, "html must resolve to a Hash-like object")
+  end
+
+  it "identifies the action when an action HTML proc returns a non-Hash-like value" do
+    expect do
+      helper.tree_view_toolbar(
+        render_state,
+        actions: [:expand_all],
+        action_html: ->(_action) { "invalid" }
+      )
+    end.to raise_error(ArgumentError, "action_html must resolve to a Hash-like object for action expand_all")
+  end
+
   it "merges action-specific HTML attributes for disabled buttons" do
     static_ui_config = TreeView::UiConfig.new(
       node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id}" },

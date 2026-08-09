@@ -54,6 +54,7 @@ Release preparation notes:
 
 ### Fixed
 
+- Improved `tree_view_toolbar` errors for non-Hash-like `html:` and `action_html:` values.
 - Cleaned up generated selection hidden inputs when selection controllers disconnect, scoped to each controller source id.
 
 ### Security

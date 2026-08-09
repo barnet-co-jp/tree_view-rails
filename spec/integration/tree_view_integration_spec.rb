@@ -204,9 +204,9 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include("project_3:grandchild")
     end
 
-    it "renders a ReverseTree through tree_view_rows helper" do
+    it "renders shared ReverseTree ancestors without duplicate DOM ids" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
-      reverse_tree = tree.reverse_tree_for([grandchild])
+      reverse_tree = tree.reverse_tree_for([grandchild, sibling])
       render_state = TreeView::RenderState.new(
         tree: reverse_tree,
         root_items: reverse_tree.root_items,
@@ -217,11 +217,12 @@ RSpec.describe "TreeView integration" do
 
       rendered = view.tree_view_rows(render_state)
 
-      expect(rendered).to include('id="project_3"')
-      expect(rendered).to include('id="project_2"')
-      expect(rendered).to include('id="project_1"')
-      expect(rendered).not_to include('id="project_4"')
+      expect(rendered.scan('id="project_1"').size).to eq(1)
+      expect(rendered.scan('id="project_2"').size).to eq(1)
+      expect(rendered.scan('id="project_3"').size).to eq(1)
+      expect(rendered.scan('id="project_4"').size).to eq(1)
       expect(rendered).to include("project_3:grandchild")
+      expect(rendered).to include("project_4:sibling")
       expect(rendered).to include("project_2:child")
       expect(rendered).to include("project_1:root")
     end
