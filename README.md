@@ -282,3 +282,7 @@ Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the 
 `npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). Use the focused guard commands when you are narrowing maintenance failures: `npm run test:entrypoints` covers package-root exports, controller registrations, docs entrypoints, CI policy, and version-source guards; `npm run test:docs-entrypoints` covers README/docs/Public API/i18n signals without the broader JavaScript suite; `npm run test:release-docs` and `npm run test:release-package-contents` are narrow local release triage aliases for the `Release docs signals` and `Release package contents signals` docs-entrypoint groups, not replacements for the full `npm run test:docs-entrypoints`, `npm run test:entrypoints`, or CI-required suite; and `npm run test:ci-policy` covers changed-file routing, workflow detection, CI observation guidance, and lockfile drift. See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
 
 Use `npm ci` for local JavaScript setup. The committed `package-lock.json` is the source of truth for repeatable installs, and CI/Docker setup use the same lockfile-backed install path.
+
+## Support
+
+Bug reports and feature requests are welcome on [GitHub Issues](https://github.com/matsuo-haruhito/tree_view-rails/issues).

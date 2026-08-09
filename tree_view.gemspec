@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name = "tree_view"
   spec.version = TreeView::VERSION
   spec.authors = ["Haruhito Matsuo"]
-  spec.email = ["noreply@example.com"]
+  spec.email = ["matsuo-haruhito@users.noreply.github.com"]
 
   spec.summary = "Tree rendering primitives for Rails applications"
   spec.description = "Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs."
