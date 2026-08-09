@@ -19,7 +19,8 @@ RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS = {
   "toggle_icons" => -> { TreeView::RenderState::VALID_TOGGLE_ICONS_KEYS.map(&:to_s) },
   "selection" => -> { TreeView::RenderState::SelectionConfig::VALID_KEYS.map(&:to_s) },
   "lazy_loading" => -> { %w[enabled loaded_keys scope] },
-  "row_status" => -> { %w[row_disabled_builder row_readonly_builder row_disabled_reason_builder] }
+  "row_status" => -> { %w[row_disabled_builder row_readonly_builder row_disabled_reason_builder] },
+  "state_messages" => -> { TreeView::RenderStateStateMessages::VALID_STATE_MESSAGE_KEYS.map(&:to_s) }
 }.freeze
 
 RSpec.describe "Public API compatibility" do

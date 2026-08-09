@@ -253,6 +253,9 @@ grouped_option_keys:
     - row_disabled_builder
     - row_readonly_builder
     - row_disabled_reason_builder
+  state_messages:
+    - empty
+    - hidden_builder
 diagnostics:
   accepted_checks:
     - node_keys
