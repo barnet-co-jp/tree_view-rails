@@ -578,19 +578,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="tree-row is-reverse-root" aria-level="1" aria-current="page">
+                <tr class="tree-row is-reverse-root" aria-level="1" aria-current="page" data-reverse-path="invoice-aging">
                   <td class="tree-toggle-cell">
-                    <span class="tree-toggle" aria-label="Matched leaf as reverse path root">
+                    <span class="tree-toggle" aria-label="Invoice aging matched leaf as reverse path root">
                       <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
                       <span class="tree-toggle__control"><span class="tree-depth-label">leaf root</span></span>
                     </span>
                     <span class="tree-node-badge tree-node-badge--reverse">matched leaf</span>
                   </td>
                   <td>Invoice aging report</td>
-                  <td>Reverse path starting point</td>
+                  <td>First reverse path starting point</td>
                   <td><span class="mock-status mock-status--active">current</span></td>
                 </tr>
-                <tr class="tree-row is-reverse-ancestor" aria-level="2">
+                <tr class="tree-row is-reverse-ancestor" aria-level="2" data-reverse-path="invoice-aging">
                   <td class="tree-toggle-cell">
                     <span class="tree-toggle" aria-label="Finance reports ancestor">
                       <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
@@ -599,23 +599,50 @@
                     <span class="tree-node-badge tree-node-badge--context">ancestor</span>
                   </td>
                   <td>Finance reports</td>
-                  <td>Parent of the matched leaf</td>
+                  <td>Parent of the first matched leaf</td>
                   <td><span class="mock-status">context</span></td>
                 </tr>
-                <tr class="tree-row is-reverse-ancestor" aria-level="3">
+                <tr class="tree-row is-reverse-ancestor" aria-level="3" data-reverse-path="invoice-aging" data-reverse-shared-ancestor="operations">
                   <td class="tree-toggle-cell">
-                    <span class="tree-toggle" aria-label="Operations root ancestor">
+                    <span class="tree-toggle" aria-label="Operations shared root ancestor">
                       <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
                       <span class="tree-toggle__control"><span class="tree-toggle__level">root</span></span>
                     </span>
-                    <span class="tree-node-badge tree-node-badge--context">top ancestor</span>
+                    <span class="tree-node-badge tree-node-badge--context">shared ancestor</span>
                   </td>
                   <td>Operations</td>
-                  <td>Shared ancestor shown once for this reverse path</td>
-                  <td><span class="mock-status mock-status--pending">context</span></td>
+                  <td>Shared ancestor attached to the first reverse path only</td>
+                  <td><span class="mock-status mock-status--pending">shown once</span></td>
+                </tr>
+                <tr class="tree-row is-reverse-root" aria-level="1" data-reverse-path="supplier-status">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Supplier status matched leaf as reverse path root">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-depth-label">leaf root</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--reverse">matched leaf</span>
+                  </td>
+                  <td>Supplier status report</td>
+                  <td>Second reverse path starting point</td>
+                  <td><span class="mock-status">matched</span></td>
+                </tr>
+                <tr class="tree-row is-reverse-ancestor" aria-level="2" data-reverse-path="supplier-status">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Procurement reports ancestor">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">ancestor</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">ancestor</span>
+                  </td>
+                  <td>Procurement reports</td>
+                  <td>Parent of the second matched leaf</td>
+                  <td><span class="mock-status">context</span></td>
                 </tr>
               </tbody>
             </table>
+            <p class="mock-filtered-callout" data-reverse-shared-ancestor-omitted="operations">
+              Operations is not repeated under the second matched leaf: ReverseTree attaches the shared ancestor to the first encountered reverse path only.
+            </p>
           </div>
         </div>
       </div>

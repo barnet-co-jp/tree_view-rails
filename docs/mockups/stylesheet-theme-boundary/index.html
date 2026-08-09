@@ -14,9 +14,9 @@
 .theme-boundary-frame { display: grid; gap: 12px; border: 1px solid var(--frame-border); border-radius: 10px; background: var(--frame-bg); color: var(--frame-text); padding: 16px; }
 .theme-boundary-frame h3, .theme-boundary-frame p { margin: 0; }
 .theme-boundary-frame h3 { color: var(--frame-heading); }
-.theme-boundary-frame--light { --frame-bg: #ffffff; --frame-text: #334155; --frame-heading: #0f172a; --frame-border: #cbd5e1; --row-border: #d8e0ea; --row-bg: #ffffff; --row-muted: #f8fafc; --row-current: #e0f2fe; --row-selected: #ecfdf5; --row-warning: #fff7ed; --row-danger: #fef2f2; --row-drop: #f0fdf4; }
-.theme-boundary-frame--dark { --frame-bg: #111827; --frame-text: #d1d5db; --frame-heading: #f9fafb; --frame-border: #475569; --row-border: #334155; --row-bg: #1f2937; --row-muted: #111827; --row-current: #1e3a8a; --row-selected: #14532d; --row-warning: #7c2d12; --row-danger: #7f1d1d; --row-drop: #064e3b; }
-.theme-boundary-frame--contrast { --frame-bg: #fdfdfd; --frame-text: #111827; --frame-heading: #000000; --frame-border: #111827; --row-border: #111827; --row-bg: #ffffff; --row-muted: #f3f4f6; --row-current: #dbeafe; --row-selected: #fef9c3; --row-warning: #ffedd5; --row-danger: #fee2e2; --row-drop: #dcfce7; }
+.theme-boundary-frame--light { --frame-bg: #ffffff; --frame-text: #334155; --frame-heading: #0f172a; --frame-border: #cbd5e1; --row-border: #d8e0ea; --row-bg: #ffffff; --row-muted: #f8fafc; --tree-view-current-row-accent-color: #0284c7; --tree-view-selected-row-background: #ecfdf5; --tree-view-collapsed-row-background: #fff7ed; --tree-view-loading-row-background: #f8fafc; --tree-view-error-row-background: #fef2f2; --tree-view-drop-target-row-background: #f0fdf4; }
+.theme-boundary-frame--dark { --frame-bg: #111827; --frame-text: #d1d5db; --frame-heading: #f9fafb; --frame-border: #475569; --row-border: #334155; --row-bg: #1f2937; --row-muted: #111827; --tree-view-current-row-accent-color: #60a5fa; --tree-view-selected-row-background: #14532d; --tree-view-collapsed-row-background: #7c2d12; --tree-view-loading-row-background: #111827; --tree-view-loading-action-color: #d1d5db; --tree-view-error-row-background: #7f1d1d; --tree-view-drop-target-row-background: #064e3b; }
+.theme-boundary-frame--contrast { --frame-bg: #fdfdfd; --frame-text: #111827; --frame-heading: #000000; --frame-border: #111827; --row-border: #111827; --row-bg: #ffffff; --row-muted: #f3f4f6; --tree-view-current-row-accent-color: #000000; --tree-view-selected-row-background: #fef9c3; --tree-view-collapsed-row-background: #ffedd5; --tree-view-loading-row-background: #f3f4f6; --tree-view-error-row-background: #fee2e2; --tree-view-drop-target-row-background: #dcfce7; }
 .theme-boundary-table { width: 100%; border-collapse: collapse; border: 1px solid var(--row-border); background: var(--row-bg); }
 .theme-boundary-table th, .theme-boundary-table td { border-bottom: 1px solid var(--row-border); padding: 0.5rem 0.55rem; text-align: left; vertical-align: top; }
 .theme-boundary-table th { font-size: 0.78rem; text-transform: uppercase; color: var(--frame-text); background: var(--row-muted); }
@@ -24,12 +24,15 @@
 .theme-boundary-label { font-weight: 700; color: var(--frame-heading); }
 .theme-boundary-meta { color: var(--frame-text); font-size: 0.85rem; }
 .theme-boundary-token { display: inline-flex; align-items: center; min-height: 1.45rem; padding: 0.1rem 0.45rem; border: 1px solid currentColor; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
-.theme-boundary-row--current { background: var(--row-current); }
-.theme-boundary-row--selected { background: var(--row-selected); }
-.theme-boundary-row--collapsed { background: var(--row-warning); }
-.theme-boundary-row--loading { background: var(--row-muted); }
-.theme-boundary-row--error { background: var(--row-danger); }
-.theme-boundary-row--drop { background: var(--row-drop); outline: 2px solid var(--frame-heading); outline-offset: -3px; }
+/* CSS-valid subset of the packaged state cues; browser smoke checks these hooks against tree_view.scss. */
+.tree-row.is-selected, .tree-row[aria-selected="true"] { background-color: var(--tree-view-selected-row-background, rgba(13, 110, 253, 0.08)); }
+.tree-row[aria-current="page"] > td:first-child { box-shadow: inset 3px 0 0 var(--tree-view-current-row-accent-color, rgba(13, 110, 253, 0.45)); }
+.tree-row.is-collapsed, .tree-row[aria-expanded="false"] { background-color: var(--tree-view-collapsed-row-background, rgba(255, 193, 7, 0.08)); }
+.tree-row.is-loading { background-color: var(--tree-view-loading-row-background, rgba(108, 117, 125, 0.08)); }
+.tree-row.is-loading .tree-toggle__action { color: var(--tree-view-loading-action-color, #6c757d); }
+.tree-row.is-error, .tree-row.is-drop-disabled { background-color: var(--tree-view-error-row-background, rgba(220, 53, 69, 0.08)); }
+.tree-row.is-drop-target { background-color: var(--tree-view-drop-target-row-background, rgba(25, 135, 84, 0.1)); }
+.theme-boundary-frame .tree-row.is-drop-target { outline: 2px solid var(--frame-heading); outline-offset: -3px; }
 .theme-boundary-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
 .theme-boundary-note { border: 1px solid #d8e0ea; border-radius: 8px; background: #f8fafc; padding: 14px; }
 .theme-boundary-note h3, .theme-boundary-note p { margin: 0; }
@@ -48,9 +51,9 @@
     <header class="mock-header">
       <p class="mock-kicker">focused mockup</p>
       <h1>Stylesheet theme boundary</h1>
-      <p>Static reference for comparing TreeView baseline state cues on light, dark, and high-contrast-like host themes. The page keeps runtime stylesheet behavior, public hooks, and CSS custom property policy out of scope.</p>
+      <p>Static reference for comparing the packaged TreeView state selectors on light, dark, and high-contrast-like host themes. The page keeps runtime stylesheet behavior, public hook promotion, and CSS custom property policy out of scope.</p>
       <div class="theme-boundary-summary" aria-label="Review summary">
-        <div class="theme-boundary-summary__item"><strong>TreeView-owned cue</strong>Rows expose reusable current, selected, collapsed, loading, error, and drop-target cues.</div>
+        <div class="theme-boundary-summary__item"><strong>TreeView-owned cue</strong>Rows use the packaged current, selected, collapsed, loading, error, and drop-target selectors.</div>
         <div class="theme-boundary-summary__item"><strong>Host-owned theme</strong>Typography, palette, density, brand tone, and final contrast policy stay with the host app.</div>
         <div class="theme-boundary-summary__item"><strong>Inventory status</strong>This page is listed from the review gallery; record desktop and narrow readability evidence in the PR discussion.</div>
       </div>
@@ -61,48 +64,48 @@
       <div class="theme-boundary-grid" data-tree-view-sample="stylesheet-theme-boundary">
         <article class="theme-boundary-frame theme-boundary-frame--light" aria-labelledby="light-theme-heading">
           <h3 id="light-theme-heading">Light host surface</h3>
-          <p>Baseline neutral app shell with TreeView state rows left visible.</p>
-          <table class="theme-boundary-table" aria-label="Light theme state cue sample">
+          <p>Baseline neutral app shell with packaged TreeView state cues left visible.</p>
+          <table class="theme-boundary-table tree-view-table" aria-label="Light theme state cue sample">
             <thead><tr><th scope="col">Node</th><th scope="col">Cue</th></tr></thead>
             <tbody>
-              <tr class="theme-boundary-row--current"><td><span class="theme-boundary-node"><span class="theme-boundary-label">Operations</span><span class="theme-boundary-meta">current branch</span></span></td><td><span class="theme-boundary-token">current</span></td></tr>
-              <tr class="theme-boundary-row--selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
-              <tr class="theme-boundary-row--collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
-              <tr class="theme-boundary-row--loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token">loading</span></td></tr>
-              <tr class="theme-boundary-row--error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
-              <tr class="theme-boundary-row--drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
+              <tr class="tree-row" aria-current="page" data-theme-cue="current"><td><span class="theme-boundary-node"><span class="theme-boundary-label">Operations</span><span class="theme-boundary-meta">current branch</span></span></td><td><span class="theme-boundary-token">current</span></td></tr>
+              <tr class="tree-row is-selected" aria-selected="true" data-theme-cue="selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
+              <tr class="tree-row is-collapsed" aria-expanded="false" data-theme-cue="collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
+              <tr class="tree-row is-loading" aria-busy="true" data-theme-cue="loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token tree-toggle__action">loading</span></td></tr>
+              <tr class="tree-row is-error" data-theme-cue="error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
+              <tr class="tree-row is-drop-target" data-theme-cue="drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
             </tbody>
           </table>
         </article>
 
         <article class="theme-boundary-frame theme-boundary-frame--dark" aria-labelledby="dark-theme-heading">
           <h3 id="dark-theme-heading">Dark host surface</h3>
-          <p>Host app chooses dark palette; TreeView keeps state meaning as row hooks.</p>
-          <table class="theme-boundary-table" aria-label="Dark theme state cue sample">
+          <p>Host app chooses dark palette; TreeView keeps state meaning through the same packaged selectors.</p>
+          <table class="theme-boundary-table tree-view-table" aria-label="Dark theme state cue sample">
             <thead><tr><th scope="col">Node</th><th scope="col">Cue</th></tr></thead>
             <tbody>
-              <tr class="theme-boundary-row--current"><td><span class="theme-boundary-label">Operations</span></td><td><span class="theme-boundary-token">current</span></td></tr>
-              <tr class="theme-boundary-row--selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
-              <tr class="theme-boundary-row--collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
-              <tr class="theme-boundary-row--loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token">loading</span></td></tr>
-              <tr class="theme-boundary-row--error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
-              <tr class="theme-boundary-row--drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
+              <tr class="tree-row" aria-current="page" data-theme-cue="current"><td><span class="theme-boundary-label">Operations</span></td><td><span class="theme-boundary-token">current</span></td></tr>
+              <tr class="tree-row is-selected" aria-selected="true" data-theme-cue="selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
+              <tr class="tree-row is-collapsed" aria-expanded="false" data-theme-cue="collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
+              <tr class="tree-row is-loading" aria-busy="true" data-theme-cue="loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token tree-toggle__action">loading</span></td></tr>
+              <tr class="tree-row is-error" data-theme-cue="error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
+              <tr class="tree-row is-drop-target" data-theme-cue="drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
             </tbody>
           </table>
         </article>
 
         <article class="theme-boundary-frame theme-boundary-frame--contrast" aria-labelledby="contrast-theme-heading">
           <h3 id="contrast-theme-heading">High-contrast-like surface</h3>
-          <p>State labels and outline cues stay inspectable beyond color alone.</p>
-          <table class="theme-boundary-table" aria-label="High contrast theme state cue sample">
+          <p>State labels and the packaged current-row cue stay inspectable beyond color alone.</p>
+          <table class="theme-boundary-table tree-view-table" aria-label="High contrast theme state cue sample">
             <thead><tr><th scope="col">Node</th><th scope="col">Cue</th></tr></thead>
             <tbody>
-              <tr class="theme-boundary-row--current"><td><span class="theme-boundary-label">Operations</span></td><td><span class="theme-boundary-token">current</span></td></tr>
-              <tr class="theme-boundary-row--selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
-              <tr class="theme-boundary-row--collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
-              <tr class="theme-boundary-row--loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token">loading</span></td></tr>
-              <tr class="theme-boundary-row--error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
-              <tr class="theme-boundary-row--drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
+              <tr class="tree-row" aria-current="page" data-theme-cue="current"><td><span class="theme-boundary-label">Operations</span></td><td><span class="theme-boundary-token">current</span></td></tr>
+              <tr class="tree-row is-selected" aria-selected="true" data-theme-cue="selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
+              <tr class="tree-row is-collapsed" aria-expanded="false" data-theme-cue="collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
+              <tr class="tree-row is-loading" aria-busy="true" data-theme-cue="loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token tree-toggle__action">loading</span></td></tr>
+              <tr class="tree-row is-error" data-theme-cue="error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
+              <tr class="tree-row is-drop-target" data-theme-cue="drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
             </tbody>
           </table>
         </article>
@@ -112,7 +115,7 @@
     <section class="mock-section" aria-labelledby="boundary-heading">
       <h2 id="boundary-heading">Review boundaries</h2>
       <div class="theme-boundary-notes">
-        <article class="theme-boundary-note"><h3>In scope</h3><p>Compare whether reusable TreeView state cues remain visible when a host theme changes surrounding color and density.</p></article>
+        <article class="theme-boundary-note"><h3>In scope</h3><p>Compare whether packaged TreeView state selectors remain visible when a host theme changes surrounding color and density.</p></article>
         <article class="theme-boundary-note"><h3>Out of scope</h3><p>No dark-mode implementation, CSS custom property API, public hook promotion, screenshot baseline, route, CRUD, or authorization policy is introduced here.</p></article>
         <article class="theme-boundary-note"><h3>Review handoff</h3><p>Use the gallery to find this page, then record desktop and narrow viewport readability, overlap, and clipping results in the PR discussion.</p></article>
       </div>
