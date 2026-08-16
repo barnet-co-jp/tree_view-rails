@@ -57,22 +57,21 @@ bundle install
 
 ## CSSの読み込み
 
-host app 側の stylesheet で TreeView 用CSSを読み込みます。
+TreeView は `app/assets/stylesheets/tree_view.css` を plain CSS として同梱します。Rails 8 + Propshaft では Sass 変換を前提にせず、layout から logical asset を直接読み込む方法を推奨します。
 
-```scss
-@import "tree_view";
+```erb
+<%= stylesheet_link_tag "tree_view", "data-turbo-track": "reload" %>
 ```
 
-例:
+Sass / cssbundling を使う host app 向けには、互換用の `tree_view.scss` も同じ内容で同梱します。その場合は host app 側の stylesheet から従来どおり import できます。
 
 ```scss
-/* app/assets/stylesheets/application.scss */
 @import "tree_view";
 ```
 
 同梱 stylesheet は、TreeView の再利用可能な構造と軽量な state cue をすぐ確認するための quick-start baseline です。selected、current、collapsed、loading、error、drop target など代表的な row state の見た目は含みますが、最終的な theme、density、brand color、product wording は host app 側の責務です。
 
-host app 側の見た目に合わせる場合も import は残し、TreeView import の後に host app の stylesheet で documented な row / toggle / table selector を上書きしてください。同梱 stylesheet の小さな documented CSS custom property surface は [State cue のスタイリング](styling-state-cues.md) で確認できます。これらの token は state cue color の host-app override guidance であり、complete theme system や manifest-backed Ruby / JavaScript API ではありません。
+host app 側の見た目に合わせる場合は、TreeView stylesheet の後に documented な row / toggle / table selector を上書きしてください。同梱 stylesheet の小さな documented CSS custom property surface は [State cue のスタイリング](styling-state-cues.md) で確認できます。
 
 ## JavaScript / importmap
 
@@ -82,17 +81,6 @@ host app 側の見た目に合わせる場合も import は残し、TreeView imp
 pin "tree_view", to: "tree_view/index.js"
 ```
 
-例:
-
-```ruby
-# config/importmap.rb
-pin "tree_view", to: "tree_view/index.js"
-```
-
-現在のTreeViewは、static表示だけであれば専用JavaScriptなしでも利用できます。Turbo Streamで開閉を行う場合も、host app側のTurbo構成とpath builderが中心になります。
-
-JavaScript controllers は、state tracking、keyboard navigation、selection cascade、transfer events、remote loading stateなどのbrowser-side integration hookで使います。
-
 Stimulus application をすでに起動している importmap app では、host app の JavaScript entrypoint から bundled controllers を登録します。
 
 ```js
@@ -101,6 +89,40 @@ import { registerTreeViewControllers } from "tree_view"
 
 registerTreeViewControllers(application)
 ```
+
+現在のTreeViewは、static表示だけであれば専用JavaScriptなしでも利用できます。JavaScript controllers は、state tracking、keyboard navigation、selection cascade、transfer events、remote loading stateなどのbrowser-side integration hookで使います。
+
+## JavaScript / Vite + TypeScript
+
+v1.0.1 では `app/javascript/tree_view/package.json` を gem に同梱し、package root から `index.js` と `index.d.ts` を同じ入口として解決できるようにします。Vite では gem の `app/javascript/tree_view` **directory** を alias にしてください。`index.js` の物理パスへ直接 alias すると package metadata と型宣言の解決を迂回するため推奨しません。
+
+```ts
+// vite.config.ts
+import { execFileSync } from "node:child_process"
+import path from "node:path"
+import { defineConfig } from "vite"
+
+const treeViewRoot = path.join(
+  execFileSync("bundle", ["show", "tree_view"], { encoding: "utf8" }).trim(),
+  "app/javascript/tree_view"
+)
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      tree_view: treeViewRoot
+    }
+  }
+})
+```
+
+application code は importmap と同じ public import を使います。
+
+```ts
+import { registerTreeViewControllers } from "tree_view"
+```
+
+`package.json` の `types` / `exports` は同梱の `index.d.ts` を指します。Vite の build/transpile はこの package root を使えます。Vite と別に `tsc` を standalone type checker として実行する host app では、TypeScript 自身も同じ directory を解決できるよう `compilerOptions.paths` など host app 側の module-resolution 設定を合わせてください。TreeView API を手書きの `declare module "tree_view"` で再定義すると、gem が同梱する型 surface を隠すため避けてください。
 
 JavaScript-powered な TreeView 機能を使う場合は、quick-start として `registerTreeViewControllers(application)` を使ってください。controller を部分登録したい場合や custom boot order が必要な場合は、public JavaScript surface の `TreeViewControllerIdentifiers` を使えます。詳しくは [Public API](public-api.md#javascript-surface) を参照してください。
 
@@ -124,9 +146,13 @@ generator 名、任意の owner 引数、生成先 path は [Public Setup Surfac
 
 TreeView gem package には、Rails host app で必要になる以下を含めます。
 
+- `app/assets/stylesheets/tree_view.css`
 - `app/assets/stylesheets/tree_view.scss`
 - `app/helpers/tree_view_helper.rb`
 - `app/helpers/tree_view_helper/**/*`
+- `app/javascript/tree_view/index.js`
+- `app/javascript/tree_view/index.d.ts`
+- `app/javascript/tree_view/package.json`
 - `app/javascript/tree_view/**/*`
 - `app/views/tree_view/**/*`
 - `config/importmap.tree_view.rb`
@@ -139,23 +165,25 @@ TreeView gem package には、Rails host app で必要になる以下を含め�
 
 `config/public_api_manifest.yml` は、documented public surface の machine-readable audit artifact として package に含めます。Rails host app が TreeView を表示するために runtime で読み込む必要はありません。
 
-導入手順を変更した場合は、`tree_view.gemspec` の packaged file list と `script/check_gem_package_contents.rb` の required paths とこの一覧が食い違わないようにします。
-
-Package verification は日英の導入手順も package-facing setup signal として扱います。`script/check_gem_package_contents.rb` はこのファイル内の代表 packaged path、CSS import 例、`pin "tree_view", to: "tree_view/index.js"` を確認し、host app が実際に受け取るファイルと shipped setup guide の drift を release / package evidence で検出します。この guard は setup surface の証跡に閉じ、packaged file glob や runtime install behavior の変更根拠としてこのページだけを使わないでください。
+導入手順を変更した場合は、`tree_view.gemspec` の packaged file list と package verification とこの一覧が食い違わないようにします。
 
 ## Propshaft
 
-Rails 8 + Propshaft でも利用できます。
+Rails 8 + Propshaft では、同梱の plain CSS asset を logical asset として直接読み込む構成を推奨します。
 
-最低限、host app 側から CSS / importmap を明示的に読み込む構成を推奨します。
-
-```scss
-@import "tree_view";
+```erb
+<%= stylesheet_link_tag "tree_view", "data-turbo-track": "reload" %>
 ```
+
+Propshaft 自体に Sass compile を期待しないでください。host app が Sass / cssbundling を明示的に使っている場合だけ、互換用 `tree_view.scss` をその pipeline から import します。
+
+JavaScript を importmap で使う場合は従来どおり次を使えます。
 
 ```ruby
 pin "tree_view", to: "tree_view/index.js"
 ```
+
+Vite を使う場合は前節の package-root alias を使います。
 
 ## Sprockets
 
@@ -164,17 +192,17 @@ Engine側にはSprockets互換のasset hookを残しています。
 - `app/javascript` を asset paths に追加
 - `tree_view.css` / `tree_view/index.js` を precompile 対象に追加
 
-ただし、導入の中心はhost app側でCSS / importmapを明示的に読み込む運用です。
+Sass pipeline を利用する既存 host app 向けに `tree_view.scss` も残します。
 
 ## Asset / importmap audit checklist
 
 asset または JavaScript の配置を変更した場合は、release 前に以下を確認します。
 
-- `tree_view.gemspec` がCSS、JavaScript、importmapファイルを含んでいる
-- README の導入例がこのファイルと一致している
+- `tree_view.gemspec` が plain CSS、SCSS compatibility source、JavaScript、type declarations、package metadata、importmapファイルを含んでいる
+- README の導入例がこのファイルと矛盾しない
 - `docs/ja/release.md` の package checklist が更新されている
 - static表示がJavaScriptなしでも利用できる、という前提を壊していない
-- JavaScriptが必要な機能は、必要なimportmap pinやdata属性をdocsに書いている
+- JavaScriptが必要な機能は、必要なimportmap pinまたはVite aliasとdata属性をdocsに書いている
 
 ## 開発環境
 
@@ -189,7 +217,7 @@ npm ci
 npm run test:js
 ```
 
-ローカル手順も CI と同じく `npm ci` を使います。commit 済みの `package-lock.json` を repeatable install の source として使うためです。`npm run test:js` は local の full JavaScript suite をまとめて実行します。Pull Request CI では、CI section に書いた changed-files policy により、docs-entrypoint、browser-smoke、JS core のいずれか軽い経路を選ぶことがあります。
+ローカル手順も CI と同じく `npm ci` を使います。commit 済みの `package-lock.json` を repeatable install の source として使うためです。
 
 Rails互換性確認用のGemfileは `gemfiles/` 配下にあります。
 
@@ -216,11 +244,8 @@ GitHub Actions では、Pull Requestで以下を実行します。
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
-- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`。docs-only PR では check name を維持しつつ重い Rails command を skip します
-- changed-files policy で選ばれる JavaScript checks:
-  - README、`docs/**`、`CHANGELOG.md` は `npm run test:docs-entrypoints` を実行します
-  - `docs/mockups/**` と `test/browser/**` は Playwright を install し、`npm run test:browser` を実行します
-  - docs 以外を含む PR は `npm run test:js:core` を実行します
-- package-sensitive path の変更では gem package verification を実行します
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
+- changed-files policy で選ばれる JavaScript checks
+- package-sensitive path の変更では gem package verification
 
 `main` へのpushでは、Ruby version matrix、full Rails version matrix、JavaScript tests、gem package verificationを実行します。
