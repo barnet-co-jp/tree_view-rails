@@ -75,7 +75,7 @@ relation に `ORDER BY` を付けても、TreeView は構築後に sibling group
 
 match-only、ancestor-retaining、descendant-retaining の代表的な出力を静的に見比べたい場合は [filtered-tree-modes.html](../mockups/filtered-tree-modes.html) を参照してください。
 
-この mockup は上の mode table を視覚的に補うためのものです。`:with_ancestors_and_descendants` はこのページで説明している combined case として扱い、search query、ranking、highlighting は引き続き host app 側の責任です。
+この mockup は上の mode table を視覚的に補うためのものです。`:with_ancestors_and_descendants` はこのページで説明している combined case として扱い、search query、ranking、highlighting は引き続き host app 側の責務です。
 
 ## PathTreeとの違い
 
