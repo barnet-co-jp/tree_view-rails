@@ -29,6 +29,7 @@ module TreeView
       :path_resolver,
       :label_resolver,
       :id_resolver,
+      :folder_key_resolver,
       :sorter,
       :sort,
       :separator,
@@ -41,6 +42,7 @@ module TreeView
       path_resolver:,
       label_resolver: nil,
       id_resolver: nil,
+      folder_key_resolver: nil,
       sorter: nil,
       sort: nil,
       separator: "/",
@@ -52,6 +54,7 @@ module TreeView
       @path_resolver = path_resolver
       @label_resolver = label_resolver
       @id_resolver = id_resolver
+      @folder_key_resolver = folder_key_resolver
       @sorter = sorter
       @sort = normalize_sort(sort)
       @separator = separator.to_s
@@ -63,6 +66,7 @@ module TreeView
       validate_callable!(path_resolver, :path_resolver)
       validate_optional_callable!(label_resolver, :label_resolver)
       validate_optional_callable!(id_resolver, :id_resolver)
+      validate_optional_callable!(folder_key_resolver, :folder_key_resolver)
       validate_optional_callable!(sorter, :sorter)
     end
 
@@ -164,6 +168,8 @@ module TreeView
     end
 
     def folder_key_for(folder_path)
+      return folder_key_resolver.call(folder_path.dup).to_s if folder_key_resolver
+
       TreeView.node_key(folder_key_prefix, folder_path.join(separator))
     end
 
