@@ -3,12 +3,17 @@
 require "spec_helper"
 
 RSpec.describe "tree_view stylesheet source" do
-  let(:stylesheet_source) { File.read(File.expand_path("../../app/assets/stylesheets/tree_view.scss", __dir__)) }
+  let(:stylesheet_source) { File.read(File.expand_path("../../app/assets/stylesheets/tree_view.css", __dir__)) }
+  let(:scss_source) { File.read(File.expand_path("../../app/assets/stylesheets/tree_view.scss", __dir__)) }
   let(:english_styling_docs) { File.read(File.expand_path("../../docs/en/styling-state-cues.md", __dir__)) }
   let(:japanese_styling_docs) { File.read(File.expand_path("../../docs/ja/styling-state-cues.md", __dir__)) }
 
   def tree_view_tokens(source)
     source.scan(/--tree-view-[a-z0-9-]+/).uniq.sort
+  end
+
+  it "keeps the plain CSS asset and Sass-compatible source identical" do
+    expect(stylesheet_source).to eq(scss_source)
   end
 
   it "keeps documented styling token lists aligned with stylesheet token usage" do

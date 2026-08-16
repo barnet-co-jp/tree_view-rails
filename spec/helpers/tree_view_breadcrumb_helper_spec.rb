@@ -235,6 +235,6 @@ RSpec.describe TreeViewBreadcrumbHelper do
 
     expect do
       helper.tree_view_breadcrumb(tree, root, label_builder: ->(item) { item.name })
-    end.to raise_error(ArgumentError, /only supported in records mode/)
+    end.to raise_error(TreeView::ConfigurationError, /parent path helpers require records mode or an adapter with parent_resolver/)
   end
 end

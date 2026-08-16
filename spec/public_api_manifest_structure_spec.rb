@@ -18,6 +18,7 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   visible_rows_row_metadata
   node_presenter_builder_names
   graph_adapter_initializer
+  path_tree_builder_initializer
   ui_config_builder_option_keys
   path_tree_builder_node_shapes
   helper_methods

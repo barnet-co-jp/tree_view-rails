@@ -79,8 +79,12 @@ module TreeView
     end
 
     def parent_for(record)
-      ensure_records_path_helpers!
+      if adapter_mode?
+        ensure_parent_path_helpers!
+        return adapter.parent_for(record)
+      end
 
+      ensure_parent_path_helpers!
       parent_id = record.public_send(parent_id_method)
       return nil if parent_id.nil?
 
@@ -88,7 +92,7 @@ module TreeView
     end
 
     def ancestors_for(record)
-      ensure_records_path_helpers!
+      ensure_parent_path_helpers!
 
       ancestors = []
       visiting = {}
@@ -96,7 +100,7 @@ module TreeView
 
       loop do
         current_key = node_key_for(current)
-        raise TreeView::CycleDetectedError, "cycle detected in parent path for node #{current_key.inspect}; check parent_id values and remove the self-referential loop" if visiting[current_key]
+        raise TreeView::CycleDetectedError, "cycle detected in parent path for node #{current_key.inspect}; check parent relationships and remove the self-referential loop" if visiting[current_key]
 
         visiting[current_key] = true
         parent = parent_for(current)
@@ -118,7 +122,7 @@ module TreeView
     end
 
     def expanded_keys_for(item_or_items)
-      ensure_records_path_helpers!
+      ensure_parent_path_helpers!
 
       items = item_or_items.is_a?(Array) ? item_or_items : [item_or_items]
       items.flat_map do |item|
@@ -242,7 +246,14 @@ module TreeView
     def ensure_records_path_helpers!
       return if records_mode?
 
-      raise TreeView::ConfigurationError, "parent path helpers are only supported in records mode; use records with parent_id_method or avoid path helpers for resolver/adapter trees"
+      raise TreeView::ConfigurationError, "records path helpers are only supported in records mode; use records with parent_id_method"
+    end
+
+    def ensure_parent_path_helpers!
+      return if records_mode?
+      return if adapter_mode? && adapter.parent_resolver?
+
+      raise TreeView::ConfigurationError, "parent path helpers require records mode or an adapter with parent_resolver"
     end
 
     def each_root_candidate

@@ -30,7 +30,7 @@ The builder creates two public node shapes:
 | `TreeView::PathTreeBuilder::FolderNode` | `key`, `parent_key`, `label`, `path`, `node_type`, `folder_node?`, `record_node?` | Generated intermediate folders. |
 | `TreeView::PathTreeBuilder::RecordNode` | `key`, `parent_key`, `label`, `path`, `record`, `node_type`, `folder_node?`, `record_node?` | Leaf nodes wrapping host-app records. |
 
-These field and predicate sets are tracked in the public API manifest as the node shape contract. The manifest fixes the readable shape of generated nodes, not the folder key generation strategy, sort algorithm, file-manager behavior, or host-app row action design.
+These field and predicate sets are tracked in the public API manifest as the node shape contract. The initializer keyword surface is also tracked under `path_tree_builder_initializer`, including `folder_key_resolver:`. The manifest fixes the public constructor and readable generated-node shape; it does not freeze the folder key generation algorithm, sort algorithm, file-manager behavior, or host-app row action design.
 
 `RecordNode#record` keeps the original object so the row partial can render application-specific columns, links, status, or actions.
 
@@ -91,6 +91,18 @@ Use `id_resolver` when records need stable or typed keys.
 id_resolver: ->(document) { TreeView.node_key(:document, document.id) }
 ```
 
+Use `folder_key_resolver:` when persisted state or another existing host contract requires a custom stable folder-key shape. The resolver receives the path segments from the root through the current folder.
+
+```ruby
+folder_key_resolver: ->(segments) {
+  TreeView.node_key("project_#{project.id}_folder", segments.join("/"))
+}
+```
+
+This lets TreeView own generic folder generation while the host app preserves project- or tenant-namespaced persisted keys. Authorization and the business meaning of the namespace remain host-app responsibilities.
+
+A custom `folder_key_resolver:` must return a non-empty key. Returning the same key again for the same logical folder path is normal deduplication, but if two different folder paths resolve to the same key, `PathTreeBuilder` raises `TreeView::DuplicateNodeKeyError` rather than silently merging the folders. This makes persisted-key migrations fail early when a namespace or hash strategy is not actually unique.
+
 Record labels are resolved in this order:
 
 1. `label_resolver.call(record)` when provided
@@ -103,6 +115,12 @@ Record labels are resolved in this order:
 Pass `sort: { folders_first: true }` to keep generated folders before records at each level.
 
 For custom ordering, pass `sorter:`. It receives the same shape as `TreeView::Tree` sorters: `->(items, tree) { ... }`.
+
+A regular `TreeView::Tree` does not promise to preserve input-array order or ActiveRecord `order` as rendered sibling order. If ordering is part of the screen contract, pass an explicit `sorter:`.
+
+## Table headers
+
+`tree_view_rows` renders one TreeView-owned toggle cell before the host app's `row_partial`. Selection mode can add a TreeView-owned selection cell as well. If the host app renders a `<thead>`, account for those columns in the header count or `colspan` values.
 
 ## Responsibility boundary
 

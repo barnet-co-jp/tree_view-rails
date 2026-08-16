@@ -130,21 +130,35 @@ Then run `bundle install` as usual.
 bundle install
 ```
 
-Import the CSS:
+Rails 8 + Propshaft apps should load the packaged plain CSS directly by logical asset name:
+
+```erb
+<%= stylesheet_link_tag "tree_view", "data-turbo-track": "reload" %>
+```
+
+Apps that explicitly use Sass or cssbundling can keep the compatible Sass import:
 
 ```scss
 @import "tree_view";
 ```
 
-Add the importmap pin when needed:
+For importmap apps, add the package-root pin when TreeView's JavaScript controllers are needed:
 
 ```ruby
 pin "tree_view", to: "tree_view/index.js"
 ```
 
-Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using the package-root exports from `tree_view/index.js`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, `TreeViewControllerEntries`, `TreeViewIntegrationHooks`, and documented data hook objects like `TreeViewRemoteStateDataHooks`, `TreeViewToolbarDataHooks`, `TreeViewTransferDataAttributes`, `TreeViewSelectionCheckboxHooks`, and `TreeViewEmptyStateHooks`. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface), the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md), and [Immutable JavaScript package-root exports](docs/en/public-api-immutable-exports.md) / [日本語](docs/ja/public-api-immutable-exports.md) for the immutable reference-constant boundary.
+For Vite + TypeScript apps, alias `tree_view` to the gem's `app/javascript/tree_view` **directory**, not directly to `index.js`. The package-local `package.json` then resolves the bundled JavaScript and TypeScript declaration entrypoints together. Application code uses the package root:
 
-See [Installation](docs/en/installation.md) for details.
+```ts
+import { registerTreeViewControllers } from "tree_view"
+```
+
+If the host app also runs standalone `tsc`, configure TypeScript module resolution to the same directory. Do not replace TreeView's bundled declarations with a handwritten `declare module "tree_view"`.
+
+Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using package-root exports from `tree_view`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, `TreeViewControllerEntries`, `TreeViewIntegrationHooks`, and documented data hook objects like `TreeViewRemoteStateDataHooks`, `TreeViewToolbarDataHooks`, `TreeViewTransferDataAttributes`, `TreeViewSelectionCheckboxHooks`, and `TreeViewEmptyStateHooks`. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface), the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md), and [Immutable JavaScript package-root exports](docs/en/public-api-immutable-exports.md) / [日本語](docs/ja/public-api-immutable-exports.md) for the immutable reference-constant boundary.
+
+See [Installation](docs/en/installation.md) for the complete Propshaft, Sprockets, importmap, Vite, and TypeScript setup.
 
 日本語の導入手順は [docs/ja/installation.md](docs/ja/installation.md) を参照してください。
 

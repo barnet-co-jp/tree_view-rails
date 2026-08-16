@@ -145,6 +145,7 @@ function assertTopLevelKeys(manifest) {
     "visible_rows_row_metadata",
     "node_presenter_builder_names",
     "graph_adapter_initializer",
+    "path_tree_builder_initializer",
     "ui_config_builder_option_keys",
     "path_tree_builder_node_shapes",
     "helper_methods",
@@ -258,6 +259,7 @@ assertUniqueStringList(manifest.filtered_tree_modes, "filtered_tree_modes")
 assertObjectWithLists(manifest.visible_rows_row_metadata, "visible_rows_row_metadata", ["fields", "predicates"])
 assertUniqueStringList(manifest.node_presenter_builder_names, "node_presenter_builder_names")
 assertObjectWithLists(manifest.graph_adapter_initializer, "graph_adapter_initializer", ["required_keywords", "optional_keywords"])
+assertObjectWithLists(manifest.path_tree_builder_initializer, "path_tree_builder_initializer", ["required_keywords", "optional_keywords"])
 assertObjectWithLists(manifest.ui_config_builder_option_keys, "ui_config_builder_option_keys", requiredUiConfigBuilderOptionKeys)
 assertPathTreeBuilderNodeShapes(manifest.path_tree_builder_node_shapes, "path_tree_builder_node_shapes", requiredPathTreeBuilderNodeShapeKeys)
 assertObjectWithLists(manifest.helper_option_keys, "helper_option_keys", requiredHelperOptionKeys)

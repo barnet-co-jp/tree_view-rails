@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "json"
 require "spec_helper"
 
 RSpec.describe "packaged gem files" do
@@ -29,14 +30,30 @@ RSpec.describe "packaged gem files" do
       "app/views/tree_view/_tree_toggle_content_static.html.erb",
       "app/views/tree_view/_tree_toggle_content_turbo.html.erb",
       "app/views/tree_view/_tree_selection_cell.html.erb",
+      "app/assets/stylesheets/tree_view.css",
       "app/assets/stylesheets/tree_view.scss",
       "app/javascript/tree_view/index.js",
+      "app/javascript/tree_view/index.d.ts",
+      "app/javascript/tree_view/package.json",
       "config/importmap.tree_view.rb"
     )
   end
 
   it "includes JavaScript controllers referenced by the packaged entrypoint" do
     expect(files).to include(*entrypoint_controller_files)
+  end
+
+  it "publishes a package-local JavaScript entrypoint for Vite and TypeScript resolution" do
+    package_metadata = JSON.parse(File.read("app/javascript/tree_view/package.json"))
+
+    expect(package_metadata).to include(
+      "type" => "module",
+      "main" => "./index.js",
+      "module" => "./index.js",
+      "types" => "./index.d.ts"
+    )
+    expect(package_metadata.dig("exports", ".", "types")).to eq("./index.d.ts")
+    expect(package_metadata.dig("exports", ".", "import")).to eq("./index.js")
   end
 
   it "includes user-facing documentation and metadata" do
