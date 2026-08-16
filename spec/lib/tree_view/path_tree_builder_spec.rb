@@ -48,6 +48,37 @@ RSpec.describe TreeView::PathTreeBuilder do
     expect(record.parent_key).to eq("project-42:guides/setup")
   end
 
+  it "rejects custom folder keys that collapse different folder paths" do
+    documents = [
+      PathTreeBuilderDocument.new(id: 1, source_relative_path: "guides/install.md", title: "Install"),
+      PathTreeBuilderDocument.new(id: 2, source_relative_path: "reference/api.md", title: "API")
+    ]
+    builder = described_class.new(
+      records: documents,
+      path_resolver: ->(record) { record.source_relative_path },
+      folder_key_resolver: ->(_segments) { "project-42:folder" }
+    )
+
+    expect { builder.nodes }.to raise_error(
+      TreeView::DuplicateNodeKeyError,
+      /duplicate key.*different folder paths.*guides.*reference/
+    )
+  end
+
+  it "rejects empty custom folder keys" do
+    document = PathTreeBuilderDocument.new(id: 1, source_relative_path: "guides/install.md", title: "Install")
+    builder = described_class.new(
+      records: [document],
+      path_resolver: ->(record) { record.source_relative_path },
+      folder_key_resolver: ->(_segments) { "" }
+    )
+
+    expect { builder.nodes }.to raise_error(
+      TreeView::ConfigurationError,
+      /folder_key_resolver must return a non-empty key/
+    )
+  end
+
   it "exposes public predicates for generated folder and record nodes" do
     documents = [
       PathTreeBuilderDocument.new(id: 1, source_relative_path: "guides/setup/install.md", title: "Install")

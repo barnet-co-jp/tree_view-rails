@@ -5,9 +5,17 @@ require "yaml"
 
 PATH_TREE_BUILDER_PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 
-RSpec.describe "PathTreeBuilder public node shape contract" do
+RSpec.describe "PathTreeBuilder public contract" do
+  def manifest
+    @manifest ||= YAML.safe_load_file(PATH_TREE_BUILDER_PUBLIC_API_MANIFEST_PATH)
+  end
+
   def manifest_node_shapes
-    @manifest_node_shapes ||= YAML.safe_load_file(PATH_TREE_BUILDER_PUBLIC_API_MANIFEST_PATH).fetch("path_tree_builder_node_shapes")
+    manifest.fetch("path_tree_builder_node_shapes")
+  end
+
+  def manifest_initializer
+    manifest.fetch("path_tree_builder_initializer")
   end
 
   def node_shape_constant(shape)
@@ -19,6 +27,15 @@ RSpec.describe "PathTreeBuilder public node shape contract" do
     else
       raise "Unknown PathTreeBuilder node shape constant: #{shape.fetch("constant")}"
     end
+  end
+
+  it "keeps manifest initializer keywords aligned with the runtime signature" do
+    parameters = TreeView::PathTreeBuilder.instance_method(:initialize).parameters
+    required_keywords = parameters.filter_map { |kind, name| name.to_s if kind == :keyreq }
+    optional_keywords = parameters.filter_map { |kind, name| name.to_s if kind == :key }
+
+    expect(manifest_initializer.fetch("required_keywords")).to eq(required_keywords)
+    expect(manifest_initializer.fetch("optional_keywords")).to eq(optional_keywords)
   end
 
   it "keeps manifest node fields aligned with FolderNode and RecordNode members" do

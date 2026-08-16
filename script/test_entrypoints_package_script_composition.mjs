@@ -7,6 +7,7 @@ const testJsCommand = packageJson.scripts?.["test:js"]
 
 const requiredCommands = [
   "node script/test_entrypoints.mjs",
+  "node script/test_package_root_resolution.mjs",
   "node script/test_controller_entries_contract.mjs",
   "node script/test_declaration_literal_shapes.mjs",
   "node script/test_immutable_package_root_export_signals.mjs",

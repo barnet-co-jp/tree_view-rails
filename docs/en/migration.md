@@ -14,6 +14,12 @@ It complements [Public API](public-api.md), [JavaScript event contract](js-event
 
 Even before `1.0.0`, breaking changes should be deliberate and documented with migration notes in `CHANGELOG.md` and related docs.
 
+### Scoped v1.0.1 integration-repair exception
+
+`v1.0.1` is intentionally treated as a patch-level integration repair even though it adds the optional `GraphAdapter#parent_resolver` and `PathTreeBuilder#folder_key_resolver` keywords. These additions complete downstream integration paths discovered immediately after `v1.0.0`: existing calls keep the same defaults and behavior, and adopters opt into the new resolvers only when they need parent-path traversal or stable host-defined folder keys.
+
+This is a scoped release decision, not a general relaxation of the versioning policy. Unrelated backward-compatible public API or option additions after this integration-repair release should use the normal minor-version rule.
+
 ## What should stay stable in `0.1.x`
 
 Within the `0.1.x` line, host apps should expect these documented integration points to remain stable unless a change is explicitly called out:

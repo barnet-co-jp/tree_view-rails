@@ -118,12 +118,20 @@ module TreeView
 
         folder_segments.each_with_index do |segment, index|
           folder_path = folder_segments[0..index]
+          folder_path_value = folder_path.join(separator)
           key = folder_key_for(folder_path)
+          existing_folder = folder_nodes_by_key[key]
+
+          if existing_folder && existing_folder.path != folder_path_value
+            raise TreeView::DuplicateNodeKeyError,
+              "folder_key_resolver returned duplicate key #{key.inspect} for different folder paths: #{existing_folder.path.inspect} and #{folder_path_value.inspect}; return a unique stable key for each folder path"
+          end
+
           folder_nodes_by_key[key] ||= FolderNode.new(
             key: key,
             parent_key: parent_key,
             label: segment,
-            path: folder_path.join(separator),
+            path: folder_path_value,
             node_type: folder_node_type
           )
           path_nodes << folder_nodes_by_key[key]
@@ -168,9 +176,15 @@ module TreeView
     end
 
     def folder_key_for(folder_path)
-      return folder_key_resolver.call(folder_path.dup).to_s if folder_key_resolver
+      return TreeView.node_key(folder_key_prefix, folder_path.join(separator)) unless folder_key_resolver
 
-      TreeView.node_key(folder_key_prefix, folder_path.join(separator))
+      key = folder_key_resolver.call(folder_path.dup).to_s
+      if key.empty?
+        raise TreeView::ConfigurationError,
+          "folder_key_resolver must return a non-empty key for every generated folder path"
+      end
+
+      key
     end
 
     def effective_sorter

@@ -40,7 +40,7 @@
     "test:release-package-contents": "npm run test:docs-entrypoints -- --only \"Release package contents signals\"",
     "test:entrypoints-composition": "node script/test_entrypoints_package_script_composition.mjs",
     "test:immutable-package-root-export-signals": "node script/test_immutable_package_root_export_signals.mjs",
-    "test:entrypoints": "node script/test_entrypoints.mjs && node script/test_controller_entries_contract.mjs && node script/test_declaration_literal_shapes.mjs && node script/test_immutable_package_root_export_signals.mjs && node script/test_render_state_callback_builder_docs_signals.mjs && npm run test:public-api-manifest-structure && npm run test:css-custom-property-manifest && npm run test:toggle-icons-docs && npm run test:docs-entrypoints && npm run test:ci-policy && npm run test:node-version-sources && npm run test:ruby-version-sources",
+    "test:entrypoints": "node script/test_entrypoints.mjs && node script/test_package_root_resolution.mjs && node script/test_controller_entries_contract.mjs && node script/test_declaration_literal_shapes.mjs && node script/test_immutable_package_root_export_signals.mjs && node script/test_render_state_callback_builder_docs_signals.mjs && npm run test:public-api-manifest-structure && npm run test:css-custom-property-manifest && npm run test:toggle-icons-docs && npm run test:docs-entrypoints && npm run test:ci-policy && npm run test:node-version-sources && npm run test:ruby-version-sources",
     "test:js:core": "npm run test:entrypoints && npm test",
     "test:js": "npm run test:js:core && npm run test:browser"
   },

@@ -14,6 +14,12 @@
 
 `1.0.0` 未満でも、breaking change は意図的に扱い、`CHANGELOG.md` と関連docsにmigration noteを書きます。
 
+### v1.0.1に限定したintegration repairの扱い
+
+`v1.0.1` は、optionalな `GraphAdapter#parent_resolver` と `PathTreeBuilder#folder_key_resolver` を追加しますが、例外的にpatch-levelのintegration repairとして扱います。これらは `v1.0.0` 直後のdownstream導入で判明した統合不足を補うためのもので、既存callのdefaultや既存挙動は変えず、parent path traversalやhost定義のstable folder keyが必要な利用側だけがopt-inします。
+
+これは `v1.0.1` に限定したrelease判断であり、versioning policy全体を緩めるものではありません。このintegration repairと無関係な後方互換public API / option追加は、以後通常どおりminor versionで扱います。
+
 ## `0.1.x` で安定しているとみなすもの
 
 `0.1.x` 系では、少なくとも次の documented integration point は、明示的な案内なしに壊さない前提で扱います。

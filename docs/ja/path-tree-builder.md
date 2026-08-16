@@ -30,7 +30,7 @@ builder は以下の2種類の公開node形状を作ります。
 | `TreeView::PathTreeBuilder::FolderNode` | `key`, `parent_key`, `label`, `path`, `node_type`, `folder_node?`, `record_node?` | 生成された中間フォルダ。 |
 | `TreeView::PathTreeBuilder::RecordNode` | `key`, `parent_key`, `label`, `path`, `record`, `node_type`, `folder_node?`, `record_node?` | host app recordを包むleaf node。 |
 
-これらの field / predicate set は、node shape contract として public API manifest でも追跡されます。manifest が固定するのは生成 node の読み取り可能な形状であり、folder key generation strategy、sort algorithm、file-manager behavior、host app の row action design までは固定しません。
+これらの field / predicate set は、node shape contract として public API manifest でも追跡されます。initializer の keyword surface も `path_tree_builder_initializer` で追跡し、`folder_key_resolver:` も公開contractに含めます。manifest が固定するのは公開constructorと生成nodeの読み取り可能な形状であり、folder key generation algorithm、sort algorithm、file-manager behavior、host app の row action design までは固定しません。
 
 `RecordNode#record` には元のobjectが残るため、row partial 側で application-specific な列、link、status、action を描画できます。
 
@@ -100,6 +100,8 @@ folder_key_resolver: ->(segments) {
 ```
 
 これによりfolder生成自体はTreeViewに寄せつつ、project/tenant namespaceを含むhost app固有のstable key contractを維持できます。認可やnamespaceの業務的意味はhost app側の責務です。
+
+custom `folder_key_resolver:` は空でないkeyを返す必要があります。同じ論理folder pathに対して同じkeyが再登場するのは通常のdedupeですが、異なるfolder pathが同じkeyへ解決された場合は、黙ってfolderを統合せず `TreeView::DuplicateNodeKeyError` をraiseします。これにより、namespaceやhash戦略が実際には一意でない場合、persisted key移行時に早期に検出できます。
 
 record label は以下の順で解決されます。
 

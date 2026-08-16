@@ -86,6 +86,21 @@ graph_adapter_initializer:
   optional_keywords:
     - node_key_resolver
     - parent_resolver
+path_tree_builder_initializer:
+  required_keywords:
+    - records
+    - path_resolver
+  optional_keywords:
+    - label_resolver
+    - id_resolver
+    - folder_key_resolver
+    - sorter
+    - sort
+    - separator
+    - folder_key_prefix
+    - record_key_prefix
+    - folder_node_type
+    - record_node_type
 ui_config_builder_option_keys:
   build:
     - show_descendants_path_builder

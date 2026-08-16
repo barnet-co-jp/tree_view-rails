@@ -29,9 +29,11 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
   ],
   "Rails views and assets" => %w[
     app/views/tree_view/_tree_row.html.erb
+    app/assets/stylesheets/tree_view.css
     app/assets/stylesheets/tree_view.scss
   ],
   "JavaScript entrypoints" => %w[
+    app/javascript/tree_view/package.json
     app/javascript/tree_view/index.js
     app/javascript/tree_view/index.d.ts
     app/javascript/tree_view/client_controller.js
