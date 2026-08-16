@@ -12,7 +12,7 @@
 - minor version: 後方互換なAPI、option、hook、docs追加
 - major version: 意図的なbreaking change
 
-`1.0.0` 未満でも、breaking change は意図的に扱い、`CHANGELOG.md` と関連docsにmigration noteを書きます。
+breaking change は意図的に扱い、`CHANGELOG.md` と関連docsにmigration noteを書きます。
 
 ### v1.0.1に限定したintegration repairの扱い
 
@@ -20,9 +20,9 @@
 
 これは `v1.0.1` に限定したrelease判断であり、versioning policy全体を緩めるものではありません。このintegration repairと無関係な後方互換public API / option追加は、以後通常どおりminor versionで扱います。
 
-## `0.1.x` で安定しているとみなすもの
+## `1.x` で安定しているとみなすもの
 
-`0.1.x` 系では、少なくとも次の documented integration point は、明示的な案内なしに壊さない前提で扱います。
+`1.x` 系では、少なくとも次の documented integration point は、明示的な案内なしに壊さない前提で扱います。
 
 - [Public API](public-api.md) に載っている documented Ruby class / module / helper / method
 - documented keyword arguments、grouped options、documented option priority
