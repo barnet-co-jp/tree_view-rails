@@ -1,175 +1,222 @@
-# frozen_string_literal: true
-
-require "rails_helper"
+require "spec_helper"
+require "action_view"
 
 BreadcrumbNode = Struct.new(:id, :parent_item_id, :name)
 
 RSpec.describe TreeViewBreadcrumbHelper do
   def build_helper
-    Class.new do
-      include ActionView::Helpers::TagHelper
-      include ActionView::Helpers::UrlHelper
-      include TreeViewBreadcrumbHelper
-    end.new
+    view = ActionView::Base.empty
+    view.extend(TreeViewBreadcrumbHelper)
+    view
   end
 
-  def build_tree
-    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
-    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
-    grandchild = BreadcrumbNode.new(id: 3, parent_item_id: 2, name: "Grandchild")
-    [TreeView::Tree.new(records: [root, child, grandchild], parent_id_method: :parent_item_id), root, child, grandchild]
+  def build_tree(records)
+    TreeView::Tree.new(records: records, parent_id_method: :parent_item_id)
   end
 
   it "renders a breadcrumb from root to current node" do
-    tree, root, child, grandchild = build_tree
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    grandchild = BreadcrumbNode.new(id: 3, parent_item_id: 2, name: "Grandchild")
+    tree = build_tree([root, child, grandchild])
     helper = build_helper
 
-    html = helper.tree_view_breadcrumb(
+    rendered = helper.tree_view_breadcrumb(
       tree,
       grandchild,
       label_builder: ->(item) { item.name },
       path_builder: ->(item) { "/nodes/#{item.id}" }
     )
 
-    expect(html).to include("Root")
-    expect(html).to include("Child")
-    expect(html).to include("Grandchild")
-    expect(html).to include('href="/nodes/1"')
-    expect(html).to include('href="/nodes/2"')
-    expect(html).not_to include('href="/nodes/3"')
-    expect(html).to include('aria-current="page"')
-  end
-
-  it "renders plain labels when path_builder is omitted" do
-    tree, = build_tree
-    grandchild = tree.records.last
-    helper = build_helper
-
-    html = helper.tree_view_breadcrumb(tree, grandchild, label_builder: ->(item) { item.name })
-
-    expect(html).to include("Root")
-    expect(html).to include("Child")
-    expect(html).to include("Grandchild")
-    expect(html).not_to include("href=")
+    expect(rendered).to include('class="tree-view-breadcrumb"')
+    expect(rendered).to include('href="/nodes/1"')
+    expect(rendered).to include('href="/nodes/2"')
+    expect(rendered).to include('class="tree-view-breadcrumb__current"')
+    expect(rendered).to include('aria-current="page"')
+    expect(rendered).to include("Grandchild")
   end
 
   it "renders non-linkable ancestor crumbs as plain labels when path_builder returns nil" do
-    tree, root, child, grandchild = build_tree
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    grandchild = BreadcrumbNode.new(id: 3, parent_item_id: 2, name: "Grandchild")
+    tree = build_tree([root, child, grandchild])
     helper = build_helper
 
-    html = helper.tree_view_breadcrumb(
+    rendered = helper.tree_view_breadcrumb(
       tree,
       grandchild,
       label_builder: ->(item) { item.name },
-      path_builder: ->(item) { item == child ? nil : "/nodes/#{item.id}" }
+      path_builder: ->(item) { (item == root) ? nil : "/nodes/#{item.id}" },
+      link_html: ->(item) { {data: {crumb_id: item.id}} }
     )
 
-    expect(html).to include('href="/nodes/1"')
-    expect(html).to include("Child")
-    expect(html).not_to include('href="/nodes/2"')
+    expect(rendered).to include('<span class="tree-view-breadcrumb__link">Root</span>')
+    expect(rendered).not_to include('data-crumb-id="1"')
+    expect(rendered).to include('href="/nodes/2"')
+    expect(rendered).to include('data-crumb-id="2"')
+    expect(rendered).not_to include('href=""')
+    expect(rendered.scan('aria-current="page"').length).to eq(1)
+  end
+
+  it "renders plain labels when path_builder is omitted" do
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
+    helper = build_helper
+
+    rendered = helper.tree_view_breadcrumb(
+      tree,
+      child,
+      label_builder: ->(item) { item.name }
+    )
+
+    expect(rendered).to include("Root")
+    expect(rendered).to include("Child")
+    expect(rendered).not_to include("href=")
   end
 
   it "allows custom classes and separator" do
-    tree, = build_tree
-    grandchild = tree.records.last
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
     helper = build_helper
 
-    html = helper.tree_view_breadcrumb(
+    rendered = helper.tree_view_breadcrumb(
       tree,
-      grandchild,
+      child,
       label_builder: ->(item) { item.name },
-      separator: ">",
-      nav_class: "crumb-nav",
-      list_class: "crumb-list",
-      item_class: "crumb-item",
-      current_class: "crumb-current"
+      path_builder: ->(item) { "/nodes/#{item.id}" },
+      separator: "/",
+      nav_class: "breadcrumb",
+      list_class: "breadcrumb-list",
+      item_class: "breadcrumb-item",
+      link_class: "breadcrumb-link",
+      current_class: "breadcrumb-current",
+      separator_class: "breadcrumb-separator",
+      aria_label: "Node path"
     )
 
-    expect(html).to include("crumb-nav")
-    expect(html).to include("crumb-list")
-    expect(html).to include("crumb-item")
-    expect(html).to include("crumb-current")
-    expect(html).to include("&gt;")
+    expect(rendered).to include('class="breadcrumb"')
+    expect(rendered).to include('class="breadcrumb-list"')
+    expect(rendered).to include('class="breadcrumb-item"')
+    expect(rendered).to include('class="breadcrumb-link"')
+    expect(rendered).to include('class="breadcrumb-current"')
+    expect(rendered).to include('class="breadcrumb-separator"')
+    expect(rendered).to include('aria-label="Node path"')
   end
 
   it "merges additional HTML attributes into the breadcrumb container and list" do
-    tree, = build_tree
-    grandchild = tree.records.last
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
     helper = build_helper
 
-    html = helper.tree_view_breadcrumb(
+    rendered = helper.tree_view_breadcrumb(
       tree,
-      grandchild,
+      child,
       label_builder: ->(item) { item.name },
-      html: {data: {testid: "breadcrumb"}},
-      list_html: {data: {role: "path"}}
+      html: {class: "app-breadcrumb", data: {controller: "analytics"}, aria: {describedby: "breadcrumb-help"}},
+      list_html: {data: {testid: "node-path"}},
+      aria_label: "Node path"
     )
 
-    expect(html).to include('data-testid="breadcrumb"')
-    expect(html).to include('data-role="path"')
+    expect(rendered).to include('class="tree-view-breadcrumb app-breadcrumb"')
+    expect(rendered).to include('data-controller="analytics"')
+    expect(rendered).to include('aria-describedby="breadcrumb-help"')
+    expect(rendered).to include('aria-label="Node path"')
+    expect(rendered).to include('data-testid="node-path"')
   end
 
   it "merges item-aware attributes into links and the current label" do
-    tree, root, _child, grandchild = build_tree
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
     helper = build_helper
 
-    html = helper.tree_view_breadcrumb(
+    rendered = helper.tree_view_breadcrumb(
       tree,
-      grandchild,
+      child,
       label_builder: ->(item) { item.name },
       path_builder: ->(item) { "/nodes/#{item.id}" },
-      link_html: ->(item) { {data: {node_id: item.id}} },
-      current_html: ->(item) { {data: {current_id: item.id}} }
+      item_html: ->(item) { {data: {node_id: item.id}} },
+      link_html: ->(item) { {rel: "up", data: {action_id: item.id}} },
+      current_html: ->(item) { {class: "is-current", data: {current_id: item.id}, aria: {label: "Current #{item.name}"}} }
     )
 
-    expect(html).to include("data-node-id=\"#{root.id}\"")
-    expect(html).to include("data-current-id=\"#{grandchild.id}\"")
+    expect(rendered).to include('data-node-id="1"')
+    expect(rendered).to include('data-node-id="2"')
+    expect(rendered).to include('href="/nodes/1"')
+    expect(rendered).to include('rel="up"')
+    expect(rendered).to include('data-action-id="1"')
+    expect(rendered).to include('class="tree-view-breadcrumb__current is-current"')
+    expect(rendered).to include('data-current-id="2"')
+    expect(rendered).to include('aria-label="Current Child"')
+    expect(rendered).to include('aria-current="page"')
   end
 
   it "merges item-aware attributes into separators while preserving hidden semantics" do
-    tree, = build_tree
-    grandchild = tree.records.last
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
     helper = build_helper
 
-    html = helper.tree_view_breadcrumb(
+    rendered = helper.tree_view_breadcrumb(
       tree,
-      grandchild,
+      child,
       label_builder: ->(item) { item.name },
-      separator_html: ->(item) { {data: {after_id: item.id}} }
+      path_builder: ->(item) { "/nodes/#{item.id}" },
+      separator_html: ->(item) { {class: "app-separator", data: {after_node: item.id}} }
     )
 
-    expect(html).to include('aria-hidden="true"')
-    expect(html).to include('data-after-id="1"')
+    expect(rendered).to include('class="tree-view-breadcrumb__separator app-separator"')
+    expect(rendered).to include('data-after-node="1"')
+    expect(rendered).to include('aria-hidden="true"')
   end
 
   it "rejects invalid HTML option values" do
-    tree, = build_tree
-    grandchild = tree.records.last
+    node = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    tree = build_tree([node])
     helper = build_helper
 
     expect do
-      helper.tree_view_breadcrumb(tree, grandchild, label_builder: ->(item) { item.name }, html: "invalid")
-    end.to raise_error(ArgumentError, /html must be Hash-like or callable/)
+      helper.tree_view_breadcrumb(tree, node, label_builder: ->(item) { item.name }, html: "nav")
+    end.to raise_error(ArgumentError, /html must be a Hash-like object or callable returning one/)
+
+    expect do
+      helper.tree_view_breadcrumb(tree, node, label_builder: ->(item) { item.name }, list_html: "list")
+    end.to raise_error(ArgumentError, /list_html must be a Hash-like object or callable returning one/)
   end
 
   it "rejects invalid item-aware HTML option return values" do
-    tree, = build_tree
-    grandchild = tree.records.last
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
     helper = build_helper
 
     expect do
       helper.tree_view_breadcrumb(
         tree,
-        grandchild,
+        child,
         label_builder: ->(item) { item.name },
-        item_html: ->(_item) { "invalid" }
+        path_builder: ->(item) { "/nodes/#{item.id}" },
+        link_html: ->(_item) { "link" }
       )
-    end.to raise_error(ArgumentError, /item_html must return Hash-like/)
+    end.to raise_error(ArgumentError, /link_html must be a Hash-like object or callable returning one/)
+
+    expect do
+      helper.tree_view_breadcrumb(
+        tree,
+        child,
+        label_builder: ->(item) { item.name },
+        current_html: ->(_item) { "current" }
+      )
+    end.to raise_error(ArgumentError, /current_html must be a Hash-like object or callable returning one/)
   end
 
   it "rejects invalid builders" do
-    tree, = build_tree
-    node = tree.records.first
+    node = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    tree = build_tree([node])
     helper = build_helper
 
     expect do
