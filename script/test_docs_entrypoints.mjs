@@ -68,12 +68,12 @@ const foundationalEntrypoints = [
     signals: [
       [
         "docs/en/installation.md",
-        /@import "tree_view";[\s\S]*pin "tree_view", to: "tree_view\/index\.js"[\s\S]*app\/assets\/stylesheets\/tree_view\.scss[\s\S]*app\/javascript\/tree_view\/\*\*\/\*[\s\S]*config\/importmap\.tree_view\.rb[\s\S]*config\/public_api_manifest\.yml[\s\S]*Propshaft[\s\S]*explicitly import CSS and add the importmap pin[\s\S]*Sprockets[\s\S]*explicit CSS\/importmap setup/,
+        /@import "tree_view";[\s\S]*pin "tree_view", to: "tree_view\/index\.js"[\s\S]*app\/assets\/stylesheets\/tree_view\.scss[\s\S]*app\/javascript\/tree_view\/\*\*\/\*[\s\S]*config\/importmap\.tree_view\.rb[\s\S]*config\/public_api_manifest\.yml[\s\S]*Propshaft[\s\S]*packaged plain CSS asset directly by logical asset name[\s\S]*Do not rely on Propshaft itself to compile Sass[\s\S]*Sprockets[\s\S]*Sprockets-compatible asset hooks/,
         "English installation docs no longer expose the CSS/importmap, packaged files, and explicit Propshaft/Sprockets setup signals"
       ],
       [
         "docs/ja/installation.md",
-        /@import "tree_view";[\s\S]*pin "tree_view", to: "tree_view\/index\.js"[\s\S]*app\/assets\/stylesheets\/tree_view\.scss[\s\S]*app\/javascript\/tree_view\/\*\*\/\*[\s\S]*config\/importmap\.tree_view\.rb[\s\S]*config\/public_api_manifest\.yml[\s\S]*Propshaft[\s\S]*CSS \/ importmap を明示的に読み込む構成[\s\S]*Sprockets[\s\S]*CSS \/ importmapを明示的に読み込む運用/,
+        /@import "tree_view";[\s\S]*pin "tree_view", to: "tree_view\/index\.js"[\s\S]*app\/assets\/stylesheets\/tree_view\.scss[\s\S]*app\/javascript\/tree_view\/\*\*\/\*[\s\S]*config\/importmap\.tree_view\.rb[\s\S]*config\/public_api_manifest\.yml[\s\S]*Propshaft[\s\S]*同梱の plain CSS asset を logical asset として直接読み込む構成[\s\S]*Propshaft 自体に Sass compile を期待しないでください[\s\S]*Sprockets[\s\S]*Sprockets互換のasset hook/,
         "Japanese installation docs no longer expose the CSS/importmap, packaged files, and explicit Propshaft/Sprockets setup signals"
       ],
       [
