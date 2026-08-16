@@ -36,9 +36,15 @@ const installation = extractSection(rootReadme, "Installation")
 const quickStart = extractSection(rootReadme, "Quick Start")
 
 assertInstallationSignal(
-  "CSS import",
+  "Propshaft logical stylesheet",
+  /stylesheet_link_tag\s+"tree_view"/,
+  "missing the Rails 8 + Propshaft logical stylesheet quick-start"
+)
+
+assertInstallationSignal(
+  "Sass compatibility import",
   /@import\s+"tree_view";/,
-  "missing the representative stylesheet import"
+  "missing the Sass or cssbundling compatibility stylesheet import"
 )
 
 assertInstallationSignal(
@@ -48,9 +54,21 @@ assertInstallationSignal(
 )
 
 assertInstallationSignal(
-  "package-root JavaScript entrypoint",
-  /tree_view\/index\.js/,
-  "missing the package-root JavaScript entrypoint signal"
+  "Vite package directory alias",
+  /app\/javascript\/tree_view[\s\S]*directory/,
+  "missing the Vite package-directory alias guidance"
+)
+
+assertInstallationSignal(
+  "package-root JavaScript import",
+  /import\s+\{\s*registerTreeViewControllers\s*\}\s+from\s+"tree_view"/,
+  "missing the package-root JavaScript import"
+)
+
+assertInstallationSignal(
+  "TypeScript declaration guidance",
+  /standalone `tsc`[\s\S]*same directory[\s\S]*declare module "tree_view"/,
+  "missing the TypeScript package-root declaration guidance"
 )
 
 assertInstallationSignal(
