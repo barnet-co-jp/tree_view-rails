@@ -15,9 +15,23 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ## Unreleased
 
+### Added
+
+- Added optional `GraphAdapter#parent_resolver` support so heterogeneous adapter trees can use parent-path helpers and ancestor-aware filtering without reimplementing parent traversal in host apps.
+- Added optional `PathTreeBuilder#folder_key_resolver` support so host apps can preserve stable project- or tenant-namespaced folder keys while delegating path-folder construction to TreeView.
+- Added package-local JavaScript metadata and a plain CSS asset so Vite/TypeScript and Rails 8 + Propshaft integrations can resolve shipped TreeView entrypoints without host-app shims or Sass compilation.
+
+### Documentation
+
+- Clarified hierarchy filtering, flat pagination, orphan handling, sibling sorting, TreeView-owned table columns, Vite/TypeScript setup, and Propshaft stylesheet integration based on downstream host-app usage.
+
+### Tests
+
+- Added package, stylesheet, public-manifest, GraphAdapter parent-path, PathTreeBuilder folder-key, and integration documentation guards for the v1.0.1 changes.
+
 Release preparation notes:
 
-- No unreleased changes yet. When entries accumulate, treat `Added`, `Changed`, and `Fixed` entries as the primary reader-facing release notes.
+- Keep `Added`, `Changed`, and `Fixed` entries as the primary reader-facing release notes.
 - Keep `Documentation` and `Tests` entries available as release evidence, but summarize or group them during the release preparation PR when they are maintenance-only and do not change runtime behavior.
 - Record public API manifest, package-root export, and documented hook changes by their user-visible effect.
 - If a breaking change, deprecation, or removal is identified, add the migration note before moving entries into a dated version section.
