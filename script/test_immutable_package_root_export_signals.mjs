@@ -105,7 +105,7 @@ assertIncludes(readme, "docs/en/public-api-immutable-exports.md", "README.md imm
 assertIncludes(readme, "docs/ja/public-api-immutable-exports.md", "README.md Japanese immutable package-root exports route")
 
 assert(
-  /package-root exports from `tree_view\/index\.js`, such as/.test(readme),
+  /package-root exports from `tree_view`, such as/.test(readme),
   "README.md: package-root export guidance should stay an entry point with representative examples, not a complete inventory"
 )
 
