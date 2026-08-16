@@ -23,8 +23,8 @@ RSpec.describe "installation entrypoint signal docs" do
         "registerTreeViewControllers(application)",
         'execFileSync("bundle", ["show", "tree_view"]',
         '"app/javascript/tree_view"',
-        'app/javascript/tree_view/package.json',
-        'app/javascript/tree_view/index.d.ts'
+        "app/javascript/tree_view/package.json",
+        "app/javascript/tree_view/index.d.ts"
       ), "#{path} lost one of the representative installation entrypoint signals"
     end
   end
