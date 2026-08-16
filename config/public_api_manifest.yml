@@ -85,6 +85,7 @@ graph_adapter_initializer:
     - children_resolver
   optional_keywords:
     - node_key_resolver
+    - parent_resolver
 ui_config_builder_option_keys:
   build:
     - show_descendants_path_builder
