@@ -22,7 +22,7 @@ RSpec.describe "GraphAdapter public manifest contract" do
     initializer_manifest = manifest.fetch("graph_adapter_initializer")
 
     expect(initializer_manifest.fetch("required_keywords")).to eq(%w[roots children_resolver])
-    expect(initializer_manifest.fetch("optional_keywords")).to eq(%w[node_key_resolver])
+    expect(initializer_manifest.fetch("optional_keywords")).to eq(%w[node_key_resolver parent_resolver])
     expect(initializer_keyword_names(:keyreq)).to eq(initializer_manifest.fetch("required_keywords"))
     expect(initializer_keyword_names(:key)).to eq(initializer_manifest.fetch("optional_keywords"))
   end
@@ -31,17 +31,19 @@ RSpec.describe "GraphAdapter public manifest contract" do
     node = Object.new
     child = Object.new
     node.define_singleton_method(:id) { 42 }
-    children_resolver = lambda do |current_node|
-      child if current_node == node
-    end
+    child.define_singleton_method(:id) { 43 }
+    children_resolver = ->(current_node) { child if current_node == node }
+    parent_resolver = ->(current_node) { node if current_node == child }
     adapter = TreeView::GraphAdapter.new(
       roots: [node],
-      children_resolver: children_resolver
+      children_resolver:,
+      parent_resolver:
     )
 
     expect(adapter.roots).to eq([node])
     expect(adapter.children_for(node)).to eq([child])
     expect(adapter.children_for(child)).to eq([])
+    expect(adapter.parent_for(child)).to eq(node)
     expect(adapter.node_key_for(node)).to eq([node.class.name, 42])
   end
 
@@ -53,6 +55,7 @@ RSpec.describe "GraphAdapter public manifest contract" do
       expect(doc).to include("roots")
       expect(doc).to include("children_resolver")
       expect(doc).to include("node_key_resolver")
+      expect(doc).to include("parent_resolver")
     end
   end
 end
