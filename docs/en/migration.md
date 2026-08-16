@@ -12,7 +12,7 @@ It complements [Public API](public-api.md), [JavaScript event contract](js-event
 - Minor versions add backward-compatible APIs, options, hooks, or docs.
 - Major versions may include intentional breaking changes.
 
-Even before `1.0.0`, breaking changes should be deliberate and documented with migration notes in `CHANGELOG.md` and related docs.
+Breaking changes should be deliberate and documented with migration notes in `CHANGELOG.md` and related docs.
 
 ### Scoped v1.0.1 integration-repair exception
 
@@ -20,9 +20,9 @@ Even before `1.0.0`, breaking changes should be deliberate and documented with m
 
 This is a scoped release decision, not a general relaxation of the versioning policy. Unrelated backward-compatible public API or option additions after this integration-repair release should use the normal minor-version rule.
 
-## What should stay stable in `0.1.x`
+## What should stay stable in `1.x`
 
-Within the `0.1.x` line, host apps should expect these documented integration points to remain stable unless a change is explicitly called out:
+Within the `1.x` line, host apps should expect these documented integration points to remain stable unless a change is explicitly called out:
 
 - documented Ruby classes, modules, helpers, and methods listed in [Public API](public-api.md)
 - documented keyword arguments, grouped options, and documented option priority
