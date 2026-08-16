@@ -15,6 +15,8 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ## Unreleased
 
+## 1.0.1 - 2026-08-17
+
 ### Added
 
 - Added optional `GraphAdapter#parent_resolver` support so heterogeneous adapter trees can use parent-path helpers and ancestor-aware filtering without reimplementing parent traversal in host apps.
@@ -28,13 +30,6 @@ Breaking changes and required migration notes should be called out explicitly in
 ### Tests
 
 - Added package, stylesheet, public-manifest, GraphAdapter parent-path, PathTreeBuilder folder-key, and integration documentation guards for the v1.0.1 changes.
-
-Release preparation notes:
-
-- Keep `Added`, `Changed`, and `Fixed` entries as the primary reader-facing release notes.
-- Keep `Documentation` and `Tests` entries available as release evidence, but summarize or group them during the release preparation PR when they are maintenance-only and do not change runtime behavior.
-- Record public API manifest, package-root export, and documented hook changes by their user-visible effect.
-- If a breaking change, deprecation, or removal is identified, add the migration note before moving entries into a dated version section.
 
 ## 1.0.0 - 2026-08-09
 
