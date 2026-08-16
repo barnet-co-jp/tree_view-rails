@@ -10,16 +10,21 @@ RSpec.describe "installation entrypoint signal docs" do
   let(:english_installation) { read_repo_file("docs/en/installation.md") }
   let(:japanese_installation) { read_repo_file("docs/ja/installation.md") }
 
-  it "keeps CSS import, importmap pin, and controller registration signals visible" do
+  it "keeps CSS, importmap, controller registration, and Vite signals visible" do
     {
       "docs/en/installation.md" => english_installation,
       "docs/ja/installation.md" => japanese_installation
     }.each do |path, document|
       expect(document).to include(
+        'stylesheet_link_tag "tree_view"',
         '@import "tree_view";',
         'pin "tree_view", to: "tree_view/index.js"',
         'import { registerTreeViewControllers } from "tree_view"',
-        "registerTreeViewControllers(application)"
+        "registerTreeViewControllers(application)",
+        'execFileSync("bundle", ["show", "tree_view"]',
+        '"app/javascript/tree_view"',
+        'app/javascript/tree_view/package.json',
+        'app/javascript/tree_view/index.d.ts'
       ), "#{path} lost one of the representative installation entrypoint signals"
     end
   end
@@ -27,16 +32,18 @@ RSpec.describe "installation entrypoint signal docs" do
   it "keeps Propshaft and Sprockets setup signals separate from the quick-start path" do
     expect(english_installation).to include(
       "## Propshaft",
-      "explicitly import CSS and add the importmap pin",
+      "packaged plain CSS asset directly by logical asset name",
+      "Do not rely on Propshaft itself to compile Sass",
       "## Sprockets",
-      "explicit CSS/importmap setup in the host app remains the recommended integration path"
+      "Sprockets-compatible asset hooks"
     )
 
     expect(japanese_installation).to include(
       "## Propshaft",
-      "CSS / importmap を明示的に読み込む構成を推奨します",
+      "同梱の plain CSS asset を logical asset として直接読み込む構成を推奨します",
+      "Propshaft 自体に Sass compile を期待しないでください",
       "## Sprockets",
-      "導入の中心はhost app側でCSS / importmapを明示的に読み込む運用です"
+      "Sprockets互換のasset hook"
     )
   end
 end
