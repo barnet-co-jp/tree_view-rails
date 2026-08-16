@@ -1,6 +1,6 @@
 require "spec_helper"
 PathNode = Struct.new(:id, :parent_item_id, :name)
-PathCountry = Struct.new(:id, :name, :children)
+PathCountry = Struct.new(:id, :name, :children, :parent)
 
 RSpec.describe "TreeView::Tree parent path helpers" do
   def build_tree(records, **options)
@@ -70,8 +70,50 @@ RSpec.describe "TreeView::Tree parent path helpers" do
     expect(tree.expanded_keys_for([child_a, child_b])).to eq([1, 2, 3])
   end
 
-  it "rejects expanded key helpers in resolver mode" do
-    country = PathCountry.new(1, "japan", [])
+  it "supports parent path helpers in adapter mode when parent_resolver is provided" do
+    root = PathCountry.new(1, "japan", [], nil)
+    parent = PathCountry.new(2, "kanto", [], root)
+    child = PathCountry.new(3, "tokyo", [], parent)
+    root.children = [parent]
+    parent.children = [child]
+    adapter = TreeView::GraphAdapter.new(
+      roots: [root],
+      children_resolver: ->(node) { node.children },
+      parent_resolver: ->(node) { node.parent }
+    )
+    tree = TreeView::Tree.new(adapter:)
+
+    expect(tree.parent_for(child)).to eq(parent)
+    expect(tree.ancestors_for(child)).to eq([root, parent])
+    expect(tree.path_for(child)).to eq([root, parent, child])
+    expect(tree.expanded_keys_for(child)).to eq([
+      ["PathCountry", 1],
+      ["PathCountry", 2],
+      ["PathCountry", 3]
+    ])
+  end
+
+  it "supports filtered trees with ancestors in adapter mode when parent_resolver is provided" do
+    root = PathCountry.new(1, "japan", [], nil)
+    parent = PathCountry.new(2, "kanto", [], root)
+    child = PathCountry.new(3, "tokyo", [], parent)
+    root.children = [parent]
+    parent.children = [child]
+    adapter = TreeView::GraphAdapter.new(
+      roots: [root],
+      children_resolver: ->(node) { node.children },
+      parent_resolver: ->(node) { node.parent }
+    )
+    tree = TreeView::Tree.new(adapter:)
+    filtered = tree.filtered_tree_for([child], mode: :with_ancestors)
+
+    expect(filtered.root_items).to eq([root])
+    expect(filtered.children_for(root)).to eq([parent])
+    expect(filtered.children_for(parent)).to eq([child])
+  end
+
+  it "rejects parent path helpers in resolver mode" do
+    country = PathCountry.new(1, "japan", [], nil)
     tree = TreeView::Tree.new(
       roots: [country],
       children_resolver: ->(node) { node.children }
@@ -79,7 +121,20 @@ RSpec.describe "TreeView::Tree parent path helpers" do
 
     expect do
       tree.expanded_keys_for(country)
-    end.to raise_error(ArgumentError, /only supported in records mode/)
+    end.to raise_error(TreeView::ConfigurationError, /parent path helpers require records mode or an adapter with parent_resolver/)
+  end
+
+  it "rejects parent path helpers in adapter mode without parent_resolver" do
+    country = PathCountry.new(1, "japan", [], nil)
+    adapter = TreeView::GraphAdapter.new(
+      roots: [country],
+      children_resolver: ->(node) { node.children }
+    )
+    tree = TreeView::Tree.new(adapter:)
+
+    expect do
+      tree.parent_for(country)
+    end.to raise_error(TreeView::ConfigurationError, /parent path helpers require records mode or an adapter with parent_resolver/)
   end
 
   it "returns orphan diagnostics with missing parent ids" do
@@ -125,18 +180,6 @@ RSpec.describe "TreeView::Tree parent path helpers" do
 
     expect do
       tree.path_for(node_a)
-    end.to raise_error(ArgumentError, /cycle detected in parent path/)
-  end
-
-  it "rejects parent path helpers in resolver mode" do
-    country = PathCountry.new(1, "japan", [])
-    tree = TreeView::Tree.new(
-      roots: [country],
-      children_resolver: ->(node) { node.children }
-    )
-
-    expect do
-      tree.parent_for(country)
-    end.to raise_error(ArgumentError, /only supported in records mode/)
+    end.to raise_error(TreeView::CycleDetectedError, /cycle detected in parent path/)
   end
 end
