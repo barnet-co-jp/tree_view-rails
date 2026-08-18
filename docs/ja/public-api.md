@@ -47,6 +47,7 @@ host app が直接使ってよい主な入口は以下です。
 - `tree_view_rows(render_state)`
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
+- `tree_view_state_data(render_state)`
 - `tree_node_dom_id(item_or_id, ui: @tree_ui)`
 - `tree_children_container_dom_id(item, ui: @tree_ui)`
 - `tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)`
@@ -84,6 +85,7 @@ host app は `TreeViewHelper::Rendering` や `TreeViewHelper::Selection` など�
 
 - `tree_view_rows(render_state, window: nil)` は TreeView rows を描画し、opt-in の windowed rendering も扱います。
 - `tree_view_window(render_state, offset:, limit:)` は visible rows 用の documented な window metadata を返します。
+- `tree_view_state_data(render_state)` は、TreeView state と設定済みの client-side / selection / transfer / remote-state controller 用のルート `data-*` 配線を返します。
 - `tree_node_dom_id(item_or_id, ui: @tree_ui)` は、解決された `UiConfig` を通して node DOM ID を組み立てます。
 - `tree_children_container_dom_id(item, ui: @tree_ui)` は、lazy-loading で host app が持つ children container 用の安定した DOM ID を組み立てます。
 - `tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)` は、1 行ぶんの remote-state placeholder 用 DOM ID を組み立てます。
