@@ -5,7 +5,9 @@ export declare class TreeViewClientController extends Controller {}
 export declare class TreeViewRemoteStateController extends Controller {}
 export declare class TreeViewSelectionController extends Controller {}
 export declare class TreeViewStateController extends Controller {}
-export declare class TreeViewTransferController extends Controller {}
+export declare class TreeViewTransferController extends Controller {
+  refreshBranches(): number
+}
 
 export declare const TreeViewEventNames: Readonly<{
   state: Readonly<{
