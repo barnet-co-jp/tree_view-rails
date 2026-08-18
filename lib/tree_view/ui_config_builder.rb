@@ -5,7 +5,7 @@ module TreeView
     def initialize(context:, node_prefix: "item", key_resolver: nil)
       @context = context
       @node_prefix = node_prefix
-      @key_resolver = key_resolver || ->(item_or_id) { item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id }
+      @key_resolver = key_resolver || method(:default_key_for)
     end
 
     def build(show_descendants_path_builder:,
@@ -63,6 +63,13 @@ module TreeView
     end
 
     private
+
+    def default_key_for(item_or_id)
+      return item_or_id.id if item_or_id.respond_to?(:id)
+      return item_or_id.key if item_or_id.respond_to?(:key)
+
+      item_or_id
+    end
 
     def dom_builders
       {
