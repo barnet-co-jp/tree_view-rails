@@ -58,7 +58,6 @@ export class TreeViewTransferController extends Controller {
 
   refreshBranches() {
     const rows = this.branchRows()
-    const parentIndexes = new Array(rows.length).fill(null)
     const siblingIndexes = new Map()
     const stack = []
 
@@ -68,8 +67,6 @@ export class TreeViewTransferController extends Controller {
       while (stack.length > depth) stack.pop()
 
       const parentIndex = depth > 0 ? (stack[depth - 1] ?? null) : null
-      parentIndexes[index] = parentIndex
-
       const siblingKey = parentIndex === null ? "root" : `parent:${parentIndex}`
       const siblings = siblingIndexes.get(siblingKey) || []
       siblings.push(index)
