@@ -56,6 +56,84 @@ export class TreeViewTransferController extends Controller {
     })
   }
 
+  refreshBranches() {
+    const rows = this.branchRows()
+    const parentIndexes = new Array(rows.length).fill(null)
+    const siblingIndexes = new Map()
+    const stack = []
+
+    rows.forEach((row, index) => {
+      const depth = this.branchDepth(row)
+
+      while (stack.length > depth) stack.pop()
+
+      const parentIndex = depth > 0 ? (stack[depth - 1] ?? null) : null
+      parentIndexes[index] = parentIndex
+
+      const siblingKey = parentIndex === null ? "root" : `parent:${parentIndex}`
+      const siblings = siblingIndexes.get(siblingKey) || []
+      siblings.push(index)
+      siblingIndexes.set(siblingKey, siblings)
+
+      stack[depth] = index
+      stack.length = depth + 1
+    })
+
+    const lastIndexes = new Set()
+    siblingIndexes.forEach((indexes) => {
+      const lastIndex = indexes[indexes.length - 1]
+      if (lastIndex !== undefined) lastIndexes.add(lastIndex)
+    })
+
+    const lastStateByDepth = []
+
+    rows.forEach((row, index) => {
+      const depth = this.branchDepth(row)
+      const branches = row.querySelector(".tree-toggle__branches")
+      if (!branches) return
+
+      const fragment = document.createDocumentFragment()
+
+      for (let ancestorDepth = 1; ancestorDepth < depth; ancestorDepth += 1) {
+        fragment.append(this.branchSlot({ ancestorIsLast: lastStateByDepth[ancestorDepth] === true }))
+      }
+
+      if (depth > 0) {
+        fragment.append(this.branchSlot({ currentIsLast: lastIndexes.has(index) }))
+      }
+
+      branches.replaceChildren(fragment)
+      lastStateByDepth[depth] = lastIndexes.has(index)
+      lastStateByDepth.length = depth + 1
+    })
+
+    return rows.length
+  }
+
+  branchRows() {
+    return Array.from(this.element.querySelectorAll("tr[data-tree-depth]")).filter((row) => (
+      row.closest("[data-controller~='tree-view-transfer']") === this.element
+    ))
+  }
+
+  branchDepth(row) {
+    const depth = Number.parseInt(row.dataset.treeDepth || "0", 10)
+    return Number.isFinite(depth) && depth >= 0 ? depth : 0
+  }
+
+  branchSlot({ ancestorIsLast = null, currentIsLast = null } = {}) {
+    const slot = document.createElement("span")
+    slot.classList.add("tree-toggle__branch-slot")
+
+    if (currentIsLast !== null) {
+      slot.classList.add("is-current", currentIsLast ? "is-last" : "is-middle")
+    } else {
+      slot.classList.add(ancestorIsLast ? "is-empty" : "has-line")
+    }
+
+    return slot
+  }
+
   dispatchTransferEvent(name, detail) {
     this.dispatch(name, { detail })
   }
