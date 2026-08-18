@@ -481,6 +481,8 @@ javascript_package_root:
     state:
       view_key_value: data-tree-view-state-view-key-value
       node_key: data-tree-view-state-node-key
+    client:
+      expanded_keys_value: data-tree-view-client-expanded-keys-value
     remote_state:
       children_url: data-tree-children-url
     transfer:
