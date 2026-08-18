@@ -1,8 +1,8 @@
 require "spec_helper"
 
-RSpec.describe TreeView::RenderState, "current_key" do
-  CurrentKeyTestNode = Struct.new(:id, :parent_id, :name)
+CurrentKeyTestNode = Struct.new(:id, :parent_id, :name)
 
+RSpec.describe TreeView::RenderState, "current_key" do
   let(:ui_config) { instance_double(TreeView::UiConfig) }
 
   it "honors the direct current_key keyword and expands its ancestors" do
