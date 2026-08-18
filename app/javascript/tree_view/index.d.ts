@@ -142,6 +142,9 @@ export declare const TreeViewIntegrationHooks: Readonly<{
     viewKeyValue: "data-tree-view-state-view-key-value"
     nodeKey: "data-tree-view-state-node-key"
   }>
+  client: Readonly<{
+    expandedKeysValue: "data-tree-view-client-expanded-keys-value"
+  }>
   remoteState: Readonly<{
     childrenUrl: "data-tree-children-url"
   }>
