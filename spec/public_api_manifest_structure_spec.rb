@@ -77,6 +77,7 @@ DOCUMENTED_TREE_VIEW_PUBLIC_CONSTANTS = %w[
 DOCUMENTED_TREE_VIEW_HELPER_METHODS = %w[
   tree_view_rows
   tree_view_window
+  tree_view_state_data
   tree_node_dom_id
   tree_children_container_dom_id
   tree_remote_state_placeholder_dom_id

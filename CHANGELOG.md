@@ -22,6 +22,14 @@ Release preparation notes:
 - Record public API manifest, package-root export, and documented hook changes by their user-visible effect.
 - If a breaking change, deprecation, or removal is identified, add the migration note before moving entries into a dated version section.
 
+### Fixed
+
+- Fixed direct `RenderState#current_key:` handling so flat keyword values reach row-state and render-state processing, take precedence over grouped `initial_expansion[:current_key]`, and preserve current-row semantics.
+
+### Documentation
+
+- Added `tree_view_state_data(render_state)` to the manifest-backed public helper contract and bilingual Public API documentation.
+
 ## 1.0.1 - 2026-08-17
 
 ### Added

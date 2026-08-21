@@ -47,6 +47,7 @@ Host apps may use these entry points directly:
 - `tree_view_rows(render_state)`
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
+- `tree_view_state_data(render_state)`
 - `tree_node_dom_id(item_or_id, ui: @tree_ui)`
 - `tree_children_container_dom_id(item, ui: @tree_ui)`
 - `tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)`
@@ -84,6 +85,7 @@ Documented non-toolbar helpers that are part of that public helper surface inclu
 
 - `tree_view_rows(render_state, window: nil)` renders TreeView rows, including opt-in windowed rendering.
 - `tree_view_window(render_state, offset:, limit:)` returns documented window metadata for visible rows.
+- `tree_view_state_data(render_state)` returns the root `data-*` wiring for TreeView state and configured client-side, selection, transfer, and remote-state controllers.
 - `tree_node_dom_id(item_or_id, ui: @tree_ui)` builds node DOM IDs through the resolved `UiConfig`.
 - `tree_children_container_dom_id(item, ui: @tree_ui)` builds the stable children-container DOM ID used by lazy-loading host-app placeholder regions.
 - `tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)` builds the stable remote-state placeholder DOM ID for one row.

@@ -10,7 +10,7 @@ module TreeView
     def initialize(**options)
       tree = options.fetch(:tree)
       original_row_class_builder = options[:row_class_builder]
-      @current_key = options.delete(:current_key)
+      @current_key = options[:current_key]
       @highlighted_keys = Array(options.delete(:highlighted_keys)).freeze
 
       options[:row_class_builder] = build_row_class_builder(

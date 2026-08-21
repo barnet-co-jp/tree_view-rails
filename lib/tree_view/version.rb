@@ -2,7 +2,7 @@
 
 module TreeView
   module Version
-    STRING = "1.0.1"
+    STRING = "1.0.2"
   end
 
   VERSION = Version::STRING

@@ -120,7 +120,7 @@ module TreeView
       @max_toggle_depth_from_root = normalize_non_negative_integer(resolve_option(max_toggle_depth_from_root, toggle_scope_options[:max_depth_from_root]), :max_toggle_depth_from_root)
       @max_toggle_leaf_distance = normalize_non_negative_integer(resolve_option(max_toggle_leaf_distance, toggle_scope_options[:max_leaf_distance]), :max_toggle_leaf_distance)
       @current_item = resolve_option(current_item, initial_expansion_options[:current_item])
-      @current_key = normalize_current_key(resolve_option(@current_key, initial_expansion_options[:current_key]))
+      @current_key = normalize_current_key(resolve_option(current_key, initial_expansion_options[:current_key]))
       @auto_expand_ancestors = normalize_boolean(resolve_option(auto_expand_ancestors, initial_expansion_options[:auto_expand_ancestors]), :auto_expand_ancestors)
       resolved_expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys]))
       @expanded_keys = expanded_keys_with_current_ancestors(resolved_expanded_keys).freeze
