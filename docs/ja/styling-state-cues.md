@@ -53,7 +53,7 @@ host app の stylesheet から上書きできる token は次のとおりです�
 
 各 token には、token 追加前と同じ fallback 値があります。そのため、host app が上書きしない場合は既存の quick-start appearance を維持します。
 
-`config/public_api_manifest.yml` はこの一覧を `css_custom_property_tokens` として追跡します。manifest-backed contract が扱うのは packaged stylesheet とこのページで document された token 名（token names）であり、fallback 値を host app 向け configuration や theme API にするものではありません。
+`config/public_api_manifest.yml` はこの一覧を `css_custom_property_tokens` として追跡します。manifest-backed contract が扱うのは packaged stylesheet とこのページで document された token 名（token names）であり、fallback 値を host app 向け configuration や theme API にするものではありません。fallback values の安定性は manifest contract の対象外です。
 
 ## Boundary
 
