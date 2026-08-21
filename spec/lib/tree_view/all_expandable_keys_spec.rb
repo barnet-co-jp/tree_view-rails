@@ -2,15 +2,15 @@
 
 require "spec_helper"
 
-RSpec.describe "TreeView::Tree#all_expandable_keys" do
-  Node = Struct.new(:id, :parent_id)
+ExpandableKeysSpecNode = Struct.new(:id, :parent_id)
 
+RSpec.describe "TreeView::Tree#all_expandable_keys" do
   it "returns keys for reachable records that have children" do
     records = [
-      Node.new(1, nil),
-      Node.new(2, 1),
-      Node.new(3, 2),
-      Node.new(4, nil)
+      ExpandableKeysSpecNode.new(1, nil),
+      ExpandableKeysSpecNode.new(2, 1),
+      ExpandableKeysSpecNode.new(3, 2),
+      ExpandableKeysSpecNode.new(4, nil)
     ]
     tree = TreeView::Tree.new(records: records, parent_id_method: :parent_id, sorter: ->(items, _tree) { items })
 

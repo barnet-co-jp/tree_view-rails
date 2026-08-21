@@ -22,6 +22,13 @@ Release preparation notes:
 - Record public API manifest, package-root export, and documented hook changes by their user-visible effect.
 - If a breaking change, deprecation, or removal is identified, add the migration note before moving entries into a dated version section.
 
+### Added
+
+- Added `Tree#all_expandable_keys` for retrieving all node keys that have children, useful for client-side expand-all without server round-trips.
+- Added `data-tree-view-client-expanded-keys-value` integration hook and `TreeViewIntegrationHooks.client` export so host apps can restore client-side expansion state from persisted storage.
+- Added density CSS custom property tokens (`--tree-view-toggle-gap`, `--tree-view-toggle-min-height`, `--tree-view-branches-min-height`, `--tree-view-branch-slot-width`, `--tree-view-branch-line-width`, `--tree-view-control-gap`, `--tree-view-control-min-width`, `--tree-view-control-padding`, `--tree-view-hidden-count-min-width`, `--tree-view-hidden-count-padding`) for host-app density tuning.
+- Added `TreeViewTransferController#refreshBranches()` for updating branch visual cues after host-app DOM reorder operations. No migration required; the method is additive and existing usage is unchanged.
+
 ### Fixed
 
 - Fixed direct `RenderState#current_key:` handling so flat keyword values reach row-state and render-state processing, take precedence over grouped `initial_expansion[:current_key]`, and preserve current-row semantics.
