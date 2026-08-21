@@ -145,6 +145,9 @@ export const TreeViewIntegrationHooks = Object.freeze({
     viewKeyValue: "data-tree-view-state-view-key-value",
     nodeKey: "data-tree-view-state-node-key"
   }),
+  client: Object.freeze({
+    expandedKeysValue: "data-tree-view-client-expanded-keys-value"
+  }),
   remoteState: Object.freeze({
     childrenUrl: "data-tree-children-url"
   }),

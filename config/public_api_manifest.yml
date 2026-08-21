@@ -331,6 +331,16 @@ css_custom_property_tokens:
   - --tree-view-level-color
   - --tree-view-hidden-count-background
   - --tree-view-hidden-count-color
+  - --tree-view-toggle-gap
+  - --tree-view-toggle-min-height
+  - --tree-view-branches-min-height
+  - --tree-view-branch-slot-width
+  - --tree-view-branch-line-width
+  - --tree-view-control-gap
+  - --tree-view-control-min-width
+  - --tree-view-control-padding
+  - --tree-view-hidden-count-min-width
+  - --tree-view-hidden-count-padding
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
@@ -481,6 +491,8 @@ javascript_package_root:
     state:
       view_key_value: data-tree-view-state-view-key-value
       node_key: data-tree-view-state-node-key
+    client:
+      expanded_keys_value: data-tree-view-client-expanded-keys-value
     remote_state:
       children_url: data-tree-children-url
     transfer:

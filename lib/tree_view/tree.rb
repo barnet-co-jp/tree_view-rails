@@ -57,6 +57,12 @@ module TreeView
       end
     end
 
+    def all_expandable_keys
+      each_reachable_node(root_items).filter_map do |item, _depth|
+        node_key_for(item) unless children_for(item).empty?
+      end
+    end
+
     def root_items(root_parent_id = nil)
       candidates = if adapter_mode?
         adapter.roots

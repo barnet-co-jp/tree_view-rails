@@ -1,6 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export class TreeViewClientController extends Controller {
+  static values = {
+    expandedKeys: Array
+  }
+
   toggle(event) {
     const button = event.currentTarget
     const row = this.rowForButton(button)
@@ -12,6 +16,29 @@ export class TreeViewClientController extends Controller {
   }
 
   connect() {
+    if (this.hasExpandedKeysValue) {
+      this.applyExpandedKeys(this.expandedKeysValue)
+    } else {
+      this.refreshRows()
+    }
+  }
+
+  expandedKeysValueChanged(value) {
+    if (!this.hasExpandedKeysValue) return
+
+    this.applyExpandedKeys(value)
+  }
+
+  applyExpandedKeys(keys) {
+    const expandedKeys = new Set(Array.from(keys || [], (key) => String(key)))
+
+    this.rows().forEach((row) => {
+      const button = this.toggleButtonForRow(row)
+      if (!button) return
+
+      this.setExpanded(row, button, expandedKeys.has(String(row.dataset.treeViewClientNodeKey)))
+    })
+
     this.refreshRows()
   }
 
@@ -22,6 +49,15 @@ export class TreeViewClientController extends Controller {
     if (!key) return button.closest("[data-tree-view-client-depth][data-tree-view-client-node-key]")
 
     return this.rows().find((row) => row.dataset.treeViewClientNodeKey === key)
+  }
+
+  toggleButtonForRow(row) {
+    const key = row.dataset.treeViewClientNodeKey
+    if (!key) return null
+
+    return Array.from(this.element.querySelectorAll("[data-action~='tree-view-client#toggle']")).find((button) => (
+      this.ownsElement(button) && button.dataset.treeViewClientNodeKey === key
+    )) || null
   }
 
   rows() {

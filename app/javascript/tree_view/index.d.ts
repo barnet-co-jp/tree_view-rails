@@ -5,7 +5,9 @@ export declare class TreeViewClientController extends Controller {}
 export declare class TreeViewRemoteStateController extends Controller {}
 export declare class TreeViewSelectionController extends Controller {}
 export declare class TreeViewStateController extends Controller {}
-export declare class TreeViewTransferController extends Controller {}
+export declare class TreeViewTransferController extends Controller {
+  refreshBranches(): number
+}
 
 export declare const TreeViewEventNames: Readonly<{
   state: Readonly<{
@@ -141,6 +143,9 @@ export declare const TreeViewIntegrationHooks: Readonly<{
   state: Readonly<{
     viewKeyValue: "data-tree-view-state-view-key-value"
     nodeKey: "data-tree-view-state-node-key"
+  }>
+  client: Readonly<{
+    expandedKeysValue: "data-tree-view-client-expanded-keys-value"
   }>
   remoteState: Readonly<{
     childrenUrl: "data-tree-children-url"
