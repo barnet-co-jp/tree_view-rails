@@ -159,6 +159,49 @@ describe("TreeViewClientController", () => {
   })
 })
 
+describe("TreeViewClientController with TreeViewStateController", () => {
+  let application
+
+  beforeEach(async () => {
+    document.body.innerHTML = `
+      <table data-controller="tree-view-state tree-view-client" data-tree-view-state-view-key-value="projects#index">
+        <tbody>
+          <tr id="row-1" data-tree-view-state-target="node" data-tree-view-state-node-key="1" data-tree-view-state-expanded="true" data-tree-view-client-node-key="1" data-tree-view-client-depth="0" data-tree-view-client-expanded="true" aria-expanded="true">
+            <td>
+              <button id="toggle-1" class="tree-toggle__client-action" data-action="tree-view-client#toggle" data-tree-view-client-node-key="1" aria-expanded="true"></button>
+            </td>
+          </tr>
+          <tr id="row-2" data-tree-view-state-target="node" data-tree-view-state-node-key="2" data-tree-view-state-expanded="true" data-tree-view-client-node-key="2" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" aria-expanded="true"><td></td></tr>
+        </tbody>
+      </table>
+    `
+
+    application = Application.start()
+    application.register("tree-view-state", TreeViewStateController)
+    application.register("tree-view-client", TreeViewClientController)
+    await nextFrame()
+  })
+
+  afterEach(() => {
+    application.stop()
+    document.body.innerHTML = ""
+  })
+
+  it("publishes collapsed and expanded state snapshots for client-side toggles", () => {
+    const events = []
+    document.addEventListener("tree-view-state:state-changed", (event) => events.push(event.detail))
+    const button = document.querySelector("#toggle-1")
+
+    button.click()
+    button.click()
+
+    expect(events).toEqual([
+      {viewKey: "projects#index", expandedKeys: ["2"], reason: "collapsed"},
+      {viewKey: "projects#index", expandedKeys: ["1", "2"], reason: "expanded"}
+    ])
+  })
+})
+
 describe("TreeViewStateController", () => {
   let application
 

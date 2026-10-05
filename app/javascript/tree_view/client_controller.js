@@ -9,6 +9,21 @@ export class TreeViewClientController extends Controller {
     const nextExpanded = !this.expanded(row)
     this.setExpanded(row, button, nextExpanded)
     this.refreshRows()
+    this.publishStateChange(row, nextExpanded)
+  }
+
+  // `tree-view-state:state-changed` は開閉のたびに state controller が発火する契約になっている。
+  // client-side の開閉は行の state data を直接書き換えるため、同じ tree 要素の state controller へ通知する。
+  // 通知しないと、開閉状態を保存している host app に変更が伝わらない。
+  publishStateChange(row, expanded) {
+    const state = this.application.getControllerForElementAndIdentifier(this.element, "tree-view-state")
+    if (!state) return
+
+    if (expanded) {
+      state.markExpanded({ target: row })
+    } else {
+      state.markCollapsed({ target: row })
+    }
   }
 
   connect() {

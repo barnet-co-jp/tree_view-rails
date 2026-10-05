@@ -25,6 +25,7 @@ Release preparation notes:
 ### Fixed
 
 - Fixed direct `RenderState#current_key:` handling so flat keyword values reach row-state and render-state processing, take precedence over grouped `initial_expansion[:current_key]`, and preserve current-row semantics.
+- Fixed client-side toggles so `tree-view-state:state-changed` is published with `expanded` / `collapsed` reasons when `tree-view-state` and `tree-view-client` share the tree element, matching the documented state event contract.
 
 ### Documentation
 
